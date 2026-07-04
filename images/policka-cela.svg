@@ -112,7 +112,7 @@
   <rect x="10" y="346" width="480" height="4" rx="2" fill="#C08552"/>
 
   <!-- dřevěný vláček -->
-  <g transform="translate(30 346) scale(0.525) translate(-8 -150)">
+  <g transform="translate(30 346) scale(0.63) translate(-8 -150)">
 <!-- podvozková deska -->
   <rect x="18" y="104" width="180" height="18" rx="4" fill="#8B5E3C" stroke="#2B3A29" stroke-width="2.5"/>
   <!-- zadní plošinka s kolíkem -->
