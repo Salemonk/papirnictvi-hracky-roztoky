@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="36 26 96 172">
+  <!-- SPODNÍ kostka (medová) — přední stěna rovně, spodní hrana vodorovná -->
+  <g>
+    <polygon points="40,130 104,130 126,108 62,108" fill="#F6D77E" stroke="#2B3A29" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="104,130 126,108 126,172 104,194" fill="#C08552" stroke="#2B3A29" stroke-width="2.5" stroke-linejoin="round"/>
+    <rect x="40" y="130" width="64" height="64" fill="#E3A72B" stroke="#2B3A29" stroke-width="2.5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- PROSTŘEDNÍ kostka (šalvějová) — usazená na horní stěně spodní kostky -->
+  <g>
+    <polygon points="50.8,79.3 98.8,79.3 115.3,62.8 67.3,62.8" fill="#BFD8C9" stroke="#2B3A29" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="98.8,79.3 115.3,62.8 115.3,110.8 98.8,127.3" fill="#3F5C4E" stroke="#2B3A29" stroke-width="2.5" stroke-linejoin="round"/>
+    <rect x="50.8" y="79.3" width="48" height="48" fill="#5C8374" stroke="#2B3A29" stroke-width="2.5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- HORNÍ kostka (cihlová) -->
+  <g>
+    <polygon points="60.2,42.9 94.2,42.9 105.9,31.2 71.9,31.2" fill="#F0B8A4" stroke="#2B3A29" stroke-width="2.5" stroke-linejoin="round"/>
+    <polygon points="94.2,42.9 105.9,31.2 105.9,65.2 94.2,76.9" fill="#6E482C" stroke="#2B3A29" stroke-width="2.5" stroke-linejoin="round"/>
+    <rect x="60.2" y="42.9" width="34" height="34" fill="#B8492F" stroke="#2B3A29" stroke-width="2.5" stroke-linejoin="round"/>
+  </g>
+</svg>

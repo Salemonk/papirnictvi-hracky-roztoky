@@ -7,7 +7,7 @@
   <line x1="141" y1="150" x2="165" y2="150" stroke="#2B3A29" stroke-width="2"/>
   <rect x="169" y="90" width="20" height="75" rx="3" fill="#E3A72B" stroke="#2B3A29" stroke-width="2.5"/>
   <circle cx="179" cy="110" r="5" fill="#FFFBF2" stroke="#2B3A29" stroke-width="2"/>
-  <g transform="translate(196,165) rotate(-12)">
+  <g transform="translate(205,165) rotate(-12)">
     <rect x="0" y="-82" width="22" height="82" rx="3" fill="#F0B8A4" stroke="#2B3A29" stroke-width="2.5"/>
     <line x1="0" y1="-70" x2="22" y2="-70" stroke="#2B3A29" stroke-width="2"/>
   </g>

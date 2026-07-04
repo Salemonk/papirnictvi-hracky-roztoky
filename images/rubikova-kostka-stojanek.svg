@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="72 34 156 176">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="72 34 156 190">
+  <ellipse cx="150" cy="216" rx="30" ry="7" fill="#2B3A29"/>
+  <path d="M136 205 Q150 199 164 205 L160 214 Q150 218 140 214 Z" fill="#2B3A29" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
   <polygon points="150.0,40.0 222.7,82.0 222.7,166.0 150.0,208.0 77.3,166.0 77.3,82.0" fill="#2B3A29" stroke="#2B3A29" stroke-width="5" stroke-linejoin="round"/>
   <polygon points="150.0,42.6 169.7,54.0 150.0,65.4 130.3,54.0" fill="#FFFBF2"/>
   <polygon points="174.2,56.6 194.0,68.0 174.2,79.4 154.5,68.0" fill="#B8492F"/>
