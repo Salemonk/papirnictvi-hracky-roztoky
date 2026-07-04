@@ -8,7 +8,7 @@
   <path d="M398 178 L398 196 L380 178 Z" fill="#6E482C"/>
 
   <!-- kelímek s pastelkami -->
-  <g transform="translate(140 165) scale(0.6) translate(-80 -246)">
+  <g transform="translate(140 165) scale(0.36) translate(-80 -246)">
 <!-- levý svazek: 4 používané pastelky různých délek, opřené o levý roh -->
   <g transform="translate(57.9,90.6) rotate(-8)">
     <rect x="-6.5" y="0" width="13" height="110" fill="#F6D77E" stroke="#2B3A29" stroke-width="2"/>
@@ -74,7 +74,7 @@
   </g>
 
   <!-- Rubikova kostka na stojánku na stohu knih -->
-  <g transform="translate(374 135) scale(0.38) translate(-150 -223)">
+  <g transform="translate(374 135) scale(0.266) translate(-150 -223)">
 <ellipse cx="150" cy="216" rx="30" ry="7" fill="#2B3A29"/>
   <path d="M136 205 Q150 199 164 205 L160 214 Q150 218 140 214 Z" fill="#2B3A29" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
   <polygon points="150.0,40.0 222.7,82.0 222.7,166.0 150.0,208.0 77.3,166.0 77.3,82.0" fill="#2B3A29" stroke="#2B3A29" stroke-width="5" stroke-linejoin="round"/>
@@ -112,7 +112,7 @@
   <rect x="10" y="346" width="480" height="4" rx="2" fill="#C08552"/>
 
   <!-- dřevěný vláček -->
-  <g transform="translate(30 346) scale(0.75) translate(-8 -150)">
+  <g transform="translate(30 346) scale(0.525) translate(-8 -150)">
 <!-- podvozková deska -->
   <rect x="18" y="104" width="180" height="18" rx="4" fill="#8B5E3C" stroke="#2B3A29" stroke-width="2.5"/>
   <!-- zadní plošinka s kolíkem -->
@@ -140,7 +140,7 @@
   </g>
 
   <!-- věž z kostek -->
-  <g transform="translate(272 346) scale(0.8) translate(-76 -194)">
+  <g transform="translate(248 346) scale(0.8) translate(-76 -194)">
 <!-- SPODNÍ kostka (medová) — přední stěna rovně, spodní hrana vodorovná -->
   <g>
     <polygon points="40,130 104,130 126,108 62,108" fill="#F6D77E" stroke="#2B3A29" stroke-width="2.5" stroke-linejoin="round"/>
