@@ -183,6 +183,7 @@
   .note:nth-child(2){ transform:rotate(2deg); background:var(--sage-light); }
   .note:nth-child(3){ transform:rotate(-1.5deg); background:var(--paper); }
   .note:nth-child(4){ transform:rotate(2.5deg); background:var(--brick-light); }
+  .note.note-dovolena{ background:var(--paper-light); display:flex; align-items:center; }
   .note-tape{
     position:absolute; top:-12px; left:50%; transform:translateX(-50%) rotate(-4deg);
     width:70px; height:22px; background:rgba(255,255,255,.55);
@@ -194,6 +195,7 @@
     background:var(--ink); color:var(--paper-light);
   }
   .note-img{ display:block; width:100%; height:140px; object-fit:cover; border-radius:6px; border:2px solid var(--ink); margin-bottom:12px; cursor:zoom-in; }
+  .note-art{ display:block; width:100%; height:auto; cursor:zoom-in; }
 
   /* ---------- LIGHTBOX ---------- */
   .lightbox{
@@ -204,7 +206,8 @@
   }
   .lightbox.is-open{ display:flex; }
   .lightbox img{
-    max-width:min(720px,100%); max-height:85vh;
+    width:min(720px,90vw); height:min(600px,85vh);
+    object-fit:contain; background:#fff;
     border-radius:10px; border:3px solid var(--paper-light);
     box-shadow:0 20px 50px rgba(0,0,0,.4);
   }
@@ -242,16 +245,14 @@
   /* ---------- O NAS ---------- */
   .section-onas{ background:var(--paper-light); }
   .onas-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:44px; align-items:center; }
-  .photo-placeholder{
+  .onas-art{
     aspect-ratio:4/3;
-    border:2.5px dashed var(--kraft-dark);
+    border:2px solid var(--ink);
     border-radius:var(--radius);
     background:var(--paper);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:10px; text-align:center; padding:20px;
+    overflow:hidden;
   }
-  .photo-placeholder svg{ width:48px; height:48px; }
-  .photo-placeholder span{ font-size:.85rem; color:var(--ink-soft); max-width:22ch; }
+  .onas-art svg{ width:100%; height:100%; display:block; }
   .quote{
     font-family:'Caveat',cursive; font-size:1.5rem; font-weight:600;
     color:var(--brick); border-left:3px solid var(--brick); padding-left:18px;
@@ -359,25 +360,23 @@
         <p>Novinky a akce, které si hlídáme a rádi vám je připomeneme, ať vám nic neuteče.</p>
       </div>
       <div class="notes-grid">
+        <div class="note note-dovolena reveal">
+          <div class="note-tape" aria-hidden="true"></div>
+          <img class="note-art" src="images/dovolena.svg" alt="Dovolená od 4. do 18. července — slunečník, míč a kufr na kolečkách">
+        </div>
         <div class="note reveal">
           <div class="note-tape" aria-hidden="true"></div>
           <span class="note-tag">Novinka</span>
-          <img class="note-img" src="images/pokemon-pitchblack.jpg" alt="Booster box Pokémon TCG: Mega Evolution Pitch Black">
+          <img class="note-img" src="images/produkty/pokemon-pitchblack.jpg" alt="Booster box Pokémon TCG: Mega Evolution Pitch Black">
           <h3>Pokémon TCG: Pitch Black</h3>
           <p>Edice Pitch Black právě dorazila. ETB Držíme po jednom kusu na zákazníka, ať se dostane na co nejvíce z vás.</p>
         </div>
         <div class="note reveal">
           <div class="note-tape" aria-hidden="true"></div>
           <span class="note-tag">Výhodná cena</span>
-          <img class="note-img" src="images/pilot-familypack.png" alt="Sada šesti náplní Pilot Frixion">
+          <img class="note-img" src="images/produkty/pilot-familypack.png" alt="Sada šesti náplní Pilot Frixion">
           <h3>Sada šesti náplní Pilot Frixion</h3>
           <p>U nás dlouhodobě k dostání za bezkonkurenční cenu 209,-</p>
-        </div>
-        <div class="note reveal">
-          <div class="note-tape" aria-hidden="true"></div>
-          <span class="note-tag">Akce</span>
-          <h3>Zpět do školy</h3>
-          <p>Sada tužek, pastelek a pravítek za zvýhodněnou cenu — stačí říct, že jde o školáka.</p>
         </div>
       </div>
     </div>
@@ -426,13 +425,60 @@
   <!-- ================= O NAS ================= -->
   <section class="section-onas" id="o-nas">
     <div class="container onas-grid">
-      <div class="photo-placeholder reveal">
-        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
-          <rect x="6" y="14" width="36" height="26" rx="3" stroke="#8B5E3C" stroke-width="2.5"/>
-          <circle cx="24" cy="27" r="8" stroke="#8B5E3C" stroke-width="2.5"/>
-          <rect x="16" y="9" width="8" height="6" rx="1.5" fill="#8B5E3C"/>
+      <div class="onas-art reveal">
+        <svg viewBox="0 0 400 300" role="img" aria-label="Ilustrace výlohy našeho obchodu se sešity a tužkami ve výkladu">
+          <ellipse cx="200" cy="284" rx="170" ry="10" fill="#2B3A29" opacity="0.08"/>
+
+          <!-- zeď -->
+          <rect x="30" y="90" width="340" height="180" rx="10" fill="#F5E9D3" stroke="#2B3A29" stroke-width="4"/>
+
+          <!-- markýza -->
+          <rect x="55" y="55" width="28" height="38" fill="#B8492F"/>
+          <rect x="83" y="55" width="28" height="38" fill="#F0B8A4"/>
+          <rect x="111" y="55" width="28" height="38" fill="#B8492F"/>
+          <rect x="139" y="55" width="28" height="38" fill="#F0B8A4"/>
+          <rect x="167" y="55" width="28" height="38" fill="#B8492F"/>
+          <rect x="55" y="55" width="140" height="38" rx="4" fill="none" stroke="#2B3A29" stroke-width="3"/>
+          <polygon points="55,93 69,107 83,93" fill="#B8492F" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
+          <polygon points="83,93 97,107 111,93" fill="#F0B8A4" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
+          <polygon points="111,93 125,107 139,93" fill="#B8492F" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
+          <polygon points="139,93 153,107 167,93" fill="#F0B8A4" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
+          <polygon points="167,93 181,107 195,93" fill="#B8492F" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
+
+          <!-- výkladní okno -->
+          <rect x="60" y="107" width="130" height="103" rx="6" fill="#FFFBF2" stroke="#2B3A29" stroke-width="3.5"/>
+          <line x1="125" y1="107" x2="125" y2="210" stroke="#2B3A29" stroke-width="2.5"/>
+          <line x1="60" y1="158" x2="190" y2="158" stroke="#2B3A29" stroke-width="2.5"/>
+
+          <!-- kelímek s pastelkami ve výloze -->
+          <rect x="75" y="175" width="34" height="28" rx="6" fill="#FFFBF2" fill-opacity="0.7" stroke="#2B3A29" stroke-width="2"/>
+          <line x1="85" y1="200" x2="82" y2="165" stroke="#E3A72B" stroke-width="5" stroke-linecap="round"/>
+          <line x1="92" y1="200" x2="93" y2="160" stroke="#B8492F" stroke-width="5" stroke-linecap="round"/>
+          <line x1="99" y1="200" x2="102" y2="167" stroke="#5C8374" stroke-width="5" stroke-linecap="round"/>
+
+          <!-- knihy ve výloze -->
+          <rect x="140" y="178" width="14" height="25" rx="2" fill="#5C8374" stroke="#2B3A29" stroke-width="2"/>
+          <rect x="156" y="172" width="14" height="31" rx="2" fill="#B8492F" stroke="#2B3A29" stroke-width="2"/>
+          <rect x="172" y="180" width="12" height="23" rx="2" fill="#E3A72B" stroke="#2B3A29" stroke-width="2"/>
+
+          <!-- dveře -->
+          <rect x="230" y="140" width="70" height="130" rx="14" fill="#8B5E3C" stroke="#2B3A29" stroke-width="4"/>
+          <circle cx="265" cy="175" r="16" fill="#FFFBF2" fill-opacity="0.7" stroke="#2B3A29" stroke-width="2.5"/>
+          <circle cx="285" cy="210" r="4" fill="#2B3A29"/>
+
+          <!-- cedulka -->
+          <line x1="245" y1="93" x2="245" y2="114" stroke="#2B3A29" stroke-width="2"/>
+          <line x1="285" y1="93" x2="285" y2="114" stroke="#2B3A29" stroke-width="2"/>
+          <rect x="233" y="112" width="64" height="26" rx="4" fill="#FFFBF2" stroke="#2B3A29" stroke-width="2.5"/>
+          <text x="265" y="130" text-anchor="middle" font-family="Caveat, cursive" font-size="17" font-weight="700" fill="#B8492F">Vítejte!</text>
+
+          <!-- kytka u vchodu -->
+          <g transform="translate(40,213) scale(0.55)">
+            <path d="M0 40 L34 40 L28 70 L6 70 Z" fill="#C08552" stroke="#2B3A29" stroke-width="2.5"/>
+            <path d="M17 40 C17 10, -6 6, -10 -10 C 8 -6, 20 10, 17 40 Z" fill="#5C8374" stroke="#2B3A29" stroke-width="2"/>
+            <path d="M17 40 C17 14, 40 8, 46 -6 C 28 0, 16 12, 17 40 Z" fill="#3F5C4E" stroke="#2B3A29" stroke-width="2"/>
+          </g>
         </svg>
-        <span>Sem patří fotka vás a vaší kolegyně v obchodě</span>
       </div>
       <div class="reveal">
         <span class="eyebrow">pár slov o nás</span>
@@ -581,7 +627,7 @@
     lightboxImg.src = '';
   }
 
-  document.querySelectorAll('.note-img').forEach(img => {
+  document.querySelectorAll('.note-img, .note-art').forEach(img => {
     img.addEventListener('click', () => openLightbox(img.src, img.alt));
   });
   lightboxClose.addEventListener('click', closeLightbox);
