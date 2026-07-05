@@ -176,11 +176,11 @@
       <circle cx="93.6" cy="67.4" r="1.8" fill="#FFFBF2"/>
       <circle cx="123.6" cy="67.4" r="1.8" fill="#FFFBF2"/>
       <!-- mašle: visící konce, smyčky a uzel -->
-      <path d="M106 137 L99 166 L107.5 161.5 L109 137 Z" fill="#B8492F" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
-      <path d="M114 137 L121 166 L112.5 161.5 L111 137 Z" fill="#B8492F" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
-      <polygon points="78,119 104,131 78,143" fill="#B8492F" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
-      <polygon points="142,119 116,131 142,143" fill="#B8492F" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
-      <rect x="103" y="125.5" width="14" height="11" rx="3.5" fill="#B8492F" stroke="#2B3A29" stroke-width="2"/>
+      <path d="m 106,145.89674 -7,29 8.5,-4.5 1.5,-24.5 z" fill="#b8492f" stroke="#2b3a29" stroke-width="2" stroke-linejoin="round"/>
+      <path d="m 114,145.89674 7,29 -8.5,-4.5 -1.5,-24.5 z" fill="#b8492f" stroke="#2b3a29" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="78,143 78,119 104,131 " fill="#b8492f" stroke="#2b3a29" stroke-width="2" stroke-linejoin="round" transform="translate(0,8.8967343)"/>
+      <polygon points="142,143 142,119 116,131 " fill="#b8492f" stroke="#2b3a29" stroke-width="2" stroke-linejoin="round" transform="translate(0,8.8967343)"/>
+      <rect x="103" y="134.39673" width="14" height="11" rx="3.5" fill="#b8492f" stroke="#2b3a29" stroke-width="2"/>
     </g>
   </g>
   </g>
