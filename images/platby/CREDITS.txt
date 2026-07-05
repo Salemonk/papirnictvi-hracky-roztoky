@@ -1,0 +1,3 @@
+Ikony platebních metod v této složce pochází z:
+https://github.com/datatrans/payment-logos
+Licence: CC-BY-SA-4.0

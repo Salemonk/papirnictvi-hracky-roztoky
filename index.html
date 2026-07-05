@@ -7,7 +7,37 @@
 <meta name="description" content="Rodinné papírnictví a hračkářství v Roztokách. Novinky, slevy, výběr papírnictví a hraček, otevírací doba a kontakt.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=Caveat:wght@600;700&display=swap');
+  /* Fonty hostované lokálně (fonts/) místo z Google serverů, aby web při návštěvě neposílal IP adresu třetí straně. */
+  @font-face{
+    font-family:'Fraunces'; font-style:normal; font-weight:400 700; font-display:swap;
+    src:url('fonts/fraunces-latin-ext.woff2') format('woff2');
+    unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+  }
+  @font-face{
+    font-family:'Fraunces'; font-style:normal; font-weight:400 700; font-display:swap;
+    src:url('fonts/fraunces-latin.woff2') format('woff2');
+    unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+  }
+  @font-face{
+    font-family:'Karla'; font-style:normal; font-weight:400 700; font-display:swap;
+    src:url('fonts/karla-latin-ext.woff2') format('woff2');
+    unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+  }
+  @font-face{
+    font-family:'Karla'; font-style:normal; font-weight:400 700; font-display:swap;
+    src:url('fonts/karla-latin.woff2') format('woff2');
+    unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+  }
+  @font-face{
+    font-family:'Caveat'; font-style:normal; font-weight:600 700; font-display:swap;
+    src:url('fonts/caveat-latin-ext.woff2') format('woff2');
+    unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+  }
+  @font-face{
+    font-family:'Caveat'; font-style:normal; font-weight:600 700; font-display:swap;
+    src:url('fonts/caveat-latin.woff2') format('woff2');
+    unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+  }
 
   :root{
     --paper: #F5E9D3;
@@ -286,6 +316,9 @@
   footer .brand{ color:var(--paper-light); }
   .footer-tagline{ font-family:'Caveat',cursive; font-size:1.3rem; color:var(--honey-light); margin-top:6px; }
   .footer-meta{ font-size:.85rem; color:var(--paper); opacity:.7; }
+  .payment-row{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:24px; }
+  .payment-row span{ font-size:.82rem; color:var(--paper); opacity:.7; margin-right:4px; }
+  .payment-row img{ height:26px; width:auto; border-radius:5px; }
   .social-row{ display:flex; gap:12px; }
   .social-row a{
     width:38px; height:38px; border-radius:50%; border:2px solid var(--paper-light);
@@ -520,7 +553,19 @@
       <a href="https://www.facebook.com/PHRoztoky/" target="_blank" rel="noopener" aria-label="Facebook">f</a>
     </div>
   </div>
-  <div class="container footer-meta" style="margin-top:24px;">
+  <div class="container payment-row" aria-label="Přijímané platební metody">
+    <span>Platíme kartou:</span>
+    <img src="images/platby/visa.svg" alt="Visa">
+    <img src="images/platby/mastercard.svg" alt="Mastercard">
+    <img src="images/platby/american-express.svg" alt="American Express">
+    <img src="images/platby/maestro.svg" alt="Maestro">
+    <img src="images/platby/vpay.svg" alt="V Pay">
+    <img src="images/platby/apple-pay.svg" alt="Apple Pay">
+    <img src="images/platby/google-pay.svg" alt="Google Pay">
+    <img src="images/platby/samsung-pay.svg" alt="Samsung Pay">
+  </div>
+  <div class="container footer-meta" style="margin-top:16px;">
+    Monika Meixnerová, fyzická osoba podnikající dle živnostenského zákona, se sídlem okres Praha-západ, IČO: 22632620<br>
     © 2026 Papírnictví Hračky Roztoky. Všechna práva vyhrazena.
   </div>
 </footer>
