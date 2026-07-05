@@ -184,7 +184,7 @@
   }
 
   section{ padding:64px 0; }
-  #top, #novinky, #produkty, #o-nas, #kontakt{ scroll-margin-top:100px; }
+  #top, #novinky, #produkty, #o-nas, #recenze, #kontakt{ scroll-margin-top:100px; }
   .section-head{ max-width:60ch; margin-bottom:38px; }
   .section-head h2{ font-size:clamp(1.6rem,3vw,2.2rem); }
   .section-head p{ color:var(--ink-soft); }
@@ -270,6 +270,7 @@
   /* ---------- O NAS ---------- */
   .section-onas{ background:var(--paper-light); }
   .onas-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:44px; align-items:center; }
+  .onas-art-wrap{ position:relative; }
   .onas-art{
     aspect-ratio:4/3;
     border:2px solid var(--ink);
@@ -278,11 +279,39 @@
     overflow:hidden;
   }
   .onas-art img{ width:100%; height:100%; display:block; object-fit:cover; }
+  .est-badge{
+    position:absolute; bottom:-18px; right:-14px;
+    width:78px; height:78px; border-radius:50%;
+    background:var(--honey); border:2.5px dashed var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(-8deg);
+    font-family:'Fraunces',serif; font-weight:700; font-size:.95rem; line-height:1.2;
+    text-align:center; color:var(--ink);
+    box-shadow:0 6px 14px var(--shadow);
+  }
   .quote{
     font-family:'Caveat',cursive; font-size:1.5rem; font-weight:600;
     color:var(--brick); border-left:3px solid var(--brick); padding-left:18px;
     margin:22px 0 0; transform:rotate(-0.6deg);
   }
+
+  /* ---------- RECENZE ---------- */
+  .reviews-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:24px;
+  }
+  .review-card{
+    background:var(--paper-light);
+    border:2px solid var(--ink);
+    border-radius:var(--radius);
+    padding:24px 22px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .review-stars{ color:var(--honey); font-size:1.1rem; letter-spacing:.15em; }
+  .review-text{ font-size:.96rem; color:var(--ink-soft); margin:0; flex-grow:1; }
+  .review-author{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+  .review-name{ font-weight:700; font-size:.94rem; }
+  .review-source{ font-size:.78rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; }
 
   /* ---------- KONTAKT ---------- */
   .kontakt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
@@ -304,6 +333,10 @@
   .chalkboard h3{ color:var(--paper-light); font-family:'Caveat',cursive; font-size:1.7rem; margin-bottom:.5em; }
   .hours-row{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed rgba(255,251,242,.25); font-size:1rem; }
   .hours-row:last-child{ border-bottom:none; }
+  .map-embed{
+    margin-top:28px; aspect-ratio:16/6; width:100%;
+    border:2px solid var(--ink); border-radius:var(--radius); overflow:hidden;
+  }
 
   /* ---------- FOOTER ---------- */
   footer{ background:var(--ink); color:var(--paper-light); padding:44px 0 30px; }
@@ -348,6 +381,7 @@
       <a href="#novinky" data-section="novinky">Novinky</a>
       <a href="#produkty" data-section="produkty">Produkty</a>
       <a href="#o-nas" data-section="o-nas">O nás</a>
+      <a href="#recenze" data-section="recenze">Recenze</a>
       <a href="#kontakt" data-section="kontakt">Kontakt</a>
     </nav>
   </div>
@@ -455,8 +489,11 @@
   <!-- ================= O NAS ================= -->
   <section class="section-onas" id="o-nas">
     <div class="container onas-grid">
-      <div class="onas-art reveal">
-        <img src="images/vyloha.svg" alt="Ilustrace výlohy našeho obchodu se sešity a tužkami ve výkladu" width="400" height="300" loading="lazy">
+      <div class="onas-art-wrap reveal">
+        <div class="onas-art">
+          <img src="images/vyloha.svg" alt="Ilustrace výlohy našeho obchodu se sešity a tužkami ve výkladu" width="400" height="300" loading="lazy">
+        </div>
+        <div class="est-badge" aria-hidden="true"><span>OD<br>2003</span></div>
       </div>
       <div class="reveal">
         <span class="eyebrow">pár slov o nás</span>
@@ -465,6 +502,51 @@
         <p>Snažíme se poradit a pomoci, i když vám občas doporučíme nakoupit jinde. Víc nám totiž záleží na tom, abyste se k nám rádi vraceli.</p>
         <p>Zboží si vybíráme sami a rádi si o něm s vámi popovídáme, ať už hledáte první pastelky pro prvňáčka, nebo dárek, který opravdu potěší.</p>
         <p class="quote">„Nejsme velký řetězec, jsme obchod, kam se dá zajít i bez nákupního seznamu.“</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RECENZE ================= -->
+  <section id="recenze">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">co říkají zákazníci</span>
+        <h2>Recenze z Googlu</h2>
+        <p>Vážíme si každého slova — děkujeme všem, kdo si na nás udělali chvilku.</p>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card reveal">
+          <div class="review-stars" aria-label="5 z 5 hvězdiček">★★★★★</div>
+          <p class="review-text">„Velmi dobře zásobené papírnictví. Obzvlášť koncem srpna a začátkem září je tu pořádný nával 😊 Pokud nemůžete sehnat obal na učebnici, nebo sešit, tady ho určitě mají.“</p>
+          <div class="review-author">
+            <span class="review-name">David Kauler</span>
+            <span class="review-source">Google</span>
+          </div>
+        </div>
+        <div class="review-card reveal">
+          <div class="review-stars" aria-label="5 z 5 hvězdiček">★★★★★</div>
+          <p class="review-text">„Vždy zde najdu to, co potřebuji, milý personál.“</p>
+          <div class="review-author">
+            <span class="review-name">Maty Drchota</span>
+            <span class="review-source">Google</span>
+          </div>
+        </div>
+        <div class="review-card reveal">
+          <div class="review-stars" aria-label="5 z 5 hvězdiček">★★★★★</div>
+          <p class="review-text">„Když nevíte coby, najdete to tady. Obsluha milá, vždy poradí a pomohou.“</p>
+          <div class="review-author">
+            <span class="review-name">Markéta Holečková</span>
+            <span class="review-source">Google</span>
+          </div>
+        </div>
+        <div class="review-card reveal">
+          <div class="review-stars" aria-label="5 z 5 hvězdiček">★★★★★</div>
+          <p class="review-text">„Malý obchůdek a hodně věcí. Personál ochotný a vstřícný.“</p>
+          <div class="review-author">
+            <span class="review-name">Hana Klapová Novotná</span>
+            <span class="review-source">Google</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -531,6 +613,9 @@
           <div class="hours-row"><span>Neděle</span><span>Zavřeno</span></div>
           <div class="hours-row"><span>Svátky</span><span>Zavřeno</span></div>
         </div>
+      </div>
+      <div class="map-embed reveal">
+        <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=14.380%2C50.155%2C14.404%2C50.167&layer=mapnik&marker=50.161288%2C14.392002" width="100%" height="100%" style="border:0;" loading="lazy" title="Mapa — Papírnictví Hračky Roztoky, Lidická 689"></iframe>
       </div>
     </div>
   </section>
