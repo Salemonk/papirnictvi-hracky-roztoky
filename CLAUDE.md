@@ -18,11 +18,13 @@ Then open `http://localhost:8080`. The file can also be opened directly in a bro
 
 ## Architecture
 
-- `index.html` — the entire site: markup, all CSS (in a single `<style>` block in `<head>`), and all JS (in a single `<script>` block before `</body>`). Sections are anchored (`#top`, `#novinky`, `#produkty`, `#o-nas`, `#kontakt`) and correspond to the nav tabs in the header.
+- `index.html` — the entire site: markup, all CSS (in a single `<style>` block in `<head>`), and all JS (in a single `<script>` block before `</body>`). Sections are anchored (`#top`, `#novinky`, `#produkty`, `#o-nas`, `#recenze`, `#kontakt`) and correspond to the nav tabs in the header.
 - CSS custom properties for the color palette / spacing are defined once in `:root` at the top of the `<style>` block (`--paper`, `--ink`, `--kraft`, `--honey`, `--sage`, `--brick`, etc.) — reuse these vars rather than hardcoding colors.
 - Fonts (`Fraunces`, `Karla`, `Caveat`) are **self-hosted** via `@font-face` rules pointing at `fonts/*.woff2` (latin + latin-ext subsets, variable-font files so one file covers all weights). They used to load from Google's CDN via `@import`, but that transmits visitors' IP addresses to Google on every page view — a real GDPR issue for a site that otherwise collects zero data — so don't reintroduce the `@import`.
 - Responsive layout collapses to single-column via one `@media (max-width: 860px)` block at the end of the stylesheet. That same block also switches the header nav to wrap onto its own row (`.header-inner{flex-wrap:wrap}` + `nav.tabs{width:100%}`) — without it, the non-shrinking brand name squeezes `nav.tabs` down to a few px on narrow screens, so don't remove those rules without re-testing mobile widths.
 - A simple click-to-zoom lightbox (`#lightbox`, wired up at the bottom of the `<script>` block) applies to any `<img class="note-img">` or `<img class="note-art">` in the Novinky section.
+- `#recenze` section shows real Google reviews (first names only, by request) plus a hand-maintained aggregate `.overall-rating` score — there's no live API pulling these, so new/changed reviews have to be edited into the HTML by hand.
+- `#kontakt` embeds an OpenStreetMap iframe (`.map-embed`) rather than Google Maps — a Google Maps embed was unreliable/blocked in testing, and OSM avoids sending visitor data to Google (same reasoning as the self-hosted fonts).
 
 ### Illustrations and images
 
