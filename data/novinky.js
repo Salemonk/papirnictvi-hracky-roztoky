@@ -37,7 +37,7 @@ window.NOVINKY = [
   {
     stitek: "Novinka",
     nadpis: "Pokémon TCG: Pitch Black",
-    text: "Edice Pitch Black i ETB právě dorazily. Držíme po jednom kusu na zákazníka, ať se dostane na co nejvíce z vás.",
+    text: "Edice Pitch Black boostery i ETB boxy právě dorazily. Držíme po jednom kusu na zákazníka, ať se dostane na co nejvíce z vás.",
     obrazek: "images/produkty/pokemon-pitchblack.jpg",
     popisek: "Booster box Pokémon TCG: Mega Evolution Pitch Black",
     sirka: 732,
