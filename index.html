@@ -284,6 +284,15 @@
   }
   .note-img{ display:block; width:100%; height:140px; object-fit:cover; border-radius:6px; border:2px solid var(--ink); margin-bottom:12px; cursor:zoom-in; }
   .note-art{ display:block; width:100%; height:auto; cursor:zoom-in; }
+  .note-reserve{
+    display:inline-block; margin-top:14px;
+    font-family:'Karla',sans-serif; font-weight:700; font-size:.85rem;
+    text-decoration:none; color:var(--ink);
+    background:var(--honey); border:2px solid var(--ink);
+    border-radius:999px; padding:8px 16px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .note-reserve:hover{ transform:translateY(-2px); box-shadow:0 4px 0 var(--ink); }
 
   /* ---------- LIGHTBOX ---------- */
   .lightbox{
@@ -804,6 +813,23 @@
         const p = document.createElement('p');
         p.textContent = item.text || '';
         card.appendChild(p);
+        if(item.rezervace){
+          const subject = 'Rezervace: ' + item.nadpis;
+          const body =
+            'Dobrý den,\n\n' +
+            'rád(a) bych si rezervoval(a) k vyzvednutí:\n' +
+            item.nadpis + '\n\n' +
+            'Jméno:\n' +
+            'Telefon:\n' +
+            'Kdy si zboží vyzvednu (orientačně):\n\n' +
+            'Děkuji.';
+          const a = document.createElement('a');
+          a.className = 'note-reserve';
+          a.href = 'mailto:papirnictvi@hrackyroztoky.cz?subject=' +
+                   encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          a.textContent = 'Rezervovat k vyzvednutí';
+          card.appendChild(a);
+        }
       } else {
         card.classList.add('note-plain');
         img.className = 'note-art';

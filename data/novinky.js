@@ -16,6 +16,10 @@
        popisek  — krátký popis obrázku (pro čtečky a Google; nepovinné)
        sirka,   — rozměry obrázku v pixelech (nepovinné, ale doporučené —
        vyska      zabrání „poskočení" stránky při načítání)
+       rezervace — když napíšete «rezervace: true,», přidá se ke kartě
+                  tlačítko „Rezervovat k vyzvednutí" (otevře e-mail
+                  s předvyplněným názvem). Vynechejte tam, kde rezervace
+                  nedává smysl (např. akce nebo oznámení).
 
   2) KARTA JEN S OBRÁZKEM — nemá nadpis, jen obrázek přes celou kartu
      (jako naše grafika „DOVOLENÁ"). Stačí vyplnit obrazek, popisek,
@@ -41,7 +45,8 @@ window.NOVINKY = [
     obrazek: "images/produkty/pokemon-pitchblack.jpg",
     popisek: "Booster box Pokémon TCG: Mega Evolution Pitch Black",
     sirka: 732,
-    vyska: 1000
+    vyska: 1000,
+    rezervace: true
   },
   {
     stitek: "Výhodná cena",
@@ -50,6 +55,7 @@ window.NOVINKY = [
     obrazek: "images/produkty/pilot-familypack.png",
     popisek: "Sada šesti náplní Pilot Frixion",
     sirka: 600,
-    vyska: 524
+    vyska: 524,
+    rezervace: true
   }
 ];
