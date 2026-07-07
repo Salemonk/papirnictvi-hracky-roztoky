@@ -247,7 +247,7 @@
   }
 
   section{ padding:64px 0; }
-  #top, #novinky, #produkty, #o-nas, #recenze, #kontakt{ scroll-margin-top:100px; }
+  #top, #novinky, #produkty, #skolni-balicky, #o-nas, #recenze, #kontakt{ scroll-margin-top:100px; }
   .section-head{ max-width:60ch; margin-bottom:38px; }
   .section-head h2{ font-size:clamp(1.6rem,3vw,2.2rem); }
   .section-head p{ color:var(--ink-soft); }
@@ -329,6 +329,29 @@
   }
   .product-card.papirnictvi li::before{ background:var(--brick); }
   .product-card.hracky li::before{ background:var(--sage); }
+
+  /* ---------- ŠKOLNÍ BALÍČKY ---------- */
+  .skolni-card{
+    background:var(--sage);
+    color:var(--paper-light);
+    border:2px solid var(--ink);
+    border-radius:var(--radius);
+    padding:40px;
+    display:grid; grid-template-columns:1.1fr .9fr; gap:36px; align-items:center;
+    box-shadow:0 10px 24px var(--shadow);
+  }
+  .skolni-card h2{ color:var(--paper-light); }
+  .skolni-card .eyebrow{ color:var(--honey-light); }
+  .skolni-lead{ font-size:1.05rem; margin:0 0 8px; }
+  .skolni-steps{ list-style:none; margin:0; padding:0; display:grid; gap:12px; }
+  .skolni-steps li{ display:flex; gap:12px; align-items:flex-start; }
+  .skolni-num{
+    flex-shrink:0; width:28px; height:28px; border-radius:50%;
+    background:var(--honey); color:var(--ink); font-weight:700;
+    display:flex; align-items:center; justify-content:center; font-size:.9rem;
+  }
+  .skolni-cta{ display:flex; flex-wrap:wrap; gap:12px; margin-top:6px; }
+  .btn-onSage{ background:var(--paper-light); color:var(--ink); }
 
   /* ---------- O NAS ---------- */
   .section-onas{ background:var(--paper-light); }
@@ -420,6 +443,7 @@
     .hero-inner, .onas-grid{ grid-template-columns:1fr; }
     .hero-art{ order:-1; }
     .produkty-grid, .kontakt-grid{ grid-template-columns:1fr; }
+    .skolni-card{ grid-template-columns:1fr; padding:28px; }
     .header-inner{ flex-wrap:wrap; }
     nav.tabs{ flex:0 0 100%; width:100%; min-width:0; padding-top:4px; }
   }
@@ -439,6 +463,7 @@
       <a href="#top" data-section="top">Domů</a>
       <a href="#novinky" data-section="novinky">Novinky</a>
       <a href="#produkty" data-section="produkty">Produkty</a>
+      <a href="#skolni-balicky" data-section="skolni-balicky">Škola</a>
       <a href="#o-nas" data-section="o-nas">O nás</a>
       <a href="#recenze" data-section="recenze">Recenze</a>
       <a href="#kontakt" data-section="kontakt">Kontakt</a>
@@ -523,6 +548,31 @@
             <li>Hračky na písek i na zahradu</li>
           </ul>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ŠKOLNÍ BALÍČKY =================
+       Sezónní služba. Mimo sezónu (mimo srpen–září) můžete celou sekci
+       skrýt tak, že tento blok <section>…</section> a odkaz „Škola"
+       v navigaci obalíte značkou <!- - a - -> (bez mezer). -->
+  <section id="skolni-balicky">
+    <div class="container">
+      <div class="skolni-card reveal">
+        <div>
+          <span class="eyebrow">služba pro rodiče</span>
+          <h2>Školní balíčky</h2>
+          <p class="skolni-lead">Nechte přípravu pomůcek na nás. Pošlete nám seznam ze školy a my vám balíček nachystáme k vyzvednutí — ušetříte si shánění i frontu na začátku září.</p>
+          <div class="skolni-cta">
+            <a class="btn btn-primary" href="mailto:papirnictvi@hrackyroztoky.cz?subject=%C5%A0koln%C3%AD%20bal%C3%AD%C4%8Dek&body=Dobr%C3%BD%20den%2C%0A%0Am%C3%A1m%20z%C3%A1jem%20o%20%C5%A1koln%C3%AD%20bal%C3%AD%C4%8Dek.%20N%C3%AD%C5%BEe%20napi%C5%A1te%20nebo%20do%20e-mailu%20p%C5%99ilo%C5%BEte%20fotku%20seznamu%20pom%C5%AFcek.%0A%0A%C5%A0kola%20a%20t%C5%99%C3%ADda%3A%0ASeznam%20pom%C5%AFcek%3A%0AJm%C3%A9no%3A%0ATelefon%3A%0AKdy%20si%20bal%C3%AD%C4%8Dek%20vyzvednu%3A%0A%0AD%C4%9Bkuji.">Napsat e-mail</a>
+            <a class="btn btn-onSage" href="tel:+420607839568">Zavolat: 607 839 568</a>
+          </div>
+        </div>
+        <ol class="skolni-steps">
+          <li><span class="skolni-num" aria-hidden="true">1</span><span>Pošlete nám seznam pomůcek e-mailem (klidně jako fotku) nebo se stavte v obchodě.</span></li>
+          <li><span class="skolni-num" aria-hidden="true">2</span><span>Připravíme vše, co máme skladem, a co nemáme, se pokusíme sehnat.</span></li>
+          <li><span class="skolni-num" aria-hidden="true">3</span><span>Dáme vám vědět a balíček si v klidu vyzvednete a zaplatíte na místě.</span></li>
+        </ol>
       </div>
     </div>
   </section>
