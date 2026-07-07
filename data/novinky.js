@@ -46,7 +46,7 @@ window.NOVINKY = [
     popisek: "Booster box Pokémon TCG: Mega Evolution Pitch Black",
     sirka: 732,
     vyska: 1000,
-    rezervace: true
+    rezervace: false
   },
   {
     stitek: "Výhodná cena",

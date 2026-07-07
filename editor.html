@@ -62,6 +62,9 @@
   }
   #vystup{ width:100%; min-height:160px; font-family:Consolas, monospace; font-size:.82rem; white-space:pre; overflow:auto; }
   .warn{ color:var(--brick); font-weight:bold; }
+  .img-row{ display:flex; gap:8px; align-items:stretch; }
+  .img-row input{ flex:1 1 auto; min-width:0; }
+  .img-row button{ flex:0 0 auto; white-space:nowrap; }
   @media (max-width:560px){ .row2{ grid-template-columns:1fr; } }
 </style>
 </head>
@@ -105,12 +108,16 @@
   try{
     if(Array.isArray(window.NOVINKY)){
       polozky = window.NOVINKY.map(function(it){
+        var obr = Array.isArray(it.obrazek) ? it.obrazek : (it.obrazek ? [it.obrazek] : []);
+        var maObr = obr.length > 0;
         return {
-          typ: !it.nadpis ? 'obrazek' : (!it.obrazek ? 'text-only' : 'text'),
+          typ: !it.nadpis ? 'obrazek' : (!maObr ? 'text-only' : 'text'),
           stitek: it.stitek || '',
           nadpis: it.nadpis || '',
           text: it.text || '',
-          obrazek: it.obrazek || '',
+          obrazek: obr[0] || '',
+          obrazek2: obr[1] || '',
+          obrazek3: obr[2] || '',
           popisek: it.popisek || '',
           sirka: it.sirka || '',
           vyska: it.vyska || '',
@@ -156,15 +163,30 @@
           '<textarea oninput="uprav(' + i + ',\'text\',this.value)">' + esc(it.text) + '</textarea>'
         : '') +
         (maObrazek ?
-          '<label>Obrázek <span class="hint">(cesta k souboru, např. images/produkty/nazev.jpg)</span></label>' +
-          '<input type="text" value="' + esc(it.obrazek) + '" oninput="upravObrazek(' + i + ',this.value)">' +
-          '<img class="thumb" id="thumb' + i + '">' +
-          '<label>Popis obrázku <span class="hint">(nepovinné, krátký popis pro čtečky a Google)</span></label>' +
+          '<label>Obrázek 1 <span class="hint">(vyberte tlačítkem, nebo napište cestu)</span></label>' +
+          '<div class="img-row">' +
+            '<input type="text" id="obr' + i + '_1" value="' + esc(it.obrazek) + '" oninput="upravObrazek(' + i + ',1,this.value)">' +
+            '<button type="button" onclick="vyberSoubor(' + i + ',1)">Vybrat…</button>' +
+          '</div>' +
+          '<img class="thumb" id="thumb' + i + '_1">' +
+          '<label>Obrázek 2 <span class="hint">(nepovinné)</span></label>' +
+          '<div class="img-row">' +
+            '<input type="text" id="obr' + i + '_2" value="' + esc(it.obrazek2) + '" oninput="upravObrazek(' + i + ',2,this.value)">' +
+            '<button type="button" onclick="vyberSoubor(' + i + ',2)">Vybrat…</button>' +
+          '</div>' +
+          '<img class="thumb" id="thumb' + i + '_2">' +
+          '<label>Obrázek 3 <span class="hint">(nepovinné)</span></label>' +
+          '<div class="img-row">' +
+            '<input type="text" id="obr' + i + '_3" value="' + esc(it.obrazek3) + '" oninput="upravObrazek(' + i + ',3,this.value)">' +
+            '<button type="button" onclick="vyberSoubor(' + i + ',3)">Vybrat…</button>' +
+          '</div>' +
+          '<img class="thumb" id="thumb' + i + '_3">' +
+          '<label>Popis obrázků <span class="hint">(nepovinné, krátký popis pro čtečky a Google)</span></label>' +
           '<input type="text" value="' + esc(it.popisek) + '" oninput="uprav(' + i + ',\'popisek\',this.value)">' +
           '<div class="row2">' +
-            '<div><label>Šířka obrázku <span class="hint">(px, doplní se sama)</span></label>' +
+            '<div><label>Šířka obrázku <span class="hint">(px, jen u jedné fotky)</span></label>' +
             '<input type="text" id="sirka' + i + '" value="' + esc(it.sirka) + '" oninput="uprav(' + i + ',\'sirka\',this.value)"></div>' +
-            '<div><label>Výška obrázku <span class="hint">(px, doplní se sama)</span></label>' +
+            '<div><label>Výška obrázku <span class="hint">(px, jen u jedné fotky)</span></label>' +
             '<input type="text" id="vyska' + i + '" value="' + esc(it.vyska) + '" oninput="uprav(' + i + ',\'vyska\',this.value)"></div>' +
           '</div>'
         : '') +
@@ -175,30 +197,74 @@
           '</div>'
         : '');
       box.appendChild(d);
-      // náhled obrázku + automatické rozměry
-      nactiObrazek(i, it.obrazek);
+      // náhledy obrázků + automatické rozměry
+      nactiObrazek(i, 1, it.obrazek);
+      nactiObrazek(i, 2, it.obrazek2);
+      nactiObrazek(i, 3, it.obrazek3);
     });
     generuj();
   }
 
   function uprav(i, pole, hodnota){ polozky[i][pole] = hodnota; generuj(); }
 
-  function upravObrazek(i, hodnota){
-    polozky[i].obrazek = hodnota;
-    nactiObrazek(i, hodnota);
+  function poleObrazku(slot){ return slot === 1 ? 'obrazek' : ('obrazek' + slot); }
+
+  function upravObrazek(i, slot, hodnota){
+    polozky[i][poleObrazku(slot)] = hodnota;
+    nactiObrazek(i, slot, hodnota);
     generuj();
   }
 
-  function nactiObrazek(i, cesta){
-    var thumb = document.getElementById('thumb' + i);
+  // Otevře okno pro výběr souboru a doplní správnou cestu (předpokládáme,
+  // že obrázek už je ve složce images/produkty, případně images).
+  function vyberSoubor(i, slot){
+    var inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'image/*';
+    inp.onchange = function(){
+      if(!inp.files || !inp.files[0]) return;
+      var nazev = inp.files[0].name;
+      zkusCesty(['images/produkty/' + nazev, 'images/' + nazev], function(cesta){
+        if(cesta){
+          polozky[i][poleObrazku(slot)] = cesta;
+          var pole = document.getElementById('obr' + i + '_' + slot);
+          if(pole) pole.value = cesta;
+          nactiObrazek(i, slot, cesta);
+          generuj();
+        } else {
+          alert('Obrázek „' + nazev + '" jsem nenašel ve složce images/produkty.\n\n' +
+                'Nejdřív ho prosím do této složky nakopírujte (Průzkumníkem souborů) a pak ho vyberte znovu.');
+        }
+      });
+    };
+    inp.click();
+  }
+
+  // Postupně zkusí načíst zadané cesty a vrátí první, která existuje.
+  function zkusCesty(cesty, hotovo){
+    var idx = 0;
+    (function dal(){
+      if(idx >= cesty.length){ hotovo(null); return; }
+      var c = cesty[idx++];
+      var im = new Image();
+      im.onload = function(){ hotovo(c); };
+      im.onerror = dal;
+      im.src = c;
+    })();
+  }
+
+  function nactiObrazek(i, slot, cesta){
+    var thumb = document.getElementById('thumb' + i + '_' + slot);
     if(!thumb) return;
     if(!cesta){ thumb.style.display='none'; return; }
     var img = new Image();
     img.onload = function(){
       thumb.src = cesta; thumb.style.display='block';
-      // doplnit rozměry, pokud nejsou vyplněné
-      if(!polozky[i].sirka){ polozky[i].sirka = img.naturalWidth; var s=document.getElementById('sirka'+i); if(s) s.value = img.naturalWidth; }
-      if(!polozky[i].vyska){ polozky[i].vyska = img.naturalHeight; var v=document.getElementById('vyska'+i); if(v) v.value = img.naturalHeight; }
+      // rozměry doplníme jen podle první fotky (a jen když je fotka jediná)
+      if(slot === 1 && !polozky[i].obrazek2 && !polozky[i].obrazek3){
+        if(!polozky[i].sirka){ polozky[i].sirka = img.naturalWidth; var s=document.getElementById('sirka'+i); if(s) s.value = img.naturalWidth; }
+        if(!polozky[i].vyska){ polozky[i].vyska = img.naturalHeight; var v=document.getElementById('vyska'+i); if(v) v.value = img.naturalHeight; }
+      }
       generuj();
     };
     img.onerror = function(){ thumb.style.display='none'; };
@@ -208,7 +274,7 @@
   function zmenTyp(i, typ){ polozky[i].typ = typ; renderSeznam(); }
 
   function pridat(){
-    polozky.push({ typ:'text', stitek:'', nadpis:'', text:'', obrazek:'', popisek:'', sirka:'', vyska:'', rezervace:false });
+    polozky.push({ typ:'text', stitek:'', nadpis:'', text:'', obrazek:'', obrazek2:'', obrazek3:'', popisek:'', sirka:'', vyska:'', rezervace:false });
     renderSeznam();
     window.scrollTo(0, document.body.scrollHeight);
   }
@@ -236,14 +302,16 @@
     var bloky = polozky.map(function(it){
       var maText = it.typ === 'text' || it.typ === 'text-only';
       var maObrazek = it.typ === 'text' || it.typ === 'obrazek';
+      var obrazky = maObrazek ? [it.obrazek, it.obrazek2, it.obrazek3].filter(function(x){return x;}) : [];
       var radky = [];
       if(maText && it.stitek)    radky.push('    stitek: ' + jsRetezec(it.stitek));
       if(maText && it.nadpis)    radky.push('    nadpis: ' + jsRetezec(it.nadpis));
       if(maText && it.text)      radky.push('    text: ' + jsRetezec(it.text));
-      if(maObrazek && it.obrazek) radky.push('    obrazek: ' + jsRetezec(it.obrazek));
+      if(obrazky.length === 1)   radky.push('    obrazek: ' + jsRetezec(obrazky[0]));
+      else if(obrazky.length > 1) radky.push('    obrazek: [' + obrazky.map(jsRetezec).join(', ') + ']');
       if(maObrazek && it.popisek) radky.push('    popisek: ' + jsRetezec(it.popisek));
-      if(maObrazek && it.sirka)   radky.push('    sirka: ' + Number(it.sirka));
-      if(maObrazek && it.vyska)   radky.push('    vyska: ' + Number(it.vyska));
+      if(obrazky.length === 1 && it.sirka) radky.push('    sirka: ' + Number(it.sirka));
+      if(obrazky.length === 1 && it.vyska) radky.push('    vyska: ' + Number(it.vyska));
       if(maText && it.rezervace) radky.push('    rezervace: true');
       return '  {\n' + radky.join(',\n') + '\n  }';
     });
