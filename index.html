@@ -356,6 +356,33 @@
   .skolni-cta{ display:flex; flex-wrap:wrap; gap:12px; margin-top:6px; }
   .btn-onSage{ background:var(--paper-light); color:var(--ink); }
 
+  .skolni-guide{
+    margin-top:36px;
+    background:var(--paper-light);
+    border:2px solid var(--ink);
+    border-radius:var(--radius);
+    padding:36px;
+  }
+  .skolni-guide p{ color:var(--ink-soft); }
+  .guide-list{
+    list-style:none; margin:20px 0 0; padding:0;
+    display:grid; gap:16px; counter-reset:guide;
+  }
+  .guide-list li{ position:relative; padding-left:46px; }
+  .guide-list li::before{
+    counter-increment:guide; content:counter(guide);
+    position:absolute; left:0; top:0;
+    width:30px; height:30px; border-radius:50%;
+    background:var(--honey); color:var(--ink); font-weight:700;
+    display:flex; align-items:center; justify-content:center; font-size:.92rem;
+  }
+  .guide-list li strong{ color:var(--ink); }
+  .guide-tip{
+    margin-top:20px; padding:14px 18px;
+    background:var(--brick-light); border-radius:10px;
+    font-size:.96rem;
+  }
+
   /* ---------- O NAS ---------- */
   .section-onas{ background:var(--paper-light); }
   .onas-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:44px; align-items:center; }
@@ -465,8 +492,8 @@
     <nav class="tabs" aria-label="Hlavní navigace">
       <a href="#top" data-section="top">Domů</a>
       <a href="#novinky" data-section="novinky">Novinky</a>
-      <a href="#produkty" data-section="produkty">Produkty</a>
       <a href="#skolni-balicky" data-section="skolni-balicky">Škola</a>
+      <a href="#produkty" data-section="produkty">Produkty</a>
       <a href="#o-nas" data-section="o-nas">O nás</a>
       <a href="#recenze" data-section="recenze">Recenze</a>
       <a href="#kontakt" data-section="kontakt">Kontakt</a>
@@ -515,6 +542,45 @@
     </div>
   </section>
 
+  <!-- ================= ŠKOLNÍ BALÍČKY =================
+       Sezónní služba. Mimo sezónu (mimo srpen–září) můžete celou sekci
+       skrýt tak, že tento blok <section>…</section> a odkaz „Škola"
+       v navigaci obalíte značkou <!- - a - -> (bez mezer). -->
+  <section id="skolni-balicky">
+    <div class="container">
+      <div class="skolni-card reveal">
+        <div>
+          <span class="eyebrow">služba pro rodiče</span>
+          <h2>Školní balíčky</h2>
+          <p class="skolni-lead">Nechte přípravu pomůcek na nás. Pošlete nám seznam ze školy a my vám balíček nachystáme k vyzvednutí. Ušetříte si shánění i frontu na začátku září.</p>
+          <!-- TODO: doplňte orientační cenu balíčku (nahraďte [doplňte cenu]) -->
+          <p class="skolni-price"><strong>Orientační cena balíčku pro prvňáčka:</strong> [doplňte cenu] Kč</p>
+          <div class="skolni-cta">
+            <a class="btn btn-primary" href="mailto:papirnictvi@hrackyroztoky.cz?subject=%C5%A0koln%C3%AD%20bal%C3%AD%C4%8Dek&body=Dobr%C3%BD%20den%2C%0A%0Am%C3%A1m%20z%C3%A1jem%20o%20sestaven%C3%AD%20%C5%A1koln%C3%ADho%20bal%C3%AD%C4%8Dku%20pro%20chlapce/d%C3%ADvku.%0A%0ASeznam%20pom%C5%AFcek%20pros%C3%ADm%20p%C5%99ilo%C5%BEte%20jedn%C3%ADm%20z%20t%C4%9Bchto%20zp%C5%AFsob%C5%AF%3A%0A-%20vyfo%C5%A5te%20seznam%20%28%C4%8Diteln%C4%9B%2C%20v%20dobr%C3%A9m%20osv%C4%9Btlen%C3%AD%29%0A-%20p%C5%99ilo%C5%BEte%20jako%20soubor%20%28.txt%2C%20Word%20nebo%20PDF%29%0A%0AJm%C3%A9no%3A%0ATelefon%3A%0AKdy%20si%20bal%C3%AD%C4%8Dek%20vyzvednu%20%28orienta%C4%8Dn%C4%9B%29%3A%0A%0APozn%C3%A1mky%20%28nepovinn%C3%A9%29%3A%0ANap%C5%99.%20obl%C3%ADben%C3%A9%20barvy%20a%20motivy%2C%20zda%20se%20jedn%C3%A1%20o%20lev%C3%A1ka%20atp.%0A%0AD%C4%9Bkuji.">Napsat e-mail</a>
+            <a class="btn btn-onSage" href="tel:+420607839568">Zavolat: 607 839 568</a>
+          </div>
+          <p class="skolni-note">Aktovku a penál vám rádi pomůžeme vybrat osobně na prodejně.</p>
+        </div>
+        <ol class="skolni-steps">
+          <li><span class="skolni-num" aria-hidden="true">1</span><span>Pošlete nám seznam pomůcek e-mailem (klidně jako fotku) nebo se stavte v obchodě.</span></li>
+          <li><span class="skolni-num" aria-hidden="true">2</span><span>Připravíme vše, co máme skladem, a co nemáme, se pokusíme sehnat.</span></li>
+          <li><span class="skolni-num" aria-hidden="true">3</span><span>Dáme vám vědět a balíček si v klidu vyzvednete a zaplatíte na místě.</span></li>
+        </ol>
+      </div>
+
+      <div class="skolni-guide reveal">
+        <span class="eyebrow">poradíme</span>
+        <h2>Jak vybrat obaly na učebnice</h2>
+        <p>Obalování učebnic dokáže potrápit a známe to i my z druhé strany pultu. „Něco mezi A5 a A4" bohužel většinou nestačí. Máme ale dvě spolehlivé cesty, jak to zvládnout rychle a bez nervů:</p>
+        <ol class="guide-list">
+          <li><strong>Nejlepší: přineste učebnice s sebou.</strong> Na prodejně vám je přeměříme a vybereme obaly se správnou výškou a nastavitelnou šířkou. Tu si pak v klidu doladíte doma přesně na míru.</li>
+          <li><strong>Druhá možnost: změřte výšku a přijďte se seznamem.</strong> Doma změřte výšku každé učebnice a přineste nám seznam výšek. Podle nich vám obaly vybereme.</li>
+        </ol>
+        <p class="guide-tip"><strong>Tip:</strong> Hotovým sadám obalů „pro určitou třídu" se raději vyhněte. Z naší zkušenosti rozměry často nesedí a bývá to spíš vyhozené peníze.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= PRODUKTY ================= -->
   <section id="produkty">
     <div class="container">
@@ -551,34 +617,6 @@
             <li>Hračky na písek i na zahradu</li>
           </ul>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= ŠKOLNÍ BALÍČKY =================
-       Sezónní služba. Mimo sezónu (mimo srpen–září) můžete celou sekci
-       skrýt tak, že tento blok <section>…</section> a odkaz „Škola"
-       v navigaci obalíte značkou <!- - a - -> (bez mezer). -->
-  <section id="skolni-balicky">
-    <div class="container">
-      <div class="skolni-card reveal">
-        <div>
-          <span class="eyebrow">služba pro rodiče</span>
-          <h2>Školní balíčky</h2>
-          <p class="skolni-lead">Nechte přípravu pomůcek na nás. Pošlete nám seznam ze školy a my vám balíček nachystáme k vyzvednutí — ušetříte si shánění i frontu na začátku září.</p>
-          <!-- TODO: doplňte orientační cenu balíčku (nahraďte [doplňte cenu]) -->
-          <p class="skolni-price"><strong>Orientační cena balíčku pro prvňáčka:</strong> [doplňte cenu] Kč</p>
-          <div class="skolni-cta">
-            <a class="btn btn-primary" href="mailto:papirnictvi@hrackyroztoky.cz?subject=%C5%A0koln%C3%AD%20bal%C3%AD%C4%8Dek&body=Dobr%C3%BD%20den%2C%0A%0Am%C3%A1m%20z%C3%A1jem%20o%20sestaven%C3%AD%20%C5%A1koln%C3%ADho%20bal%C3%AD%C4%8Dku.%0A%0ASeznam%20pom%C5%AFcek%20pros%C3%ADm%20p%C5%99ilo%C5%BEte%20jedn%C3%ADm%20z%20t%C4%9Bchto%20zp%C5%AFsob%C5%AF%3A%0A-%20vyfo%C5%A5te%20seznam%20%28%C4%8Diteln%C4%9B%2C%20zp%C5%99%C3%ADma%2C%20v%20dobr%C3%A9m%20osv%C4%9Btlen%C3%AD%29%0A-%20napi%C5%A1te%20ho%20p%C5%99%C3%ADmo%20sem%20do%20e-mailu%0A-%20p%C5%99ilo%C5%BEte%20jako%20soubor%20%28.txt%2C%20Word%20nebo%20PDF%29%0A%0A%C5%A0kola%20a%20t%C5%99%C3%ADda%3A%0ASeznam%20pom%C5%AFcek%20%28pokud%20nep%C5%99ikl%C3%A1d%C3%A1te%20fotku/soubor%29%3A%0A%0AJm%C3%A9no%3A%0ATelefon%3A%0AKdy%20si%20bal%C3%AD%C4%8Dek%20vyzvednu%20%28orienta%C4%8Dn%C4%9B%29%3A%0A%0APozn%C3%A1mky%20%28nepovinn%C3%A9%29%3A%0ANap%C5%99.%20orienta%C4%8Dn%C3%AD%20rozpo%C4%8Det%2C%20obl%C3%ADben%C3%A9%20barvy%20a%20motivy%2C%20nebo%20zda%20chcete%20d%C3%ADv%C4%8D%C3%AD%20%C4%8Di%20chlapeck%C3%BD%20bal%C3%AD%C4%8Dek.%20Bez%20pozn%C3%A1mek%20vol%C3%ADme%20osv%C4%9Bd%C4%8Den%C3%A9%20pom%C5%AFcky%20s%20dobr%C3%BDm%20pom%C4%9Brem%20ceny%20a%20kvality.%0A%0AD%C4%9Bkuji.">Napsat e-mail</a>
-            <a class="btn btn-onSage" href="tel:+420607839568">Zavolat: 607 839 568</a>
-          </div>
-          <p class="skolni-note">Aktovku a penál vám rádi pomůžeme vybrat osobně v obchodě.</p>
-        </div>
-        <ol class="skolni-steps">
-          <li><span class="skolni-num" aria-hidden="true">1</span><span>Pošlete nám seznam pomůcek e-mailem (klidně jako fotku) nebo se stavte v obchodě.</span></li>
-          <li><span class="skolni-num" aria-hidden="true">2</span><span>Připravíme vše, co máme skladem, a co nemáme, se pokusíme sehnat.</span></li>
-          <li><span class="skolni-num" aria-hidden="true">3</span><span>Dáme vám vědět a balíček si v klidu vyzvednete a zaplatíte na místě.</span></li>
-        </ol>
       </div>
     </div>
   </section>
