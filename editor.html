@@ -296,8 +296,40 @@
     var header =
       '/*\n' +
       '  NOVINKY — obsah sekce „Co je u nás nového" na webu.\n' +
-      '  Tento soubor byl vytvořen editorem (editor.html). Můžete ho\n' +
-      '  klidně upravovat i ručně, ale nejjednodušší je použít editor.\n' +
+      '\n' +
+      '  Nejsnazší je upravovat novinky v editoru (soubor editor.html) — otevřete\n' +
+      '  ho dvojklikem. Můžete ale upravovat i ručně tady, podle návodu níže.\n' +
+      '  Každá novinka je jeden blok { ... } oddělený čárkou. Karty se na webu\n' +
+      '  zobrazí v tom pořadí, v jakém jsou tady napsané (shora dolů = zleva doprava).\n' +
+      '\n' +
+      '  Existují tři druhy karet:\n' +
+      '\n' +
+      '  1) KARTA S TEXTEM A OBRÁZKEM — vyplňte:\n' +
+      '       stitek   — malý štítek nahoře, např. "Novinka" nebo "Výhodná cena"\n' +
+      '                  (nepovinné — když ho vynecháte, štítek se nezobrazí)\n' +
+      '       nadpis   — název novinky (tučný text)\n' +
+      '       text     — popis pod nadpisem\n' +
+      '       obrazek  — cesta k obrázku, např. "images/produkty/nazev.jpg".\n' +
+      '                  Pro více fotek (max 3) použijte hranaté závorky:\n' +
+      '                  obrazek: ["images/produkty/1.jpg", "images/produkty/2.jpg"]\n' +
+      '       popisek  — krátký popis obrázku (pro čtečky a Google; nepovinné)\n' +
+      '       sirka,   — rozměry obrázku v pixelech (nepovinné; jen u jedné fotky —\n' +
+      '       vyska      zabrání „poskočení" stránky při načítání)\n' +
+      '       rezervace — když napíšete «rezervace: true,», přidá se ke kartě\n' +
+      '                  tlačítko „Rezervovat k vyzvednutí" (otevře e-mail\n' +
+      '                  s předvyplněným názvem). Vynechejte tam, kde rezervace\n' +
+      '                  nedává smysl (např. akce nebo oznámení).\n' +
+      '\n' +
+      '  2) KARTA JEN S TEXTEM — má nadpis a text, ale žádný obrázek\n' +
+      '     (hodí se na oznámení, např. „Zavřeno o svátcích"). NEvyplňujte obrazek.\n' +
+      '\n' +
+      '  3) KARTA JEN S OBRÁZKEM — nemá nadpis, jen obrázek přes celou kartu\n' +
+      '     (jako naše grafika „DOVOLENÁ"). Vyplňte obrazek, popisek, sirka\n' +
+      '     a vyska a NEvyplňujte nadpis.\n' +
+      '\n' +
+      '  Přidání novinky: zkopírujte jeden blok { ... }, vložte ho a upravte.\n' +
+      '  Smazání novinky: smažte celý blok { ... } i s čárkou za ním.\n' +
+      '  Po úpravě soubor uložte — na webu se změna projeví po načtení stránky.\n' +
       '*/\n\n';
     var bloky = polozky.map(function(it){
       var maText = it.typ === 'text' || it.typ === 'text-only';
