@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- zdroj pro assets/og-image.png (náhled při sdílení odkazu); export z Inkscape do PNG 1200x630 -->
+  <rect width="1200" height="630" fill="#F5E9D3"/>
+  <rect x="14" y="14" width="1172" height="602" rx="20" fill="none" stroke="#2B3A29" stroke-width="4"/>
+  <image xlink:href="logo.svg" x="355" y="70" width="490" height="490"/>
+</svg>
