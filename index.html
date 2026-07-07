@@ -271,7 +271,7 @@
   .note:nth-child(2){ transform:rotate(2deg); background:var(--sage-light); }
   .note:nth-child(3){ transform:rotate(-1.5deg); background:var(--paper); }
   .note:nth-child(4){ transform:rotate(2.5deg); background:var(--brick-light); }
-  .note.note-dovolena{ background:var(--paper-light); display:flex; align-items:center; }
+  .note.note-plain{ background:var(--paper-light); display:flex; align-items:center; }
   .note-tape{
     position:absolute; top:-12px; left:50%; transform:translateX(-50%) rotate(-4deg);
     width:70px; height:22px; background:rgba(255,255,255,.55);
@@ -482,26 +482,8 @@
         <h2>Co je u nás nového</h2>
         <p>Novinky a akce, které si hlídáme a rádi vám je připomeneme, ať vám nic neuteče.</p>
       </div>
-      <div class="notes-grid">
-        <div class="note note-dovolena reveal">
-          <div class="note-tape" aria-hidden="true"></div>
-          <img class="note-art" src="images/dovolena.svg" alt="Dovolená od 4. do 18. července — slunečník, míč a kufr na kolečkách" width="228" height="222" loading="lazy">
-        </div>
-        <div class="note reveal">
-          <div class="note-tape" aria-hidden="true"></div>
-          <span class="note-tag">Novinka</span>
-          <img class="note-img" src="images/produkty/pokemon-pitchblack.jpg" alt="Booster box Pokémon TCG: Mega Evolution Pitch Black" width="732" height="1000" loading="lazy">
-          <h3>Pokémon TCG: Pitch Black</h3>
-          <p>Edice Pitch Black i ETB právě dorazily. Držíme po jednom kusu na zákazníka, ať se dostane na co nejvíce z vás.</p>
-        </div>
-        <div class="note reveal">
-          <div class="note-tape" aria-hidden="true"></div>
-          <span class="note-tag">Výhodná cena</span>
-          <img class="note-img" src="images/produkty/pilot-familypack.png" alt="Sada šesti náplní Pilot Frixion" width="600" height="524" loading="lazy">
-          <h3>Sada šesti náplní Pilot Frixion</h3>
-          <p>U nás dlouhodobě k dostání za bezkonkurenční cenu 209 Kč.</p>
-        </div>
-      </div>
+      <!-- Karty novinek se vykreslují z data/novinky.js — obsah upravujte tam. -->
+      <div class="notes-grid"></div>
     </div>
   </section>
 
@@ -690,7 +672,54 @@
   <img id="lightboxImg" src="" alt="">
 </div>
 
+<script src="data/novinky.js"></script>
 <script>
+  // Vykreslení karet novinek z dat v data/novinky.js
+  function renderNovinky(){
+    const grid = document.querySelector('.notes-grid');
+    if(!grid || !Array.isArray(window.NOVINKY)) return;
+    grid.innerHTML = '';
+    window.NOVINKY.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'note reveal';
+
+      const tape = document.createElement('div');
+      tape.className = 'note-tape';
+      tape.setAttribute('aria-hidden', 'true');
+      card.appendChild(tape);
+
+      const img = document.createElement('img');
+      img.src = item.obrazek;
+      img.alt = item.popisek || '';
+      if(item.sirka) img.width = item.sirka;
+      if(item.vyska) img.height = item.vyska;
+      img.loading = 'lazy';
+
+      if(item.nadpis){
+        if(item.stitek){
+          const tag = document.createElement('span');
+          tag.className = 'note-tag';
+          tag.textContent = item.stitek;
+          card.appendChild(tag);
+        }
+        img.className = 'note-img';
+        card.appendChild(img);
+        const h = document.createElement('h3');
+        h.textContent = item.nadpis;
+        card.appendChild(h);
+        const p = document.createElement('p');
+        p.textContent = item.text || '';
+        card.appendChild(p);
+      } else {
+        card.classList.add('note-plain');
+        img.className = 'note-art';
+        card.appendChild(img);
+      }
+      grid.appendChild(card);
+    });
+  }
+  renderNovinky();
+
   // active tab highlighting
   const sections = document.querySelectorAll('main section, .hero');
   const tabs = document.querySelectorAll('nav.tabs a');
