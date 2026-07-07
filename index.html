@@ -805,8 +805,10 @@
           tag.textContent = item.stitek;
           card.appendChild(tag);
         }
-        img.className = 'note-img';
-        card.appendChild(img);
+        if(item.obrazek){
+          img.className = 'note-img';
+          card.appendChild(img);
+        }
         const h = document.createElement('h3');
         h.textContent = item.nadpis;
         card.appendChild(h);

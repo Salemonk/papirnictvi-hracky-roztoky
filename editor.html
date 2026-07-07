@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editor novinek — Papírnictví a Hračky Roztoky</title>
+<!-- Načte stávající novinky, aby se daly upravovat -->
+<script src="data/novinky.js"></script>
+<style>
+  :root{
+    --paper:#F5E9D3; --paper-light:#FFFBF2; --ink:#2B3A29; --ink-soft:#4A5A44;
+    --honey:#E3A72B; --honey-light:#F6D77E; --sage:#5C8374; --brick:#B8492F;
+    --radius:12px;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.5;
+    padding:24px;
+  }
+  .wrap{ max-width:820px; margin:0 auto; }
+  h1{ font-size:1.7rem; margin:0 0 6px; }
+  .lead{ color:var(--ink-soft); margin:0 0 24px; }
+  .steps{
+    background:var(--paper-light); border:2px solid var(--ink); border-radius:var(--radius);
+    padding:16px 20px; margin-bottom:24px;
+  }
+  .steps ol{ margin:8px 0 0; padding-left:22px; }
+  .steps li{ margin:4px 0; }
+  .card{
+    background:var(--paper-light); border:2px solid var(--ink); border-radius:var(--radius);
+    padding:18px 20px; margin-bottom:18px;
+  }
+  .card-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+  .card-head strong{ font-size:1.05rem; }
+  .card-tools button{ margin-left:6px; }
+  label{ display:block; font-weight:bold; font-size:.9rem; margin:12px 0 4px; }
+  .hint{ font-weight:normal; color:var(--ink-soft); font-size:.82rem; }
+  input[type=text], textarea, select{
+    width:100%; padding:9px 11px; font-size:1rem; font-family:inherit;
+    border:2px solid var(--ink); border-radius:8px; background:#fff; color:var(--ink);
+  }
+  textarea{ min-height:70px; resize:vertical; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .checkbox-row{ display:flex; align-items:center; gap:8px; margin-top:14px; }
+  .checkbox-row input{ width:20px; height:20px; }
+  .checkbox-row label{ margin:0; }
+  .thumb{ max-width:120px; max-height:90px; margin-top:8px; border:2px solid var(--ink); border-radius:8px; display:none; }
+  button{
+    font-family:inherit; font-size:.95rem; font-weight:bold; cursor:pointer;
+    background:var(--paper); color:var(--ink); border:2px solid var(--ink);
+    border-radius:999px; padding:8px 16px;
+  }
+  button:hover{ background:var(--honey-light); }
+  button.primary{ background:var(--honey); }
+  button.danger{ background:#fff; color:var(--brick); border-color:var(--brick); }
+  .toolbar{ display:flex; flex-wrap:wrap; gap:10px; margin:8px 0 26px; }
+  .btn-big{ font-size:1.05rem; padding:12px 22px; }
+  .output{
+    background:var(--paper-light); border:2px solid var(--ink); border-radius:var(--radius);
+    padding:18px 20px; margin-top:8px;
+  }
+  #vystup{ width:100%; min-height:160px; font-family:Consolas, monospace; font-size:.82rem; white-space:pre; overflow:auto; }
+  .warn{ color:var(--brick); font-weight:bold; }
+  @media (max-width:560px){ .row2{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Editor novinek</h1>
+  <p class="lead">Tady upravíte novinky na webu bez psaní kódu. Vyplňte políčka a dole si vygenerujte hotový soubor.</p>
+
+  <div class="steps">
+    <strong>Jak na to:</strong>
+    <ol>
+      <li>Upravte novinky ve formuláři níže (přidat, smazat, přesunout, změnit text).</li>
+      <li>Dole klikněte na <strong>„Stáhnout soubor novinky.js"</strong>.</li>
+      <li>Stažený soubor přesuňte do složky <strong>data</strong> ve vašem projektu (nahraďte původní).</li>
+      <li>Nové obrázky nezapomeňte nakopírovat do složky <strong>images/produkty</strong>.</li>
+      <li>Spusťte <strong>nahrat-na-github.bat</strong> a hotovo.</li>
+    </ol>
+  </div>
+
+  <div id="seznam"></div>
+
+  <div class="toolbar">
+    <button class="primary" onclick="pridat()">+ Přidat novinku</button>
+  </div>
+
+  <div class="toolbar">
+    <button class="primary btn-big" onclick="stahnout()">⬇ Stáhnout soubor novinky.js</button>
+    <button class="btn-big" onclick="zkopirovat()">Zkopírovat text</button>
+  </div>
+
+  <div class="output">
+    <label>Náhled vygenerovaného souboru <span class="hint">(nemusíte nic měnit, jen pro kontrolu)</span></label>
+    <textarea id="vystup" readonly></textarea>
+    <p id="upozorneni" class="warn"></p>
+  </div>
+</div>
+
+<script>
+  // Načtení stávajících novinek (nebo prázdný seznam, když se nenačtou)
+  let polozky = [];
+  try{
+    if(Array.isArray(window.NOVINKY)){
+      polozky = window.NOVINKY.map(function(it){
+        return {
+          typ: !it.nadpis ? 'obrazek' : (!it.obrazek ? 'text-only' : 'text'),
+          stitek: it.stitek || '',
+          nadpis: it.nadpis || '',
+          text: it.text || '',
+          obrazek: it.obrazek || '',
+          popisek: it.popisek || '',
+          sirka: it.sirka || '',
+          vyska: it.vyska || '',
+          rezervace: !!it.rezervace
+        };
+      });
+    }
+  }catch(e){ polozky = []; }
+
+  function esc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderSeznam(){
+    var box = document.getElementById('seznam');
+    box.innerHTML = '';
+    polozky.forEach(function(it, i){
+      var d = document.createElement('div');
+      d.className = 'card';
+      var maText = it.typ === 'text' || it.typ === 'text-only';
+      var maObrazek = it.typ === 'text' || it.typ === 'obrazek';
+      d.innerHTML =
+        '<div class="card-head">' +
+          '<strong>Novinka č. ' + (i+1) + '</strong>' +
+          '<span class="card-tools">' +
+            '<button onclick="posun(' + i + ',-1)" title="Nahoru">▲</button>' +
+            '<button onclick="posun(' + i + ',1)" title="Dolů">▼</button>' +
+            '<button class="danger" onclick="smazat(' + i + ')">Smazat</button>' +
+          '</span>' +
+        '</div>' +
+        '<label>Typ karty</label>' +
+        '<select onchange="zmenTyp(' + i + ', this.value)">' +
+          '<option value="text"' + (it.typ==='text'?' selected':'') + '>S textem a obrázkem</option>' +
+          '<option value="text-only"' + (it.typ==='text-only'?' selected':'') + '>Jen text</option>' +
+          '<option value="obrazek"' + (it.typ==='obrazek'?' selected':'') + '>Jen obrázek</option>' +
+        '</select>' +
+        (maText ?
+          '<label>Štítek <span class="hint">(nepovinné, např. Novinka nebo Výhodná cena)</span></label>' +
+          '<input type="text" value="' + esc(it.stitek) + '" oninput="uprav(' + i + ',\'stitek\',this.value)">' +
+          '<label>Nadpis</label>' +
+          '<input type="text" value="' + esc(it.nadpis) + '" oninput="uprav(' + i + ',\'nadpis\',this.value)">' +
+          '<label>Text</label>' +
+          '<textarea oninput="uprav(' + i + ',\'text\',this.value)">' + esc(it.text) + '</textarea>'
+        : '') +
+        (maObrazek ?
+          '<label>Obrázek <span class="hint">(cesta k souboru, např. images/produkty/nazev.jpg)</span></label>' +
+          '<input type="text" value="' + esc(it.obrazek) + '" oninput="upravObrazek(' + i + ',this.value)">' +
+          '<img class="thumb" id="thumb' + i + '">' +
+          '<label>Popis obrázku <span class="hint">(nepovinné, krátký popis pro čtečky a Google)</span></label>' +
+          '<input type="text" value="' + esc(it.popisek) + '" oninput="uprav(' + i + ',\'popisek\',this.value)">' +
+          '<div class="row2">' +
+            '<div><label>Šířka obrázku <span class="hint">(px, doplní se sama)</span></label>' +
+            '<input type="text" id="sirka' + i + '" value="' + esc(it.sirka) + '" oninput="uprav(' + i + ',\'sirka\',this.value)"></div>' +
+            '<div><label>Výška obrázku <span class="hint">(px, doplní se sama)</span></label>' +
+            '<input type="text" id="vyska' + i + '" value="' + esc(it.vyska) + '" oninput="uprav(' + i + ',\'vyska\',this.value)"></div>' +
+          '</div>'
+        : '') +
+        (maText ?
+          '<div class="checkbox-row">' +
+            '<input type="checkbox" id="rez' + i + '" ' + (it.rezervace?'checked':'') + ' onchange="uprav(' + i + ',\'rezervace\',this.checked)">' +
+            '<label for="rez' + i + '">Zobrazit tlačítko „Rezervovat k vyzvednutí"</label>' +
+          '</div>'
+        : '');
+      box.appendChild(d);
+      // náhled obrázku + automatické rozměry
+      nactiObrazek(i, it.obrazek);
+    });
+    generuj();
+  }
+
+  function uprav(i, pole, hodnota){ polozky[i][pole] = hodnota; generuj(); }
+
+  function upravObrazek(i, hodnota){
+    polozky[i].obrazek = hodnota;
+    nactiObrazek(i, hodnota);
+    generuj();
+  }
+
+  function nactiObrazek(i, cesta){
+    var thumb = document.getElementById('thumb' + i);
+    if(!thumb) return;
+    if(!cesta){ thumb.style.display='none'; return; }
+    var img = new Image();
+    img.onload = function(){
+      thumb.src = cesta; thumb.style.display='block';
+      // doplnit rozměry, pokud nejsou vyplněné
+      if(!polozky[i].sirka){ polozky[i].sirka = img.naturalWidth; var s=document.getElementById('sirka'+i); if(s) s.value = img.naturalWidth; }
+      if(!polozky[i].vyska){ polozky[i].vyska = img.naturalHeight; var v=document.getElementById('vyska'+i); if(v) v.value = img.naturalHeight; }
+      generuj();
+    };
+    img.onerror = function(){ thumb.style.display='none'; };
+    img.src = cesta;
+  }
+
+  function zmenTyp(i, typ){ polozky[i].typ = typ; renderSeznam(); }
+
+  function pridat(){
+    polozky.push({ typ:'text', stitek:'', nadpis:'', text:'', obrazek:'', popisek:'', sirka:'', vyska:'', rezervace:false });
+    renderSeznam();
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function smazat(i){
+    if(confirm('Opravdu smazat tuto novinku?')){ polozky.splice(i,1); renderSeznam(); }
+  }
+
+  function posun(i, smer){
+    var j = i + smer;
+    if(j < 0 || j >= polozky.length) return;
+    var tmp = polozky[i]; polozky[i] = polozky[j]; polozky[j] = tmp;
+    renderSeznam();
+  }
+
+  function jsRetezec(s){ return JSON.stringify(String(s)); }
+
+  function generuj(){
+    var header =
+      '/*\n' +
+      '  NOVINKY — obsah sekce „Co je u nás nového" na webu.\n' +
+      '  Tento soubor byl vytvořen editorem (editor.html). Můžete ho\n' +
+      '  klidně upravovat i ručně, ale nejjednodušší je použít editor.\n' +
+      '*/\n\n';
+    var bloky = polozky.map(function(it){
+      var maText = it.typ === 'text' || it.typ === 'text-only';
+      var maObrazek = it.typ === 'text' || it.typ === 'obrazek';
+      var radky = [];
+      if(maText && it.stitek)    radky.push('    stitek: ' + jsRetezec(it.stitek));
+      if(maText && it.nadpis)    radky.push('    nadpis: ' + jsRetezec(it.nadpis));
+      if(maText && it.text)      radky.push('    text: ' + jsRetezec(it.text));
+      if(maObrazek && it.obrazek) radky.push('    obrazek: ' + jsRetezec(it.obrazek));
+      if(maObrazek && it.popisek) radky.push('    popisek: ' + jsRetezec(it.popisek));
+      if(maObrazek && it.sirka)   radky.push('    sirka: ' + Number(it.sirka));
+      if(maObrazek && it.vyska)   radky.push('    vyska: ' + Number(it.vyska));
+      if(maText && it.rezervace) radky.push('    rezervace: true');
+      return '  {\n' + radky.join(',\n') + '\n  }';
+    });
+    var obsah = header + 'window.NOVINKY = [\n' + bloky.join(',\n') + '\n];\n';
+    document.getElementById('vystup').value = obsah;
+
+    // upozornění na chybějící údaje
+    var chyby = [];
+    polozky.forEach(function(it, i){
+      var maText = it.typ === 'text' || it.typ === 'text-only';
+      var maObrazek = it.typ === 'text' || it.typ === 'obrazek';
+      if(maText && !it.nadpis) chyby.push('Novinka č. ' + (i+1) + ' nemá nadpis.');
+      if(maObrazek && !it.obrazek) chyby.push('Novinka č. ' + (i+1) + ' nemá obrázek.');
+    });
+    document.getElementById('upozorneni').textContent = chyby.join(' ');
+    return obsah;
+  }
+
+  function stahnout(){
+    var obsah = generuj();
+    var blob = new Blob([obsah], {type:'text/javascript;charset=utf-8'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'novinky.js';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function zkopirovat(){
+    var ta = document.getElementById('vystup');
+    ta.select();
+    try{ document.execCommand('copy'); alert('Text zkopírován. Můžete ho vložit do souboru data/novinky.js.'); }
+    catch(e){ alert('Zkopírování se nepovedlo, označte text ručně a zkopírujte (Ctrl+C).'); }
+  }
+
+  renderSeznam();
+</script>
+</body>
+</html>
