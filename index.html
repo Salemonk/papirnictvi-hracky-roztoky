@@ -359,25 +359,18 @@
   }
 
   /* ---------- RECENZE ---------- */
-  .reviews-grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:24px;
-  }
-  .review-card{
+  .rating-banner{
     background:var(--paper-light);
     border:2px solid var(--ink);
     border-radius:var(--radius);
-    padding:24px 22px;
-    display:flex; flex-direction:column; gap:12px;
+    padding:36px;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    text-align:center;
   }
-  .review-stars{ color:var(--honey); font-size:1.1rem; letter-spacing:.15em; }
-  .overall-rating{ display:flex; align-items:center; gap:10px; margin:.3em 0 .8em; }
-  .overall-rating .review-stars{ font-size:1.3rem; }
-  .overall-rating-score{ font-weight:700; font-size:1.1rem; color:var(--ink); }
-  .review-text{ font-size:.96rem; color:var(--ink-soft); margin:0; flex-grow:1; }
-  .review-author{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
-  .review-name{ font-weight:700; font-size:.94rem; }
-  .review-source{ font-size:.78rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; }
+  .rating-banner p{ color:var(--ink-soft); margin:0 0 6px; }
+  .review-stars{ color:var(--honey); font-size:1.4rem; letter-spacing:.15em; }
+  .overall-rating{ display:flex; align-items:center; gap:10px; }
+  .overall-rating-score{ font-weight:700; font-size:1.3rem; color:var(--ink); }
 
   /* ---------- KONTAKT ---------- */
   .kontakt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
@@ -578,61 +571,15 @@
       <div class="section-head reveal">
         <span class="eyebrow">co říkají zákazníci</span>
         <h2>Recenze z Googlu</h2>
+        <p>Vážíme si každého slova a děkujeme všem, kdo si na nás udělali chvilku.</p>
+      </div>
+      <div class="rating-banner reveal">
         <div class="overall-rating" aria-label="Hodnocení 4,6 z 5 hvězdiček na Googlu">
           <span class="review-stars">★★★★★</span>
           <span class="overall-rating-score">4,6/5</span>
         </div>
-        <p>Vážíme si každého slova a děkujeme všem, kdo si na nás udělali chvilku.</p>
-      </div>
-      <div class="reviews-grid">
-        <div class="review-card reveal">
-          <div class="review-stars" aria-label="5 z 5 hvězdiček">★★★★★</div>
-          <p class="review-text">„Velmi dobře zásobené papírnictví. Obzvlášť koncem srpna a začátkem září je tu pořádný nával 😊 Pokud nemůžete sehnat obal na učebnici, nebo sešit, tady ho určitě mají.“</p>
-          <div class="review-author">
-            <span class="review-name">David</span>
-            <span class="review-source">Google</span>
-          </div>
-        </div>
-        <div class="review-card reveal">
-          <div class="review-stars" aria-label="5 z 5 hvězdiček">★★★★★</div>
-          <p class="review-text">„Vždy zde najdu to, co potřebuji, milý personál.“</p>
-          <div class="review-author">
-            <span class="review-name">Maty</span>
-            <span class="review-source">Google</span>
-          </div>
-        </div>
-        <div class="review-card reveal">
-          <div class="review-stars" aria-label="5 z 5 hvězdiček">★★★★★</div>
-          <p class="review-text">„Když nevíte coby, najdete to tady. Obsluha milá, vždy poradí a pomohou.“</p>
-          <div class="review-author">
-            <span class="review-name">Markéta</span>
-            <span class="review-source">Google</span>
-          </div>
-        </div>
-        <div class="review-card reveal">
-          <div class="review-stars" aria-label="5 z 5 hvězdiček">★★★★★</div>
-          <p class="review-text">„Malý obchůdek a hodně věcí. Personál ochotný a vstřícný.“</p>
-          <div class="review-author">
-            <span class="review-name">Hana</span>
-            <span class="review-source">Google</span>
-          </div>
-        </div>
-        <div class="review-card reveal">
-          <div class="review-stars" aria-label="5 z 5 hvězdiček">★★★★★</div>
-          <p class="review-text">„Mají všechno nebo všechno seženou. Příjemný personál. Domácí prostředí.“</p>
-          <div class="review-author">
-            <span class="review-name">René</span>
-            <span class="review-source">Google</span>
-          </div>
-        </div>
-        <div class="review-card reveal">
-          <div class="review-stars" aria-label="5 z 5 hvězdiček">★★★★★</div>
-          <p class="review-text">„Velký výběr. Příjemný personál, který dokáže poradit.“</p>
-          <div class="review-author">
-            <span class="review-name">Jana</span>
-            <span class="review-source">Google</span>
-          </div>
-        </div>
+        <p>Aktuální recenze najdete na našem Google profilu.</p>
+        <a class="btn btn-primary" href="https://www.google.com/search?q=Pap%C3%ADrnictv%C3%AD+a+Hra%C4%8Dky+Roztoky+recenze" target="_blank" rel="noopener">Přečíst recenze na Googlu</a>
       </div>
     </div>
   </section>
