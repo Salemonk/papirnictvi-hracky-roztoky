@@ -234,8 +234,58 @@
   }
   .brand-logo img{ width:420px; height:auto; }
 
-  .hero-art{ position:relative; }
+  .hero-art{ position:relative; display:flex; flex-direction:column; }
   .hero-art img{ width:100%; height:auto; }
+
+  /* jemná „podlaha" pod poličkami, ať ilustrace nepůsobí useknutě */
+  .hero-podlaha{
+    height:3px; margin:8px 6% 0; border-radius:3px;
+    background:linear-gradient(90deg, transparent, var(--kraft) 18%, var(--kraft) 82%, transparent);
+    opacity:.5;
+  }
+  /* ===== Visací cedule se stavem obchodu (pod poličkou) ===== */
+  .hero-stav{
+    position:relative; width:210px; margin:40px auto 0; padding-top:34px;
+    transform:scale(1.5); transform-origin:top center;  /* celá cedule o 50 % větší */
+  }
+  /* provázek + hřebík nad cedulí */
+  .cedule-provazek{ position:absolute; top:0; left:0; width:210px; height:48px; overflow:visible; }
+  /* samotná cedule */
+  .hero-stav .stav{
+    position:relative; display:flex; justify-content:center; align-items:center; gap:9px;
+    margin:0; padding:16px 18px; min-height:60px;
+    background:linear-gradient(var(--kraft), var(--kraft-dark)); color:var(--paper-light);
+    border:2.5px solid var(--ink); border-radius:12px;
+    box-shadow:0 10px 22px rgba(43,58,41,.18), inset 0 2px 0 rgba(255,255,255,.18);
+    font-family:'Fraunces',Georgia,serif; font-weight:700; font-size:1.5rem; line-height:1;
+  }
+  /* dírky pro provázek v horních rozích */
+  .hero-stav .stav::before, .hero-stav .stav::after{
+    content:''; position:absolute; top:9px; width:9px; height:9px;
+    border:2px solid var(--ink); border-radius:50%; background:var(--kraft-darker);
+  }
+  .hero-stav .stav::before{ left:18px; }
+  .hero-stav .stav::after{ right:18px; }
+  .hero-stav .stav .dot{ width:12px; height:12px; margin:0; }
+  .hero-stav .stav.otevreno{ color:#EAF6E4; }   /* světle zelenkavá na dřevě */
+  .hero-stav .stav.zavreno{ color:#FBE4D6; }    /* světle teplá na dřevě */
+  /* papírek s časovým údajem, přilepený k ceduli */
+  .hero-stav .stav-detail{
+    position:absolute; right:-12px; bottom:-58px;
+    display:block; max-width:150px; padding:9px 13px 11px;
+    background:var(--honey-light); color:var(--ink);
+    font-family:'Caveat',cursive; font-weight:700; font-size:1.18rem; line-height:1.12;
+    text-align:center; opacity:1;
+    border:1.5px solid rgba(43,58,41,.3); border-radius:3px;
+    box-shadow:0 5px 12px rgba(43,58,41,.18); transform:rotate(-5deg);
+  }
+  /* lepicí páska nahoře na papírku */
+  .hero-stav .stav .stav-detail::before{
+    content:''; position:absolute; top:-9px; left:50%;
+    transform:translateX(-50%) rotate(2deg);
+    width:44px; height:16px; background:rgba(227,167,43,.4);
+    border:1px solid rgba(43,58,41,.15);
+  }
 
   /* ---------- PERFORATED DIVIDER (notepad tear) ---------- */
   .perforated{
@@ -464,6 +514,7 @@
   }
   .stav.zavreno .dot{ background:#E8765C; box-shadow:0 0 0 3px rgba(232,118,92,.25); }
   .stav .stav-detail{ font-weight:400; opacity:.85; }
+  .stav .stav-detail::before{ content:'· '; }
   .hours-row{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed rgba(255,251,242,.25); font-size:1rem; }
   .hours-row:last-child{ border-bottom:none; }
   .map-embed{
@@ -578,6 +629,15 @@
 
       <div class="hero-art">
         <img src="images/policka-cela.svg" alt="Ilustrace dvou dřevěných poliček — nahoře kelímek s pastelkami, knihy a Rubikova kostka na stojánku, dole dřevěný vláček, medvídek s mašlí a počítadlo" width="500" height="420">
+        <div class="hero-podlaha" role="presentation"></div>
+        <div class="hero-stav">
+          <svg class="cedule-provazek" viewBox="0 0 210 48" aria-hidden="true">
+            <path d="M105 8 Q62 26 25 43" fill="none" stroke="#2B3A29" stroke-width="2" stroke-linecap="round"/>
+            <path d="M105 8 Q148 26 185 43" fill="none" stroke="#2B3A29" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="105" cy="7" r="4" fill="#B8492F" stroke="#2B3A29" stroke-width="2"/>
+          </svg>
+          <div class="stav js-stav" aria-live="polite"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -783,7 +843,7 @@
         </div>
         <div class="chalkboard reveal">
           <h3>Otevírací doba</h3>
-          <div id="stav-obchodu" class="stav" aria-live="polite"></div>
+          <div id="stav-obchodu" class="stav js-stav" aria-live="polite"></div>
           <div class="hours-row"><span>Pondělí – Pátek</span><span>9:00 – 12:00, 12:30 – 18:00</span></div>
           <div class="hours-row"><span>Sobota</span><span>9:00 – 12:00</span></div>
           <div class="hours-row"><span>Neděle</span><span>Zavřeno</span></div>
@@ -993,8 +1053,7 @@
       'Písmena na tužce prozradí tvrdost. H znamená „hard", tedy tvrdá tužka se světlou stopou na rýsování. B je jako „black", u nás spíš měkká tužka se sytou stopou na kreslení. A HB je zlatá střední cesta.'
     ];
     const bezPohybu = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let i = Math.floor(Math.random() * tipy.length);
-    let timer = null;
+    let i = Math.floor(Math.random() * tipy.length); // náhodný tip při načtení
 
     function ukaz(){ el.textContent = tipy[i]; }
     function dalsi(){
@@ -1003,26 +1062,30 @@
       el.classList.add('fade');
       setTimeout(function(){ ukaz(); el.classList.remove('fade'); }, 350);
     }
-    function spustAuto(){ if(bezPohybu) return; zastavAuto(); timer = setInterval(dalsi, 8000); }
-    function zastavAuto(){ if(timer){ clearInterval(timer); timer = null; } }
 
     ukaz();
-    if(btn) btn.addEventListener('click', function(){ dalsi(); spustAuto(); });
-    const banner = el.closest('.vite-banner');
-    if(banner){
-      banner.addEventListener('mouseenter', zastavAuto);
-      banner.addEventListener('mouseleave', spustAuto);
-    }
-    spustAuto();
+    if(btn) btn.addEventListener('click', dalsi);
   })();
 
   // ---------- Stav „Právě otevřeno / zavřeno" ----------
   // Otevírací doba: Po–Pá 9–12 a 12:30–18, So 9–12, Ne a svátky zavřeno.
   (function(){
-    const stavEl = document.getElementById('stav-obchodu');
-    if(!stavEl) return;
+    const stavEls = document.querySelectorAll('.js-stav');
+    if(!stavEls.length) return;
 
     const dnyNazev = ['v neděli','v pondělí','v úterý','ve středu','ve čtvrtek','v pátek','v sobotu'];
+
+    // ===== DOVOLENÁ / mimořádné zavření =====
+    // Vyplňte data (oba dny VČETNĚ), nebo až skončí nastavte na null.
+    // Příklad: zavřeno od 8. 7. do 18. 7. včetně (otevíráme až v pondělí 20. 7.):
+    const dovolena = { od: '2026-07-08', do: '2026-07-18' };
+    function vDovolene(d){
+      if(!dovolena) return false;
+      const den = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+      const od  = new Date(dovolena.od + 'T00:00:00').getTime();
+      const doo = new Date(dovolena.do + 'T00:00:00').getTime();
+      return den >= od && den <= doo;
+    }
 
     // Aktuální čas přepočtený na pražský (ať to sedí i pro návštěvníky odjinud)
     function prazskyCas(){
@@ -1030,6 +1093,7 @@
     }
     // Intervaly otevření pro daný den (v minutách od půlnoci)
     function intervalyDne(d){
+      if(vDovolene(d)) return [];
       if(jeSvatek(d)) return [];
       const den = d.getDay();
       if(den >= 1 && den <= 5) return [[540, 720], [750, 1080]]; // 9–12, 12:30–18
@@ -1061,24 +1125,27 @@
     // Najde nejbližší budoucí otevření
     function dalsiOtevreni(now){
       const minutyNow = now.getHours()*60 + now.getMinutes();
-      for(let offset=0; offset<8; offset++){
+      for(let offset=0; offset<60; offset++){
         const d = new Date(now); d.setDate(now.getDate()+offset);
         const iv = intervalyDne(d);
         for(let j=0; j<iv.length; j++){
           const start = iv[j][0];
           if(offset===0 && minutyNow >= start) continue;
-          return { offset: offset, den: d.getDay(), cas: naCas(start) };
+          return { offset: offset, den: d.getDay(), cas: naCas(start), datum: new Date(d) };
         }
       }
       return null;
     }
+    function datumKratky(d){ return d.getDate() + '. ' + (d.getMonth()+1) + '.'; }
     function popisDalsi(info){
       if(!info) return '';
       const cas = info.cas;
       const predlozkaCas = (cas.indexOf('12:')===0 || cas.indexOf('14:')===0) ? 've ' : 'v ';
       if(info.offset === 0) return 'otevíráme ' + predlozkaCas + cas;
       if(info.offset === 1) return 'otevíráme zítra ' + predlozkaCas + cas;
-      return 'otevíráme ' + dnyNazev[info.den] + ' ' + predlozkaCas + cas;
+      // do týdne stačí název dne, dál radši i s datem (ať je to u dovolené jednoznačné)
+      if(info.offset <= 6) return 'otevíráme ' + dnyNazev[info.den] + ' ' + predlozkaCas + cas;
+      return 'otevíráme ' + dnyNazev[info.den] + ' ' + datumKratky(info.datum);
     }
 
     function render(){
@@ -1089,18 +1156,24 @@
       for(let j=0; j<iv.length; j++){
         if(minuty >= iv[j][0] && minuty < iv[j][1]){ otevreno = iv[j][1]; break; }
       }
-      stavEl.innerHTML = '';
-      const dot = document.createElement('span'); dot.className = 'dot'; dot.setAttribute('aria-hidden','true');
-      const text = document.createElement('span');
+      let trida, html;
       if(otevreno !== null){
-        stavEl.className = 'stav otevreno';
-        text.innerHTML = 'Právě otevřeno <span class="stav-detail">· do ' + naCas(otevreno) + '</span>';
+        trida = 'stav otevreno';
+        html = 'Právě otevřeno <span class="stav-detail">do ' + naCas(otevreno) + '</span>';
       } else {
-        stavEl.className = 'stav zavreno';
+        trida = 'stav zavreno';
         const info = popisDalsi(dalsiOtevreni(now));
-        text.innerHTML = 'Zavřeno' + (info ? ' <span class="stav-detail">· ' + info + '</span>' : '');
+        const popisek = vDovolene(now) ? 'Dovolená' : 'Zavřeno';
+        html = popisek + (info ? ' <span class="stav-detail">' + info + '</span>' : '');
       }
-      stavEl.appendChild(dot); stavEl.appendChild(text);
+      stavEls.forEach(function(stavEl){
+        // zachovat případné pomocné třídy (js-stav) a přepsat jen stav
+        stavEl.className = trida + ' js-stav';
+        stavEl.innerHTML = '';
+        const dot = document.createElement('span'); dot.className = 'dot'; dot.setAttribute('aria-hidden','true');
+        const text = document.createElement('span'); text.innerHTML = html;
+        stavEl.appendChild(dot); stavEl.appendChild(text);
+      });
     }
 
     render();

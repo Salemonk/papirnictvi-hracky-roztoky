@@ -41,7 +41,8 @@ window.NOVINKY = [
     obrazek: "images/dovolena.svg",
     popisek: "Dovolená od 4. do 18. července — slunečník, míč a kufr na kolečkách",
     sirka: 228,
-    vyska: 222
+    vyska: 222,
+    zobrazitDo: "2026-07-18"
   },
   {
     stitek: "Novinka",
