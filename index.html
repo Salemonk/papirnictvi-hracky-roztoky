@@ -456,7 +456,12 @@
   .chalkboard h3{ color:var(--paper-light); font-family:'Caveat',cursive; font-size:1.7rem; margin-bottom:.35em; }
   .stav{ display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:.95rem; margin-bottom:14px; }
   .stav .dot{ width:11px; height:11px; border-radius:50%; flex-shrink:0; }
-  .stav.otevreno .dot{ background:#7BC47F; box-shadow:0 0 0 3px rgba(123,196,127,.25); }
+  .stav.otevreno .dot{ background:#7BC47F; animation:pulz 2.2s ease-out infinite; }
+  @keyframes pulz{
+    0%{ box-shadow:0 0 0 0 rgba(123,196,127,.5); }
+    70%{ box-shadow:0 0 0 8px rgba(123,196,127,0); }
+    100%{ box-shadow:0 0 0 0 rgba(123,196,127,0); }
+  }
   .stav.zavreno .dot{ background:#E8765C; box-shadow:0 0 0 3px rgba(232,118,92,.25); }
   .stav .stav-detail{ font-weight:400; opacity:.85; }
   .hours-row{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed rgba(255,251,242,.25); font-size:1rem; }
@@ -481,6 +486,38 @@
   .social-row a{
     width:38px; height:38px; border-radius:50%; border:2px solid var(--paper-light);
     display:flex; align-items:center; justify-content:center; text-decoration:none;
+  }
+
+  /* ---------- VĚDĚLI JSTE (banner s tipy) ---------- */
+  .section-vite{ padding:20px 0 44px; }
+  .vite-banner{
+    position:relative;
+    background:var(--honey-light);
+    border:2px solid var(--ink);
+    border-radius:var(--radius);
+    padding:26px 30px;
+    box-shadow:0 8px 18px var(--shadow);
+  }
+  .vite-label{
+    display:inline-block; font-family:'Caveat',cursive; font-weight:700;
+    font-size:1.5rem; color:var(--brick); transform:rotate(-2deg); margin-bottom:.1em;
+  }
+  .vite-text{
+    margin:2px 0 0; font-size:1.05rem; min-height:3.2em;
+    transition:opacity .35s ease;
+  }
+  .vite-text.fade{ opacity:0; }
+  .vite-dalsi{
+    position:absolute; top:22px; right:26px;
+    font-family:'Karla',sans-serif; font-weight:700; font-size:.85rem;
+    background:transparent; color:var(--ink); border:2px solid var(--ink);
+    border-radius:999px; padding:6px 14px; cursor:pointer;
+    transition:background .15s ease;
+  }
+  .vite-dalsi:hover{ background:var(--paper-light); }
+  @media (max-width:560px){
+    .vite-dalsi{ position:static; margin-top:14px; }
+    .vite-text{ min-height:0; }
   }
 
   /* reveal on scroll */
@@ -635,6 +672,17 @@
             <li>Hračky na písek i na zahradu</li>
           </ul>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VĚDĚLI JSTE ================= -->
+  <section class="section-vite">
+    <div class="container">
+      <div class="vite-banner reveal" aria-live="polite">
+        <span class="vite-label">Věděli jste?</span>
+        <p class="vite-text" id="vite-text"></p>
+        <button type="button" class="vite-dalsi" id="vite-dalsi">Další tip &rsaquo;</button>
       </div>
     </div>
   </section>
@@ -932,6 +980,41 @@
   lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
+
+  // ---------- „Věděli jste?" — střídání tipů ----------
+  (function(){
+    const el = document.getElementById('vite-text');
+    const btn = document.getElementById('vite-dalsi');
+    if(!el) return;
+    const tipy = [
+      'Když se řekne „osmdesátka", myslí se gramáž: jeden metr čtvereční běžného kancelářského papíru váží 80 gramů. Proto se značí 80 g/m².',
+      'Formát A4 je malý zázrak. Přeložíte ho napůl a dostanete A5 se stejnými proporcemi (poměr stran je odmocnina ze dvou). A největší arch celé řady, A0, měří přesně jeden metr čtvereční.',
+      'Číslo na sešitu není náhodné. První číslice je formát (4 = A4, 5 = A5, 6 = A6), druhá počet listů (2 = 20, 4 = 40…) a třetí typ linek. Takže „524" je sešit A5, 20 listů, linkovaný.',
+      'Písmena na tužce prozradí tvrdost. H znamená „hard", tedy tvrdá tužka se světlou stopou na rýsování. B je jako „black", u nás spíš měkká tužka se sytou stopou na kreslení. A HB je zlatá střední cesta.'
+    ];
+    const bezPohybu = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let i = Math.floor(Math.random() * tipy.length);
+    let timer = null;
+
+    function ukaz(){ el.textContent = tipy[i]; }
+    function dalsi(){
+      i = (i + 1) % tipy.length;
+      if(bezPohybu){ ukaz(); return; }
+      el.classList.add('fade');
+      setTimeout(function(){ ukaz(); el.classList.remove('fade'); }, 350);
+    }
+    function spustAuto(){ if(bezPohybu) return; zastavAuto(); timer = setInterval(dalsi, 8000); }
+    function zastavAuto(){ if(timer){ clearInterval(timer); timer = null; } }
+
+    ukaz();
+    if(btn) btn.addEventListener('click', function(){ dalsi(); spustAuto(); });
+    const banner = el.closest('.vite-banner');
+    if(banner){
+      banner.addEventListener('mouseenter', zastavAuto);
+      banner.addEventListener('mouseleave', spustAuto);
+    }
+    spustAuto();
+  })();
 
   // ---------- Stav „Právě otevřeno / zavřeno" ----------
   // Otevírací doba: Po–Pá 9–12 a 12:30–18, So 9–12, Ne a svátky zavřeno.

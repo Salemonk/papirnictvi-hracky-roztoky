@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stránka nenalezena — Papírnictví a Hračky Roztoky</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<style>
+  /* Samostatná stránka — vlastní styly, aby fungovala i pro cizí adresu.
+     Fonty webu zkusíme načíst z /fonts, ale máme i bezpečné náhrady. */
+  @font-face{
+    font-family:'Fraunces'; font-style:normal; font-weight:400 700; font-display:swap;
+    src:url('/fonts/fraunces-latin.woff2') format('woff2');
+  }
+  @font-face{
+    font-family:'Karla'; font-style:normal; font-weight:400 700; font-display:swap;
+    src:url('/fonts/karla-latin.woff2') format('woff2');
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    background:#F5E9D3; color:#2B3A29;
+    font-family:'Karla', Arial, sans-serif; line-height:1.6;
+    padding:32px;
+  }
+  .box{
+    max-width:520px; text-align:center;
+    background:#FFFBF2; border:2px solid #2B3A29; border-radius:14px;
+    padding:44px 36px; box-shadow:0 12px 28px rgba(43,58,41,0.18);
+  }
+  .kod{
+    font-family:'Fraunces', Georgia, serif; font-weight:700;
+    font-size:4.5rem; line-height:1; color:#E3A72B;
+    -webkit-text-stroke:2px #2B3A29;
+  }
+  h1{ font-family:'Fraunces', Georgia, serif; font-size:1.6rem; margin:12px 0 10px; }
+  p{ color:#4A5A44; margin:0 0 26px; }
+  .tuzka{ width:54px; height:54px; margin:0 auto 6px; display:block; }
+  a.btn{
+    display:inline-block; text-decoration:none; font-weight:700;
+    background:#E3A72B; color:#2B3A29; border:2px solid #2B3A29;
+    border-radius:999px; padding:13px 26px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  a.btn:hover{ transform:translateY(-2px); box-shadow:0 6px 0 #2B3A29; }
+</style>
+</head>
+<body>
+  <div class="box">
+    <svg class="tuzka" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+      <path d="M8 40 L14 39 L36 17 L31 12 L9 34 Z" fill="#F6D77E" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M31 12 L36 17 L40 13 L35 8 Z" fill="#B8492F" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M8 40 L14 39 L11.5 35.5 Z" fill="#4A5A44" stroke="#2B3A29" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+    <div class="kod">404</div>
+    <h1>Tady nic není</h1>
+    <p>Tuhle stránku se nám nepodařilo najít. Nejspíš jste se překlikli, nebo už neexistuje. V obchodě toho ale máme spoustu.</p>
+    <a class="btn" href="/">Zpět na hlavní stránku</a>
+  </div>
+</body>
+</html>
