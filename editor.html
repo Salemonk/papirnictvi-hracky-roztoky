@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Editor novinek — Papírnictví a Hračky Roztoky</title>
-<!-- Načte stávající novinky, aby se daly upravovat -->
+<title>Editor novinek a tipů — Papírnictví a Hračky Roztoky</title>
+<!-- Načte stávající novinky a tipy, aby se daly upravovat -->
 <script src="data/novinky.js"></script>
+<script src="data/tipy.js"></script>
 <style>
   :root{
     --paper:#F5E9D3; --paper-light:#FFFBF2; --ink:#2B3A29; --ink-soft:#4A5A44;
@@ -60,7 +61,7 @@
     background:var(--paper-light); border:2px solid var(--ink); border-radius:var(--radius);
     padding:18px 20px; margin-top:8px;
   }
-  #vystup{ width:100%; min-height:160px; font-family:Consolas, monospace; font-size:.82rem; white-space:pre; overflow:auto; }
+  #vystup, #vystup-tipy{ width:100%; min-height:160px; font-family:Consolas, monospace; font-size:.82rem; white-space:pre; overflow:auto; }
   .warn{ color:var(--brick); font-weight:bold; }
   .img-row{ display:flex; gap:8px; align-items:stretch; }
   .img-row input{ flex:1 1 auto; min-width:0; }
@@ -70,19 +71,21 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>Editor novinek</h1>
-  <p class="lead">Tady upravíte novinky na webu bez psaní kódu. Vyplňte políčka a dole si vygenerujte hotový soubor.</p>
+  <h1>Editor novinek a tipů</h1>
+  <p class="lead">Tady upravíte <strong>novinky</strong> i <strong>tipy</strong> na webu bez psaní kódu. Vyplňte políčka a u té části, kterou jste měnili, si dole vygenerujte hotový soubor.</p>
 
   <div class="steps">
     <strong>Jak na to:</strong>
     <ol>
-      <li>Upravte novinky ve formuláři níže (přidat, smazat, přesunout, změnit text).</li>
-      <li>Dole klikněte na <strong>„Stáhnout soubor novinky.js"</strong>.</li>
+      <li>Nahoře upravte <strong>novinky</strong>, dole <strong>tipy</strong> (přidat, smazat, přesunout, změnit text).</li>
+      <li>U té části, kterou jste měnili, klikněte na její tlačítko <strong>„Stáhnout soubor…"</strong> (novinky.js, resp. tipy.js).</li>
       <li>Stažený soubor přesuňte do složky <strong>data</strong> ve vašem projektu (nahraďte původní).</li>
       <li>Nové obrázky nezapomeňte nakopírovat do složky <strong>images/produkty</strong>.</li>
       <li>Spusťte <strong>nahrat-na-github.bat</strong> a hotovo.</li>
     </ol>
   </div>
+
+  <h2 style="margin:26px 0 4px;">Novinky</h2>
 
   <div id="seznam"></div>
 
@@ -99,6 +102,26 @@
     <label>Náhled vygenerovaného souboru <span class="hint">(nemusíte nic měnit, jen pro kontrolu)</span></label>
     <textarea id="vystup" readonly></textarea>
     <p id="upozorneni" class="warn"></p>
+  </div>
+
+  <h2 style="margin:40px 0 4px;">Tipy do bannerku „Věděli jste?"</h2>
+  <p class="lead">Krátké zajímavosti, které se v úvodu stránky náhodně střídají. Každý tip je jedna věta či dvě.</p>
+
+  <div id="seznam-tipy"></div>
+
+  <div class="toolbar">
+    <button class="primary" onclick="pridatTip()">+ Přidat tip</button>
+  </div>
+
+  <div class="toolbar">
+    <button class="primary btn-big" onclick="stahnoutTipy()">⬇ Stáhnout soubor tipy.js</button>
+    <button class="btn-big" onclick="zkopirovatTipy()">Zkopírovat text</button>
+  </div>
+
+  <div class="output">
+    <label>Náhled vygenerovaného souboru <span class="hint">(nemusíte nic měnit, jen pro kontrolu)</span></label>
+    <textarea id="vystup-tipy" readonly></textarea>
+    <p id="upozorneni-tipy" class="warn"></p>
   </div>
 </div>
 
@@ -396,7 +419,109 @@
     catch(e){ alert('Zkopírování se nepovedlo, označte text ručně a zkopírujte (Ctrl+C).'); }
   }
 
+  // ===================== TIPY (banner „Věděli jste?") =====================
+  // Načtení stávajících tipů (nebo prázdný seznam, když se nenačtou)
+  var tipyList = Array.isArray(window.TIPY) ? window.TIPY.slice() : [];
+
+  function renderTipy(){
+    var box = document.getElementById('seznam-tipy');
+    box.innerHTML = '';
+    tipyList.forEach(function(t, i){
+      var d = document.createElement('div');
+      d.className = 'card';
+      d.innerHTML =
+        '<div class="card-head">' +
+          '<strong>Tip č. ' + (i+1) + '</strong>' +
+          '<span class="card-tools">' +
+            '<button onclick="posunTip(' + i + ',-1)" title="Nahoru">▲</button>' +
+            '<button onclick="posunTip(' + i + ',1)" title="Dolů">▼</button>' +
+            '<button class="danger" onclick="smazatTip(' + i + ')">Smazat</button>' +
+          '</span>' +
+        '</div>' +
+        '<label>Text tipu</label>' +
+        '<textarea oninput="upravTip(' + i + ',this.value)">' + esc(t) + '</textarea>';
+      box.appendChild(d);
+    });
+    generujTipy();
+  }
+
+  function upravTip(i, hodnota){ tipyList[i] = hodnota; generujTipy(); }
+
+  function pridatTip(){
+    tipyList.push('');
+    renderTipy();
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function smazatTip(i){
+    if(confirm('Opravdu smazat tento tip?')){ tipyList.splice(i,1); renderTipy(); }
+  }
+
+  function posunTip(i, smer){
+    var j = i + smer;
+    if(j < 0 || j >= tipyList.length) return;
+    var tmp = tipyList[i]; tipyList[i] = tipyList[j]; tipyList[j] = tmp;
+    renderTipy();
+  }
+
+  // Tip zapíšeme do apostrofů a ošetříme zpětné lomítko i apostrof uvnitř textu.
+  function jsApostrof(s){
+    return "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r?\n/g, ' ') + "'";
+  }
+
+  function generujTipy(){
+    var header =
+`/*
+  TIPY — texty do bannerku „Věděli jste?" na webu.
+
+  Při načtení stránky se ukáže jeden náhodný tip. Návštěvník si tlačítkem
+  „Další tip" může přepnout na následující. Tady se tipy dají upravovat,
+  přidávat a mazat, stejně jako novinky v souboru novinky.js.
+
+  Každý tip je jeden text ohraničený apostrofy ('...'), oddělený čárkou.
+    • Přidání tipu: napište nový řádek s textem v apostrofech a čárkou na konci.
+    • Smazání tipu: smažte celý řádek i s čárkou.
+    • Pořadí nehraje roli (tip se vybírá náhodně).
+    • Uvnitř textu klidně používejte „uvozovky" — nevadí. Pozor jen na apostrof
+      (') přímo v textu; ten by tip předčasně ukončil (v češtině ho ale skoro
+      nepotřebujete).
+
+  Po úpravě soubor uložte. Na webu se změna projeví po načtení stránky.
+  Když by tento soubor chyběl nebo byl prázdný, banner „Věděli jste?" se
+  na webu automaticky skryje.
+*/
+
+`;
+    var neprazdne = tipyList.map(function(t){ return String(t).trim(); }).filter(function(t){ return t; });
+    var radky = neprazdne.map(function(t){ return '  ' + jsApostrof(t); });
+    var obsah = header + 'window.TIPY = [\n' + radky.join(',\n') + '\n];\n';
+    document.getElementById('vystup-tipy').value = obsah;
+
+    var prazdne = tipyList.length - neprazdne.length;
+    document.getElementById('upozorneni-tipy').textContent =
+      prazdne ? ('Pozor: ' + prazdne + ' prázdný tip se do souboru nezapíše.') : '';
+    return obsah;
+  }
+
+  function stahnoutTipy(){
+    var obsah = generujTipy();
+    var blob = new Blob([obsah], {type:'text/javascript;charset=utf-8'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'tipy.js';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function zkopirovatTipy(){
+    var ta = document.getElementById('vystup-tipy');
+    ta.select();
+    try{ document.execCommand('copy'); alert('Text zkopírován. Můžete ho vložit do souboru data/tipy.js.'); }
+    catch(e){ alert('Zkopírování se nepovedlo, označte text ručně a zkopírujte (Ctrl+C).'); }
+  }
+
   renderSeznam();
+  renderTipy();
 </script>
 </body>
 </html>

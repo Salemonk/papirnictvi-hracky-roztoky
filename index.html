@@ -1,5 +1,54 @@
 <!DOCTYPE html>
 <html lang="cs">
+<!--
+  ============================================================================
+  PAPÍRNICTVÍ A HRAČKY ROZTOKY — jednostránkový web
+  ============================================================================
+
+  Celý web je jeden soubor index.html (styly i skripty jsou uvnitř). Texty,
+  které se mění nejčastěji, jsou ale ve zvláštních souborech ve složce data/,
+  aby se daly upravit bez hrabání v kódu.
+
+  KDE CO NAJDU
+  ------------
+  data/novinky.js ...... karty v sekci „Co je u nás nového" (návod je v souboru)
+  data/tipy.js ......... texty do bannerku „Věděli jste?" (návod je v souboru)
+  editor.html .......... formulářový editor novinek (otevřít dvojklikem);
+                         vygeneruje nový novinky.js ke stažení
+  images/, assets/ ..... fotky produktů, ilustrace, logo, favicon
+  fonts/ ............... lokálně hostované fonty (kvůli soukromí / GDPR)
+  404.html ............. stránka pro neexistující adresu
+
+  STRUKTURA TOHOTO SOUBORU
+  ------------------------
+  <head>   — titulek, popis a SEO značky, náhled pro sociální sítě (og:),
+             strukturovaná data pro Google (JSON-LD), načtení fontů a <style>.
+  <style>  — všechny styly. Barvy jsou nahoře v :root (paleta), dál je vše
+             řazené po sekcích (HEADER, HERO, NOVINKY, …) se stejnými nadpisy
+             jako v těle stránky.
+  <body>   — jednotlivé sekce webu; každou uvozuje komentář ===== NÁZEV =====.
+  <script> — až na konci souboru: vykreslení novinek, zvýraznění položky
+             v menu, efekty při scrollování, lightbox (zvětšení obrázků),
+             střídání tipů a nápis „Otevřeno / Zavřeno".
+
+  ČASTÉ ÚPRAVY
+  ------------
+  • Novinka nebo tip .... upravte v data/novinky.js resp. data/tipy.js.
+  • Otevírací doba ...... je na TŘECH místech, která je nutné držet shodná:
+      1) JSON-LD v <head> (openingHoursSpecification) — kvůli Googlu,
+      2) viditelný výpis v sekci KONTAKT (tabule „Otevírací doba"),
+      3) logika v <script> (funkce intervalyDne) — řídí nápis „Otevřeno/Zavřeno".
+  • Dovolená ............ v <script> nastavte konstantu „dovolena" (od–do);
+                         po skončení ji přepněte na null.
+  • Adresa / kontakt .... sekce KONTAKT v <body> a zároveň JSON-LD v <head>.
+
+  NASAZENÍ NA WEB (FORPSI)
+  ------------------------
+  Nahrát: index.html, 404.html, .htaccess, robots.txt, sitemap.xml a složky
+  data/, assets/, images/, fonts/. NENAHRÁVAT pracovní soubory: editor.html,
+  nahrat-na-github.bat, CLAUDE.md, README.md ani složku .git.
+  ============================================================================
+-->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,6 +119,18 @@
 }
 </script>
 <style>
+  /* ===========================================================================
+     OBSAH STYLŮ (pořadí odshora dolů)
+       1) @font-face .......... načtení lokálních fontů
+       2) :root ............... paleta barev a proměnné (--paper, --ink, …)
+       3) základ .............. body, nadpisy, .container, přístupnost
+       4) sekce ............... HEADER, HERO, NOVINKY, LIGHTBOX, PRODUKTY,
+                                ŠKOLNÍ BALÍČKY, O NÁS, RECENZE, KONTAKT, FOOTER,
+                                VĚDĚLI JSTE — každou uvozuje komentář s názvem sekce
+       5) reveal / responsivita na konci
+     Barvu čehokoli měňte primárně přes proměnné v :root.
+     =========================================================================== */
+
   /* Fonty hostované lokálně (fonts/) místo z Google serverů, aby web při návštěvě neposílal IP adresu třetí straně. */
   @font-face{
     font-family:'Fraunces'; font-style:normal; font-weight:400 700; font-display:swap;
@@ -894,8 +955,20 @@
   <img id="lightboxImg" src="" alt="">
 </div>
 
+<!-- Data (obsah k editaci) se načítají zvlášť, aby s nimi šlo pracovat bez zásahu do kódu.
+     Používáme <script src>, ne fetch(), aby web fungoval i po otevření souboru přímo z disku. -->
 <script src="data/novinky.js"></script>
+<script src="data/tipy.js"></script>
 <script>
+  /* ===========================================================================
+     SKRIPTY STRÁNKY — přehled (jednotlivé části níže jsou okomentované):
+       1) novinkaViditelna() + renderNovinky() — vykreslí karty z window.NOVINKY
+       2) zvýraznění aktivní položky v menu podle scrollu (IntersectionObserver)
+       3) „reveal" — prvky s třídou .reveal se plavně objeví při scrollu
+       4) lightbox — klik na obrázek novinky ho zvětší
+       5) „Věděli jste?" — náhodný tip z window.TIPY (data/tipy.js)
+       6) stav „Otevřeno / Zavřeno" — počítá se z otevírací doby, svátků a dovolené
+     =========================================================================== */
   // Rozhodne, zda se novinka má dnes zobrazit (podle „zobrazit od / do")
   function novinkaViditelna(item){
     const dnes = new Date(); dnes.setHours(0, 0, 0, 0);
@@ -1042,16 +1115,17 @@
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
 
   // ---------- „Věděli jste?" — střídání tipů ----------
+  // Texty tipů jsou v samostatném souboru data/tipy.js (window.TIPY), aby se
+  // snadno upravovaly. Když soubor chybí nebo je prázdný, banner se skryje.
   (function(){
     const el = document.getElementById('vite-text');
     const btn = document.getElementById('vite-dalsi');
-    if(!el) return;
-    const tipy = [
-      'Když se řekne „osmdesátka", myslí se gramáž: jeden metr čtvereční běžného kancelářského papíru váží 80 gramů. Proto se značí 80 g/m².',
-      'Formát A4 je malý zázrak. Přeložíte ho napůl a dostanete A5 se stejnými proporcemi (poměr stran je odmocnina ze dvou). A největší arch celé řady, A0, měří přesně jeden metr čtvereční.',
-      'Číslo na sešitu není náhodné. První číslice je formát (4 = A4, 5 = A5, 6 = A6), druhá počet listů (2 = 20, 4 = 40…) a třetí typ linek. Takže „524" je sešit A5, 20 listů, linkovaný.',
-      'Písmena na tužce prozradí tvrdost. H znamená „hard", tedy tvrdá tužka se světlou stopou na rýsování. B je jako „black", u nás spíš měkká tužka se sytou stopou na kreslení. A HB je zlatá střední cesta.'
-    ];
+    const tipy = Array.isArray(window.TIPY) ? window.TIPY : [];
+    if(!el || tipy.length === 0){
+      const banner = el ? el.closest('.section-vite') : null;
+      if(banner) banner.style.display = 'none'; // není co ukazovat
+      return;
+    }
     const bezPohybu = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let i = Math.floor(Math.random() * tipy.length); // náhodný tip při načtení
 
