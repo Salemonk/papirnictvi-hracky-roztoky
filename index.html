@@ -779,12 +779,26 @@
 
 <script src="data/novinky.js"></script>
 <script>
+  // Rozhodne, zda se novinka má dnes zobrazit (podle „zobrazit od / do")
+  function novinkaViditelna(item){
+    const dnes = new Date(); dnes.setHours(0, 0, 0, 0);
+    if(item.zobrazitOd){
+      const od = new Date(item.zobrazitOd + 'T00:00:00');
+      if(!isNaN(od) && dnes < od) return false;
+    }
+    if(item.zobrazitDo){
+      const doData = new Date(item.zobrazitDo + 'T23:59:59');
+      if(!isNaN(doData) && dnes > doData) return false;
+    }
+    return true;
+  }
+
   // Vykreslení karet novinek z dat v data/novinky.js
   function renderNovinky(){
     const grid = document.querySelector('.notes-grid');
     if(!grid || !Array.isArray(window.NOVINKY)) return;
     grid.innerHTML = '';
-    window.NOVINKY.forEach(item => {
+    window.NOVINKY.filter(novinkaViditelna).forEach(item => {
       const card = document.createElement('div');
       card.className = 'note reveal';
 

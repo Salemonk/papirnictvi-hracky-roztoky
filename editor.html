@@ -121,7 +121,9 @@
           popisek: it.popisek || '',
           sirka: it.sirka || '',
           vyska: it.vyska || '',
-          rezervace: !!it.rezervace
+          rezervace: !!it.rezervace,
+          zobrazitOd: it.zobrazitOd || '',
+          zobrazitDo: it.zobrazitDo || ''
         };
       });
     }
@@ -195,7 +197,14 @@
             '<input type="checkbox" id="rez' + i + '" ' + (it.rezervace?'checked':'') + ' onchange="uprav(' + i + ',\'rezervace\',this.checked)">' +
             '<label for="rez' + i + '">Zobrazit tlačítko „Rezervovat k vyzvednutí"</label>' +
           '</div>'
-        : '');
+        : '') +
+        '<label>Zobrazit jen v období <span class="hint">(nepovinné — necháte-li prázdné, zobrazuje se pořád)</span></label>' +
+        '<div class="row2">' +
+          '<div><label class="hint">od</label>' +
+          '<input type="date" value="' + esc(it.zobrazitOd) + '" oninput="uprav(' + i + ',\'zobrazitOd\',this.value)"></div>' +
+          '<div><label class="hint">do</label>' +
+          '<input type="date" value="' + esc(it.zobrazitDo) + '" oninput="uprav(' + i + ',\'zobrazitDo\',this.value)"></div>' +
+        '</div>';
       box.appendChild(d);
       // náhledy obrázků + automatické rozměry
       nactiObrazek(i, 1, it.obrazek);
@@ -274,7 +283,7 @@
   function zmenTyp(i, typ){ polozky[i].typ = typ; renderSeznam(); }
 
   function pridat(){
-    polozky.push({ typ:'text', stitek:'', nadpis:'', text:'', obrazek:'', obrazek2:'', obrazek3:'', popisek:'', sirka:'', vyska:'', rezervace:false });
+    polozky.push({ typ:'text', stitek:'', nadpis:'', text:'', obrazek:'', obrazek2:'', obrazek3:'', popisek:'', sirka:'', vyska:'', rezervace:false, zobrazitOd:'', zobrazitDo:'' });
     renderSeznam();
     window.scrollTo(0, document.body.scrollHeight);
   }
@@ -327,6 +336,12 @@
       '     (jako naše grafika „DOVOLENÁ"). Vyplňte obrazek, popisek, sirka\n' +
       '     a vyska a NEvyplňujte nadpis.\n' +
       '\n' +
+      '  DOBA PLATNOSTI (u všech typů, nepovinné):\n' +
+      '       zobrazitOd — datum, odkdy se novinka ukáže, např. "2026-08-01"\n' +
+      '       zobrazitDo — datum, dokdy se ukáže (poslední den včetně)\n' +
+      '                    Karta se pak sama objeví a sama zmizí. Když necháte\n' +
+      '                    prázdné, zobrazuje se pořád.\n' +
+      '\n' +
       '  Přidání novinky: zkopírujte jeden blok { ... }, vložte ho a upravte.\n' +
       '  Smazání novinky: smažte celý blok { ... } i s čárkou za ním.\n' +
       '  Po úpravě soubor uložte — na webu se změna projeví po načtení stránky.\n' +
@@ -345,6 +360,8 @@
       if(obrazky.length === 1 && it.sirka) radky.push('    sirka: ' + Number(it.sirka));
       if(obrazky.length === 1 && it.vyska) radky.push('    vyska: ' + Number(it.vyska));
       if(maText && it.rezervace) radky.push('    rezervace: true');
+      if(it.zobrazitOd) radky.push('    zobrazitOd: ' + jsRetezec(it.zobrazitOd));
+      if(it.zobrazitDo) radky.push('    zobrazitDo: ' + jsRetezec(it.zobrazitDo));
       return '  {\n' + radky.join(',\n') + '\n  }';
     });
     var obsah = header + 'window.NOVINKY = [\n' + bloky.join(',\n') + '\n];\n';
