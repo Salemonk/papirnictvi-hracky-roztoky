@@ -657,6 +657,13 @@
     .section-vite{ display:none; }    /* banner „Věděli jste?" */
     .payment-row img{ display:none; } /* ikony karet skryjeme, text „Platíme kartou" zůstane */
     .pay-colon{ display:none; }       /* dvojtečka dává smysl jen když za ní následují ikony */
+
+    /* Na mobilu skryjeme celé sekce Produkty, O nás a Recenze i s jejich
+       tlačítky v horním menu (aby tlačítka nevedla na skryté sekce). */
+    #produkty, #o-nas, #recenze{ display:none; }
+    nav.tabs a[href="#produkty"],
+    nav.tabs a[href="#o-nas"],
+    nav.tabs a[href="#recenze"]{ display:none; }
   }
 </style>
 </head>
