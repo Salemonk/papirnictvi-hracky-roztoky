@@ -620,6 +620,14 @@
     .jen-desktop{ display:none; }
     .jen-mobil{ display:block; }
   }
+
+  /* Platební ikony: jakmile se přestanou vejít na jeden řádek (úzké displeje),
+     srovnáme je do dvou řádků po 4. Popisek „Platíme kartou:" jde na vlastní řádek.
+     Práh 580 px odpovídá šířce, pod kterou se řada karet začne lámat. */
+  @media (max-width: 580px){
+    .payment-row{ display:grid; grid-template-columns:repeat(4, auto); justify-content:start; column-gap:12px; row-gap:10px; }
+    .payment-row > span{ grid-column:1 / -1; }
+  }
 </style>
 </head>
 <body>
