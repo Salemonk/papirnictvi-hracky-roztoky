@@ -1083,16 +1083,47 @@
   const byId = {};
   tabs.forEach(t => byId[t.dataset.section] = t);
 
+  // Na mobilu je lišta menu vodorovně posuvná. Když se aktivní položka dostane
+  // mimo viditelnou část lišty, posuneme lištu tak, aby byla znovu vidět
+  // (posouvá se jen samotné menu, ne celá stránka).
+  function zviditelniTab(tab){
+    const nav = tab.closest('nav.tabs');
+    if(!nav || nav.scrollWidth <= nav.clientWidth) return; // není co posouvat
+    const t = tab.getBoundingClientRect();
+    const n = nav.getBoundingClientRect();
+    const delta = (t.left + t.width / 2) - (n.left + n.width / 2); // vystředit položku
+    nav.scrollBy({ left: delta, behavior: 'smooth' });
+  }
+
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(entry.isIntersecting){
         const id = entry.target.id;
         tabs.forEach(t => t.classList.remove('is-active'));
-        if(byId[id]) byId[id].classList.add('is-active');
+        if(byId[id]){ byId[id].classList.add('is-active'); zviditelniTab(byId[id]); }
       }
     });
   }, { rootMargin: '-45% 0px -50% 0px' });
   sections.forEach(s => { if(s.id) io.observe(s); });
+
+  // Odkazy na #top (logo, „Domů") a načtení adresy s #top mají odrolovat na úplný
+  // vršek stránky. Samotná kotva #top by skončila na začátku hero sekce, který je
+  // ale schovaný pod lepící hlavičkou (na mobilu je vysoká ~2 řádky), takže to
+  // řešíme tady na jistotu skrokem na 0.
+  function naVrsek(plynule){
+    window.scrollTo({ top: 0, behavior: plynule ? 'smooth' : 'auto' });
+  }
+  document.querySelectorAll('a[href="#top"]').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); naVrsek(true); });
+  });
+  // Změna adresy na #top na už otevřené stránce (např. z adresního řádku).
+  window.addEventListener('hashchange', () => { if(location.hash === '#top') naVrsek(true); });
+  // Načtení adresy s #top: prohlížeč sám skočí na kotvu (pod hlavičku) až po
+  // doběhnutí skriptu, proto pozici srovnáme na 0 ještě po události load.
+  if(location.hash === '#top'){
+    naVrsek(false);
+    window.addEventListener('load', () => { requestAnimationFrame(() => naVrsek(false)); });
+  }
 
   // reveal on scroll
   const revealItems = document.querySelectorAll('.reveal');

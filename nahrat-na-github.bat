@@ -18,11 +18,41 @@ set /p msg=Kratky popis zmeny (nebo dejte Enter):
 if "%msg%"=="" set msg=Uprava webu %DATE%
 
 echo.
+echo [1/3] Ukladam zmeny...
 %GIT% add -A
 %GIT% commit -m "%msg%"
+
+echo.
+echo [2/3] Stahuji zmeny z GitHubu (napr. z mobilni aplikace)...
+%GIT% pull --no-rebase --no-edit
+if errorlevel 1 goto konflikt
+
+echo.
+echo [3/3] Nahravam na GitHub...
 %GIT% push
+if errorlevel 1 goto pushfail
 
 echo.
 echo --------------------------------------------
-echo Hotovo. Okno muzete zavrit.
+echo Hotovo. Vse je nahrano. Okno muzete zavrit.
 pause
+exit /b 0
+
+:konflikt
+echo.
+echo --------------------------------------------
+echo POZOR: Pri stahovani zmen z GitHubu vznikl problem
+echo (nejspis konflikt, ktery je potreba vyresit rucne).
+echo NIC se zatim nenahralo na GitHub - vase zmeny jsou v bezpeci.
+echo Napiste o tom Claudovi na pocitaci, pomuze to srovnat.
+echo (Zatim prosim nespoustejte skript znovu.)
+pause
+exit /b 1
+
+:pushfail
+echo.
+echo --------------------------------------------
+echo POZOR: Nahrani na GitHub se nepovedlo.
+echo Zkuste skript spustit znovu, nebo napiste Claudovi.
+pause
+exit /b 1
