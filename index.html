@@ -13,8 +13,9 @@
   ------------
   data/novinky.js ...... karty v sekci „Co je u nás nového" (návod je v souboru)
   data/tipy.js ......... texty do bannerku „Věděli jste?" (návod je v souboru)
-  editor.html .......... formulářový editor novinek (otevřít dvojklikem);
-                         vygeneruje nový novinky.js ke stažení
+  data/skola.js ........ obsah + zapnutí/vypnutí sezónní sekce „Škola"
+  editor.html .......... formulářový editor novinek, tipů a sekce Škola
+                         (otevřít dvojklikem; vygeneruje datové soubory ke stažení)
   images/, assets/ ..... fotky produktů, ilustrace, logo, favicon
   fonts/ ............... lokálně hostované fonty (kvůli soukromí / GDPR)
   404.html ............. stránka pro neexistující adresu
@@ -693,50 +694,13 @@
     </div>
   </section>
 
-  <!-- ================= ŠKOLNÍ BALÍČKY =================
-       Sezónní služba. Mimo sezónu (mimo srpen–září) můžete celou sekci
-       skrýt tak, že tento blok <section>…</section> a odkaz „Škola"
-       v navigaci obalíte značkou <!- - a - -> (bez mezer). -->
+  <!-- ================= ŠKOLNÍ BALÍČKY (sezónní) =================
+       Sezónní sekce. Obsah i zapnutí/vypnutí (a případné období) se řídí
+       souborem data/skola.js — nejsnáz přes editor.html, sekci „Škola".
+       Když je vypnutá nebo mimo zadané období, skryje se i tlačítko „Škola"
+       v menu. Obsah sem vykresluje funkce renderSkola() ve skriptu níže. -->
   <section id="skolni-balicky">
-    <div class="container">
-      <div class="skolni-card reveal">
-        <div>
-          <span class="eyebrow">služba pro rodiče</span>
-          <h2>Školní balíčky</h2>
-          <p class="skolni-lead">Nechte přípravu pomůcek na nás. Pošlete nám seznam ze školy a my vám balíček nachystáme k vyzvednutí. Ušetříte si shánění i frontu na začátku září.</p>
-          <!-- TODO: doplňte orientační cenu balíčku (nahraďte [doplňte cenu]) -->
-          <p class="skolni-price"><strong>Orientační cena balíčku pro prvňáčka:</strong> [doplňte cenu] Kč</p>
-          <div class="skolni-cta">
-            <a class="btn btn-primary" href="mailto:papirnictvi@hrackyroztoky.cz?subject=%C5%A0koln%C3%AD%20bal%C3%AD%C4%8Dek&body=Dobr%C3%BD%20den%2C%0A%0Am%C3%A1m%20z%C3%A1jem%20o%20sestaven%C3%AD%20%C5%A1koln%C3%ADho%20bal%C3%AD%C4%8Dku%20pro%20chlapce/d%C3%ADvku.%0A%0ASeznam%20pom%C5%AFcek%20pros%C3%ADm%20p%C5%99ilo%C5%BEte%20jedn%C3%ADm%20z%20t%C4%9Bchto%20zp%C5%AFsob%C5%AF%3A%0A-%20vyfo%C5%A5te%20seznam%20%28%C4%8Diteln%C4%9B%2C%20v%20dobr%C3%A9m%20osv%C4%9Btlen%C3%AD%29%0A-%20p%C5%99ilo%C5%BEte%20jako%20soubor%20%28.txt%2C%20Word%20nebo%20PDF%29%0A%0AJm%C3%A9no%3A%0ATelefon%3A%0AKdy%20si%20bal%C3%AD%C4%8Dek%20vyzvednu%20%28orienta%C4%8Dn%C4%9B%29%3A%0A%0APozn%C3%A1mky%20%28nepovinn%C3%A9%29%3A%0ANap%C5%99.%20obl%C3%ADben%C3%A9%20barvy%20a%20motivy%2C%20zda%20se%20jedn%C3%A1%20o%20lev%C3%A1ka%20atp.%0A%0AD%C4%9Bkuji.">Napsat e-mail</a>
-            <a class="btn btn-onSage" href="tel:+420607839568">Zavolat: 607 839 568</a>
-          </div>
-          <p class="skolni-note">Aktovku a penál vám rádi pomůžeme vybrat osobně na prodejně.</p>
-        </div>
-        <ol class="skolni-steps">
-          <li><span class="skolni-num" aria-hidden="true">1</span><span>Pošlete nám seznam pomůcek e-mailem (klidně jako fotku) nebo se stavte v obchodě.</span></li>
-          <li><span class="skolni-num" aria-hidden="true">2</span><span>Připravíme vše, co máme skladem, a co nemáme, se pokusíme sehnat.</span></li>
-          <li><span class="skolni-num" aria-hidden="true">3</span><span>Dáme vám vědět a balíček si v klidu vyzvednete a zaplatíte na místě.</span></li>
-        </ol>
-      </div>
-
-      <div class="skolni-guide reveal">
-        <span class="eyebrow">poradíme</span>
-        <h2>Jak vybrat obaly na učebnice</h2>
-
-        <!-- Krátká verze jen pro mobil (základní myšlenka) -->
-        <p class="jen-mobil">Nevíte si s obaly na učebnice rady? Přineste je k nám, nebo si doma změřte jejich výšku, a vybereme je s vámi přesně na míru.</p>
-
-        <!-- Plná verze jen pro počítač -->
-        <div class="jen-desktop">
-          <p>Obalování učebnic dokáže potrápit a známe to i my z druhé strany pultu. „Něco mezi A5 a A4" bohužel nestačí. Máme ale dvě spolehlivé cesty, jak to zvládnout rychle a bez nervů:</p>
-          <ol class="guide-list">
-            <li><strong>Nejlepší: přineste učebnice s sebou.</strong> Na prodejně vám je přeměříme a vybereme obaly se správnou výškou a nastavitelnou šířkou. Tu si pak v klidu doladíte doma přesně na míru.</li>
-            <li><strong>Druhá možnost: změřte výšku a přijďte se seznamem.</strong> Doma změřte výšku každé učebnice a přineste nám seznam výšek. Podle nich vám obaly vybereme.</li>
-          </ol>
-          <p class="guide-tip"><strong>Tip:</strong> Hotovým sadám obalů „pro určitou třídu" se raději vyhněte. Z naší zkušenosti rozměry často nesedí a bývá to spíš vyhozený peníz.</p>
-        </div>
-      </div>
-    </div>
+    <div class="container"></div>
   </section>
 
   <!-- ================= PRODUKTY ================= -->
@@ -941,15 +905,18 @@
      Používáme <script src>, ne fetch(), aby web fungoval i po otevření souboru přímo z disku. -->
 <script src="data/novinky.js"></script>
 <script src="data/tipy.js"></script>
+<script src="data/skola.js"></script>
 <script>
   /* ===========================================================================
      SKRIPTY STRÁNKY — přehled (jednotlivé části níže jsou okomentované):
        1) novinkaViditelna() + renderNovinky() — vykreslí karty z window.NOVINKY
-       2) zvýraznění aktivní položky v menu podle scrollu (IntersectionObserver)
-       3) „reveal" — prvky s třídou .reveal se plavně objeví při scrollu
-       4) lightbox — klik na obrázek novinky ho zvětší
-       5) „Věděli jste?" — náhodný tip z window.TIPY (data/tipy.js)
-       6) stav „Otevřeno / Zavřeno" — počítá se z otevírací doby, svátků a dovolené
+       2) renderSkola() — sezónní sekce Škola z window.SKOLA (data/skola.js);
+          umí ji i skrýt vč. tlačítka v menu (přepínač / období)
+       3) zvýraznění aktivní položky v menu podle scrollu (IntersectionObserver)
+       4) „reveal" — prvky s třídou .reveal se plavně objeví při scrollu
+       5) lightbox — klik na obrázek novinky ho zvětší
+       6) „Věděli jste?" — náhodný tip z window.TIPY (data/tipy.js)
+       7) stav „Otevřeno / Zavřeno" — počítá se z otevírací doby, svátků a dovolené
      =========================================================================== */
   // Rozhodne, zda se novinka má dnes zobrazit (podle „zobrazit od / do")
   function novinkaViditelna(item){
@@ -1044,6 +1011,73 @@
     });
   }
   renderNovinky();
+
+  // ---------- Sezónní sekce „Škola" (obsah + zapnutí z data/skola.js) ----------
+  // Rozhodne, zda se sekce Škola dnes zobrazí (přepínač + volitelné období).
+  function skolaViditelna(){
+    const s = window.SKOLA;
+    if(!s || s.zobrazit === false) return false;
+    const dnes = new Date(); dnes.setHours(0, 0, 0, 0);
+    if(s.zobrazitOd){ const od = new Date(s.zobrazitOd + 'T00:00:00'); if(!isNaN(od) && dnes < od) return false; }
+    if(s.zobrazitDo){ const doData = new Date(s.zobrazitDo + 'T23:59:59'); if(!isNaN(doData) && dnes > doData) return false; }
+    return true;
+  }
+  function renderSkola(){
+    const sekce = document.getElementById('skolni-balicky');
+    const box = sekce ? sekce.querySelector('.container') : null;
+    const tab = document.querySelector('nav.tabs a[href="#skolni-balicky"]');
+    const s = window.SKOLA;
+    if(!box || !s) return;
+    // mimo sezónu / vypnuto: skryjeme sekci i tlačítko v menu
+    if(!skolaViditelna()){
+      sekce.style.display = 'none';
+      if(tab) tab.style.display = 'none';
+      box.innerHTML = '';
+      return;
+    }
+    sekce.style.display = '';
+    if(tab) tab.style.display = '';
+
+    // Tlačítka jsou napevno (mají v sobě předvyplněný e-mail / telefon).
+    const mailtoHref = 'mailto:papirnictvi@hrackyroztoky.cz?subject=%C5%A0koln%C3%AD%20bal%C3%AD%C4%8Dek&body=Dobr%C3%BD%20den%2C%0A%0Am%C3%A1m%20z%C3%A1jem%20o%20sestaven%C3%AD%20%C5%A1koln%C3%ADho%20bal%C3%AD%C4%8Dku%20pro%20chlapce/d%C3%ADvku.%0A%0ASeznam%20pom%C5%AFcek%20pros%C3%ADm%20p%C5%99ilo%C5%BEte%20jedn%C3%ADm%20z%20t%C4%9Bchto%20zp%C5%AFsob%C5%AF%3A%0A-%20vyfo%C5%A5te%20seznam%20%28%C4%8Diteln%C4%9B%2C%20v%20dobr%C3%A9m%20osv%C4%9Btlen%C3%AD%29%0A-%20p%C5%99ilo%C5%BEte%20jako%20soubor%20%28.txt%2C%20Word%20nebo%20PDF%29%0A%0AJm%C3%A9no%3A%0ATelefon%3A%0AKdy%20si%20bal%C3%AD%C4%8Dek%20vyzvednu%20%28orienta%C4%8Dn%C4%9B%29%3A%0A%0APozn%C3%A1mky%20%28nepovinn%C3%A9%29%3A%0ANap%C5%99.%20obl%C3%ADben%C3%A9%20barvy%20a%20motivy%2C%20zda%20se%20jedn%C3%A1%20o%20lev%C3%A1ka%20atp.%0A%0AD%C4%9Bkuji.';
+
+    const krokyHtml = (s.kroky || []).map((k, i) =>
+      '<li><span class="skolni-num" aria-hidden="true">' + (i + 1) + '</span><span>' + (k || '') + '</span></li>'
+    ).join('');
+    const obalyLi = (arr) => (arr || []).map(k =>
+      '<li><strong>' + (k.tucne || '') + '</strong> ' + (k.text || '') + '</li>'
+    ).join('');
+
+    box.innerHTML =
+      '<div class="skolni-card reveal">' +
+        '<div>' +
+          '<span class="eyebrow">' + (s.stitek || '') + '</span>' +
+          '<h2>' + (s.nadpis || '') + '</h2>' +
+          '<p class="skolni-lead">' + (s.text || '') + '</p>' +
+          '<p class="skolni-price"><strong>' + (s.cenaPopisek || '') + '</strong> ' + (s.cena || '') + '</p>' +
+          '<div class="skolni-cta">' +
+            '<a class="btn btn-primary" href="' + mailtoHref + '">Napsat e-mail</a>' +
+            '<a class="btn btn-onSage" href="tel:+420607839568">Zavolat: 607 839 568</a>' +
+          '</div>' +
+          '<p class="skolni-note">' + (s.poznamka || '') + '</p>' +
+        '</div>' +
+        '<ol class="skolni-steps">' + krokyHtml + '</ol>' +
+      '</div>' +
+      '<div class="skolni-guide reveal">' +
+        '<span class="eyebrow">' + (s.obalyStitek || '') + '</span>' +
+        '<h2>' + (s.obalyNadpis || '') + '</h2>' +
+        '<div class="jen-mobil">' +
+          '<p>' + (s.obalyMobilUvod || '') + '</p>' +
+          '<ol class="guide-list">' + obalyLi(s.obalyMobilKroky) + '</ol>' +
+        '</div>' +
+        '<div class="jen-desktop">' +
+          '<p>' + (s.obalyUvod || '') + '</p>' +
+          '<ol class="guide-list">' + obalyLi(s.obalyKroky) + '</ol>' +
+          '<p class="guide-tip"><strong>Tip:</strong> ' + (s.obalyTip || '') + '</p>' +
+        '</div>' +
+      '</div>';
+  }
+  renderSkola();
 
   // active tab highlighting
   const sections = document.querySelectorAll('main section, .hero');
