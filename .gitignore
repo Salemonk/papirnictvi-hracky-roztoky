@@ -1,0 +1,16 @@
+# Nepoužité ilustrace — zůstávají v lokální složce images/ pro budoucí použití,
+# ale nenahrávají se na GitHub (web je nepotřebuje). Když některou zase začnete
+# na webu používat, smažte její řádek tady, ať se zase nahraje.
+images/policka-cela.svg
+images/kelimek-s-tuzkami.svg
+images/knihy.svg
+images/rubikova-kostka.svg
+images/rubikova-kostka-stojanek.svg
+images/vlacek.svg
+images/medvidek.svg
+images/pocitadlo.svg
+images/kostky-police.svg
+images/kostky-text.svg
+images/mic.svg
+images/slunecnik-plazovy.svg
+images/kufr-na-koleckach.svg

@@ -273,9 +273,9 @@
   }
 
   /* ---------- HERO ---------- */
-  .hero{ padding:64px 0 40px; }
+  .hero{ padding:40px 0 32px; }
   .hero-inner{
-    display:grid; grid-template-columns:1.05fr 1fr; gap:48px; align-items:start;
+    display:grid; grid-template-columns:1.05fr 1fr; gap:48px; align-items:center;
   }
   .hero h1{ font-size:clamp(2.1rem,4.4vw,3rem); max-width:12ch; }
   .hero p.lede{ max-width:46ch; color:var(--ink-soft); font-size:1.08rem; }
@@ -290,66 +290,10 @@
   .btn-primary{ background:var(--honey); color:var(--ink); }
   .btn-ghost{ background:transparent; color:var(--ink); }
 
-  .brand-logo{
-    margin-top:36px;
-  }
-  .brand-logo img{ width:420px; height:auto; }
+  .brand-logo{ margin-top:0; }
+  .brand-logo img{ width:340px; max-width:100%; height:auto; }
 
-  .hero-art{ position:relative; display:flex; flex-direction:column; min-width:0; }
-  .hero-art img{ width:100%; height:auto; }
-
-  /* jemná „podlaha" pod poličkami, ať ilustrace nepůsobí useknutě */
-  .hero-podlaha{
-    height:3px; margin:8px 6% 0; border-radius:3px;
-    background:linear-gradient(90deg, transparent, var(--kraft) 18%, var(--kraft) 82%, transparent);
-    opacity:.5;
-  }
-  /* ===== Visací cedule se stavem obchodu (pod poličkou) =====
-     Rozměry jsou napevno o ~50 % větší (ne přes transform:scale, aby cedule
-     správně zabírala místo a nepřekrývala okolní obsah). Spodní margin
-     rezervuje prostor pro papírek, který visí pod cedulí. */
-  .hero-stav{
-    position:relative; width:345px; max-width:100%;
-    margin:40px auto 90px; padding-top:52px;
-  }
-  /* provázek + hřebík nad cedulí */
-  .cedule-provazek{ position:absolute; top:0; left:0; width:345px; max-width:100%; height:74px; overflow:visible; }
-  /* samotná cedule */
-  .hero-stav .stav{
-    position:relative; display:flex; justify-content:center; align-items:center; gap:14px;
-    margin:0; padding:25px 28px; min-height:96px;
-    background:linear-gradient(var(--kraft), var(--kraft-dark)); color:var(--paper-light);
-    border:3px solid var(--ink); border-radius:17px;
-    box-shadow:0 12px 26px rgba(43,58,41,.18), inset 0 2px 0 rgba(255,255,255,.18);
-    font-family:'Fraunces',Georgia,serif; font-weight:700; font-size:2.4rem; line-height:1;
-  }
-  /* dírky pro provázek v horních rozích */
-  .hero-stav .stav::before, .hero-stav .stav::after{
-    content:''; position:absolute; top:14px; width:14px; height:14px;
-    border:3px solid var(--ink); border-radius:50%; background:var(--kraft-darker);
-  }
-  .hero-stav .stav::before{ left:27px; }
-  .hero-stav .stav::after{ right:27px; }
-  .hero-stav .stav .dot{ width:18px; height:18px; margin:0; }
-  .hero-stav .stav.otevreno{ color:#EAF6E4; }   /* světle zelenkavá na dřevě */
-  .hero-stav .stav.zavreno{ color:#FBE4D6; }    /* světle teplá na dřevě */
-  /* papírek s časovým údajem, přilepený k ceduli */
-  .hero-stav .stav-detail{
-    position:absolute; right:-12px; bottom:-74px;
-    display:block; max-width:188px; padding:10px 15px 12px;
-    background:var(--honey-light); color:var(--ink);
-    font-family:'Caveat',cursive; font-weight:700; font-size:1.5rem; line-height:1.1;
-    text-align:center; opacity:1;
-    border:2px solid rgba(43,58,41,.3); border-radius:4px;
-    box-shadow:0 6px 14px rgba(43,58,41,.18); transform:rotate(-5deg);
-  }
-  /* lepicí páska nahoře na papírku */
-  .hero-stav .stav .stav-detail::before{
-    content:''; position:absolute; top:-11px; left:50%;
-    transform:translateX(-50%) rotate(2deg);
-    width:54px; height:20px; background:rgba(227,167,43,.4);
-    border:1px solid rgba(43,58,41,.15);
-  }
+  .hero-art{ display:flex; align-items:center; justify-content:center; min-width:0; }
 
   /* ---------- PERFORATED DIVIDER (notepad tear) ---------- */
   .perforated{
@@ -642,6 +586,11 @@
   .reveal{ opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease; }
   .reveal.in-view{ opacity:1; transform:translateY(0); }
 
+  /* Pomocné třídy pro odlišný obsah na počítači a na mobilu (zlom 860 px).
+     .jen-desktop se ukáže jen na počítači, .jen-mobil jen na telefonu.
+     Hodí se, když má být na mobilu kratší text. */
+  .jen-mobil{ display:none; }
+
   @media (max-width: 860px){
     .hero-inner, .onas-grid{ grid-template-columns:1fr; }
     .produkty-grid, .kontakt-grid{ grid-template-columns:1fr; }
@@ -653,8 +602,7 @@
        prvky, ať je stránka kratší, přehlednější a rychleji se dostane k textu.
        Stav „Otevřeno / Zavřeno" zůstává v sekci Kontakt, informace se neztrácí.
        Chcete-li něco z toho na mobilu zase zobrazit, smažte příslušný řádek. */
-    .hero-art{ display:none; }        /* velká ilustrace poliček + visací cedule se stavem */
-    .brand-logo{ display:none; }      /* velké logo pod textem (značka je i v hlavičce) */
+    .hero-art{ display:none; }        /* pravý sloupec hero s logem (na mobilu je značka v hlavičce) */
     .onas-art-wrap{ display:none; }   /* ilustrace výlohy v sekci „O nás" */
     .section-vite{ display:none; }    /* banner „Věděli jste?" */
     .payment-row img{ display:none; } /* ikony karet skryjeme, text „Platíme kartou" zůstane */
@@ -669,6 +617,10 @@
 
     /* Vloženou mapu na mobilu skryjeme, odkaz zůstává přes tlačítko „Otevřít v mapách". */
     .map-embed{ display:none; }
+
+    /* Odlišný obsah pro mobil: schová se verze pro počítač, ukáže se mobilní. */
+    .jen-desktop{ display:none; }
+    .jen-mobil{ display:block; }
   }
 </style>
 </head>
@@ -708,22 +660,13 @@
           <a class="btn btn-primary" href="#novinky">Podívat se na novinky</a>
           <a class="btn btn-ghost" href="#kontakt">Kde nás najdete</a>
         </div>
-
-        <div class="brand-logo">
-          <img src="assets/logo.svg" alt="Logo Papírnictví a Hračky Roztoky" width="420" height="420">
-        </div>
       </div>
 
+      <!-- Pravý sloupec hero sekce: logo s tužkou (dříve zde byla ilustrace poličky
+           a visací cedule se stavem; stav obchodu je i nadále v sekci Kontakt). -->
       <div class="hero-art">
-        <img src="images/policka-cela.svg" alt="Ilustrace dvou dřevěných poliček — nahoře kelímek s pastelkami, knihy a Rubikova kostka na stojánku, dole dřevěný vláček, medvídek s mašlí a počítadlo" width="500" height="420">
-        <div class="hero-podlaha" role="presentation"></div>
-        <div class="hero-stav">
-          <svg class="cedule-provazek" viewBox="0 0 210 48" aria-hidden="true">
-            <path d="M105 8 Q62 26 25 43" fill="none" stroke="#2B3A29" stroke-width="2" stroke-linecap="round"/>
-            <path d="M105 8 Q148 26 185 43" fill="none" stroke="#2B3A29" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="105" cy="7" r="4" fill="#B8492F" stroke="#2B3A29" stroke-width="2"/>
-          </svg>
-          <div class="stav js-stav" aria-live="polite"></div>
+        <div class="brand-logo">
+          <img src="assets/logo.svg" alt="Logo Papírnictví a Hračky Roztoky" width="420" height="420">
         </div>
       </div>
     </div>
@@ -773,12 +716,19 @@
       <div class="skolni-guide reveal">
         <span class="eyebrow">poradíme</span>
         <h2>Jak vybrat obaly na učebnice</h2>
-        <p>Obalování učebnic dokáže potrápit a známe to i my z druhé strany pultu. „Něco mezi A5 a A4" bohužel nestačí. Máme ale dvě spolehlivé cesty, jak to zvládnout rychle a bez nervů:</p>
-        <ol class="guide-list">
-          <li><strong>Nejlepší: přineste učebnice s sebou.</strong> Na prodejně vám je přeměříme a vybereme obaly se správnou výškou a nastavitelnou šířkou. Tu si pak v klidu doladíte doma přesně na míru.</li>
-          <li><strong>Druhá možnost: změřte výšku a přijďte se seznamem.</strong> Doma změřte výšku každé učebnice a přineste nám seznam výšek. Podle nich vám obaly vybereme.</li>
-        </ol>
-        <p class="guide-tip"><strong>Tip:</strong> Hotovým sadám obalů „pro určitou třídu" se raději vyhněte. Z naší zkušenosti rozměry často nesedí a bývá to spíš vyhozený peníz.</p>
+
+        <!-- Krátká verze jen pro mobil (základní myšlenka) -->
+        <p class="jen-mobil">Nevíte si s obaly na učebnice rady? Přineste je k nám, nebo si doma změřte jejich výšku, a vybereme je s vámi přesně na míru.</p>
+
+        <!-- Plná verze jen pro počítač -->
+        <div class="jen-desktop">
+          <p>Obalování učebnic dokáže potrápit a známe to i my z druhé strany pultu. „Něco mezi A5 a A4" bohužel nestačí. Máme ale dvě spolehlivé cesty, jak to zvládnout rychle a bez nervů:</p>
+          <ol class="guide-list">
+            <li><strong>Nejlepší: přineste učebnice s sebou.</strong> Na prodejně vám je přeměříme a vybereme obaly se správnou výškou a nastavitelnou šířkou. Tu si pak v klidu doladíte doma přesně na míru.</li>
+            <li><strong>Druhá možnost: změřte výšku a přijďte se seznamem.</strong> Doma změřte výšku každé učebnice a přineste nám seznam výšek. Podle nich vám obaly vybereme.</li>
+          </ol>
+          <p class="guide-tip"><strong>Tip:</strong> Hotovým sadám obalů „pro určitou třídu" se raději vyhněte. Z naší zkušenosti rozměry často nesedí a bývá to spíš vyhozený peníz.</p>
+        </div>
       </div>
     </div>
   </section>
