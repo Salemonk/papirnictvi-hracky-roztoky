@@ -642,11 +642,21 @@
 
   @media (max-width: 860px){
     .hero-inner, .onas-grid{ grid-template-columns:1fr; }
-    .hero-art{ order:-1; }
     .produkty-grid, .kontakt-grid{ grid-template-columns:1fr; }
     .skolni-card{ grid-template-columns:1fr; padding:28px; }
     .header-inner{ flex-wrap:wrap; }
     nav.tabs{ flex:0 0 100%; width:100%; min-width:0; padding-top:4px; }
+
+    /* Odlehčení mobilu: na telefonu skryjeme čistě dekorativní a redundantní
+       prvky, ať je stránka kratší, přehlednější a rychleji se dostane k textu.
+       Stav „Otevřeno / Zavřeno" zůstává v sekci Kontakt, informace se neztrácí.
+       Chcete-li něco z toho na mobilu zase zobrazit, smažte příslušný řádek. */
+    .hero-art{ display:none; }        /* velká ilustrace poliček + visací cedule se stavem */
+    .brand-logo{ display:none; }      /* velké logo pod textem (značka je i v hlavičce) */
+    .onas-art-wrap{ display:none; }   /* ilustrace výlohy v sekci „O nás" */
+    .section-vite{ display:none; }    /* banner „Věděli jste?" */
+    .payment-row img{ display:none; } /* ikony karet skryjeme, text „Platíme kartou" zůstane */
+    .pay-colon{ display:none; }       /* dvojtečka dává smysl jen když za ní následují ikony */
   }
 </style>
 </head>
@@ -938,7 +948,7 @@
     </div>
   </div>
   <div class="container payment-row" aria-label="Přijímané platební metody">
-    <span>Platíme kartou:</span>
+    <span>Platíme kartou<span class="pay-colon" aria-hidden="true">:</span></span>
     <img src="images/platby/visa.svg" alt="Visa" width="120" height="80" loading="lazy">
     <img src="images/platby/mastercard.svg" alt="Mastercard" width="120" height="80" loading="lazy">
     <img src="images/platby/american-express.svg" alt="American Express" width="120" height="80" loading="lazy">
