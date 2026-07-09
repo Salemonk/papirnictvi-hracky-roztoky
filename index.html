@@ -580,8 +580,10 @@
   .stav.zavreno .dot{ background:#E8765C; box-shadow:0 0 0 3px rgba(232,118,92,.25); }
   .stav .stav-detail{ font-weight:400; opacity:.85; }
   .stav .stav-detail::before{ content:'· '; }
-  .hours-row{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed rgba(255,251,242,.25); font-size:1rem; }
+  .hours-row{ display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:8px 0; border-bottom:1px dashed rgba(255,251,242,.25); font-size:1rem; }
   .hours-row:last-child{ border-bottom:none; }
+  .hours-day{ font-weight:700; }                       /* den tučně, ať se dobře čte */
+  .hours-time{ text-align:right; white-space:nowrap; } /* časy zarovnané doprava, bez zalamování uprostřed */
   .map-embed{
     margin-top:28px; aspect-ratio:16/6; width:100%;
     border:2px solid var(--ink); border-radius:var(--radius); overflow:hidden;
@@ -664,6 +666,9 @@
     nav.tabs a[href="#produkty"],
     nav.tabs a[href="#o-nas"],
     nav.tabs a[href="#recenze"]{ display:none; }
+
+    /* Vloženou mapu na mobilu skryjeme, odkaz zůstává přes tlačítko „Otevřít v mapách". */
+    .map-embed{ display:none; }
   }
 </style>
 </head>
@@ -926,10 +931,10 @@
         <div class="chalkboard reveal">
           <h3>Otevírací doba</h3>
           <div id="stav-obchodu" class="stav js-stav" aria-live="polite"></div>
-          <div class="hours-row"><span>Pondělí – Pátek</span><span>9:00 – 12:00, 12:30 – 18:00</span></div>
-          <div class="hours-row"><span>Sobota</span><span>9:00 – 12:00</span></div>
-          <div class="hours-row"><span>Neděle</span><span>Zavřeno</span></div>
-          <div class="hours-row"><span>Svátky</span><span>Zavřeno</span></div>
+          <div class="hours-row"><span class="hours-day">Pondělí – Pátek</span><span class="hours-time">9:00 – 12:00<br>12:30 – 18:00</span></div>
+          <div class="hours-row"><span class="hours-day">Sobota</span><span class="hours-time">9:00 – 12:00</span></div>
+          <div class="hours-row"><span class="hours-day">Neděle</span><span class="hours-time">Zavřeno</span></div>
+          <div class="hours-row"><span class="hours-day">Svátky</span><span class="hours-time">Zavřeno</span></div>
         </div>
       </div>
       <div class="map-embed reveal">
