@@ -1,23 +1,20 @@
 /*
-  ŠKOLA — obsah a nastavení sezónní sekce „Školní balíčky" na webu.
+  ŠKOLA — sezónní sekce webu (obsah + nastavení).
 
-  Nejsnazší je upravovat sekci v editoru (soubor editor.html, sekce „Škola") —
-  otevřete ho dvojklikem. Můžete ale upravovat i ručně tady.
+  Nejsnáz se upravuje v editoru (editor.html, sekce „Škola") — otevřete ho
+  dvojklikem. Můžete ale upravovat i ručně tady.
 
-  SEZÓNNÍ ZOBRAZENÍ:
-    zobrazit    — true = sekce (i tlačítko „Škola" v menu) je na webu vidět,
-                  false = celá sekce i tlačítko se skryjí (mimo sezónu).
-    zobrazitOd  — nepovinné „RRRR-MM-DD". Když vyplníte OBĚ data, sekce se
-    zobrazitDo    ukáže jen v tom období (a jinak se sama skryje). Necháte-li
-                  prázdné, řídí se jen přepínačem „zobrazit".
-
-  TEXTY: jednotlivé texty jsou v uvozovkách. Kroky (kroky, obalyKroky…) jsou
-  seznamy — každá položka je jeden řádek oddělený čárkou. U návodu na obaly má
-  každý krok dvě části: „tucne" (tučný začátek) a „text" (zbytek věty).
+  zobrazit    — true = sekce i její tlačítko v menu jsou vidět, false = skryté.
+  zobrazitOd  — nepovinné „RRRR-MM-DD"; když vyplníte obě data, sekce se ukáže
+  zobrazitDo    jen v tom období. Jinak se řídí jen přepínačem „zobrazit".
+  nazev       — název sekce; použije se jako nadpis i jako text tlačítka v menu.
+  telefonTlacitko / emailTlacitko — zapnutí tlačítek „Zavolat" / „Napsat e-mail".
+  emailPredmet / emailText — předmět a text předvyplněného e-mailu (použijí se,
+                             jen když je e-mailové tlačítko zapnuté).
+  polozky     — karty obsahu (jako novinky): stitek (malý štítek nahoře, nepovinné),
+                nadpis, text, obrazek (cesta k obrázku, nepovinné), popisek, sirka, vyska.
 
   Po úpravě soubor uložte. Na webu se změna projeví po načtení stránky.
-  Tlačítka „Napsat e-mail" a „Zavolat" jsou napevno v kódu (mají v sobě
-  předvyplněný e-mail), tady se neupravují.
 */
 
 window.SKOLA = {
@@ -26,35 +23,26 @@ window.SKOLA = {
   zobrazitOd: '',
   zobrazitDo: '',
 
-  // --- Karta „Školní balíčky" ---
-  stitek: 'služba pro rodiče',
-  nadpis: 'Školní balíčky',
-  text: 'Nechte přípravu pomůcek na nás. Pošlete nám seznam ze školy a my vám balíček nachystáme k vyzvednutí. Ušetříte si shánění i frontu na začátku září.',
-  cenaPopisek: 'Orientační cena balíčku pro prvňáčka:',
-  cena: '[doplňte cenu] Kč',
-  poznamka: 'Aktovku a penál vám rádi pomůžeme vybrat osobně na prodejně.',
-  kroky: [
-    'Pošlete nám seznam pomůcek e-mailem (klidně jako fotku) nebo se stavte v obchodě.',
-    'Připravíme vše, co máme skladem, a co nemáme, se pokusíme sehnat.',
-    'Dáme vám vědět a balíček si v klidu vyzvednete a zaplatíte na místě.'
-  ],
+  // --- Název sekce (nadpis + tlačítko v menu) ---
+  nazev: 'Školní balíčky',
 
-  // --- Návod „Jak vybrat obaly na učebnice" ---
-  obalyStitek: 'poradíme',
-  obalyNadpis: 'Jak vybrat obaly na učebnice',
+  // --- Kontaktní tlačítka pod obsahem ---
+  telefonTlacitko: true,
+  emailTlacitko: true,
+  emailPredmet: 'Školní balíček',
+  emailText: 'Dobrý den,\n\nmám zájem o sestavení školního balíčku pro chlapce/dívku.\n\nSeznam pomůcek prosím přiložte jedním z těchto způsobů:\n- vyfoťte seznam (čitelně, v dobrém osvětlení)\n- přiložte jako soubor (.txt, Word nebo PDF)\n\nJméno:\nTelefon:\nKdy si balíček vyzvednu (orientačně):\n\nPoznámky (nepovinné):\nNapř. oblíbené barvy a motivy, zda se jedná o leváka atp.\n\nDěkuji.',
 
-  // Krátká verze pro mobil
-  obalyMobilUvod: 'Nevíte si s obaly na učebnice rady? Máme dvě cesty:',
-  obalyMobilKroky: [
-    { tucne: 'Přineste učebnice s sebou.', text: 'Na prodejně vám je přeměříme a vybereme správné obaly.' },
-    { tucne: 'Změřte výšky učebnic a přijďte se seznamem.', text: 'Podle nich vám obaly vybereme.' }
-  ],
-
-  // Plná verze pro počítač
-  obalyUvod: 'Obalování učebnic dokáže potrápit a známe to i my z druhé strany pultu. „Něco mezi A5 a A4" bohužel nestačí. Máme ale dvě spolehlivé cesty, jak to zvládnout rychle a bez nervů:',
-  obalyKroky: [
-    { tucne: 'Nejlepší: přineste učebnice s sebou.', text: 'Na prodejně vám je přeměříme a vybereme obaly se správnou výškou a nastavitelnou šířkou. Tu si pak v klidu doladíte doma přesně na míru.' },
-    { tucne: 'Druhá možnost: změřte výšku a přijďte se seznamem.', text: 'Doma změřte výšku každé učebnice a přineste nám seznam výšek. Podle nich vám obaly vybereme.' }
-  ],
-  obalyTip: 'Hotovým sadám obalů „pro určitou třídu" se raději vyhněte. Z naší zkušenosti rozměry často nesedí a bývá to spíš vyhozený peníz.'
+  // --- Obsah = karty (jako novinky) ---
+  polozky: [
+    {
+      stitek: 'služba pro rodiče',
+      nadpis: 'Školní balíčky',
+      text: 'Nechte přípravu pomůcek na nás. Pošlete nám seznam ze školy a my vám balíček nachystáme k vyzvednutí. Ušetříte si shánění i frontu na začátku září. Orientační cena balíčku pro prvňáčka: [doplňte cenu] Kč.'
+    },
+    {
+      stitek: 'poradíme',
+      nadpis: 'Jak vybrat obaly na učebnice',
+      text: 'Nevíte si s obaly na učebnice rady? Přineste je k nám, nebo si doma změřte jejich výšku, a vybereme je s vámi přesně na míru.'
+    }
+  ]
 };

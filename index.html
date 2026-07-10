@@ -401,58 +401,11 @@
   .product-card.papirnictvi li::before{ background:var(--brick); }
   .product-card.hracky li::before{ background:var(--sage); }
 
-  /* ---------- ŠKOLNÍ BALÍČKY ---------- */
-  .skolni-card{
-    background:var(--sage);
-    color:var(--paper-light);
-    border:2px solid var(--ink);
-    border-radius:var(--radius);
-    padding:40px;
-    display:grid; grid-template-columns:1.1fr .9fr; gap:36px; align-items:center;
-    box-shadow:0 10px 24px var(--shadow);
-  }
-  .skolni-card h2{ color:var(--paper-light); }
-  .skolni-card .eyebrow{ color:var(--honey-light); }
-  .skolni-lead{ font-size:1.05rem; margin:0 0 8px; }
-  .skolni-price{ font-size:1.02rem; margin:0 0 14px; }
-  .skolni-price strong{ color:var(--honey-light); }
-  .skolni-note{ font-size:.9rem; margin:14px 0 0; opacity:.85; }
-  .skolni-steps{ list-style:none; margin:0; padding:0; display:grid; gap:12px; }
-  .skolni-steps li{ display:flex; gap:12px; align-items:flex-start; }
-  .skolni-num{
-    flex-shrink:0; width:28px; height:28px; border-radius:50%;
-    background:var(--honey); color:var(--ink); font-weight:700;
-    display:flex; align-items:center; justify-content:center; font-size:.9rem;
-  }
-  .skolni-cta{ display:flex; flex-wrap:wrap; gap:12px; margin-top:6px; }
+  /* ---------- SEKCE ŠKOLA (sezónní) ---------- */
+  /* Obsah tvoří karty ve stylu novinek (.note…) — vykresluje je renderSkola()
+     z data/skola.js. Tady zůstávají jen styly kontaktních tlačítek pod sekcí. */
+  .skolni-cta{ display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
   .btn-onSage{ background:var(--paper-light); color:var(--ink); }
-
-  .skolni-guide{
-    margin-top:36px;
-    background:var(--paper-light);
-    border:2px solid var(--ink);
-    border-radius:var(--radius);
-    padding:36px;
-  }
-  .skolni-guide p{ color:var(--ink-soft); }
-  .guide-list{
-    list-style:none; margin:20px 0 0; padding:0;
-    display:grid; gap:16px; counter-reset:guide;
-  }
-  .guide-list li{ position:relative; padding-left:46px; }
-  .guide-list li::before{
-    counter-increment:guide; content:counter(guide);
-    position:absolute; left:0; top:0;
-    width:30px; height:30px; border-radius:50%;
-    background:var(--honey); color:var(--ink); font-weight:700;
-    display:flex; align-items:center; justify-content:center; font-size:.92rem;
-  }
-  .guide-list li strong{ color:var(--ink); }
-  .guide-tip{
-    margin-top:20px; padding:14px 18px;
-    background:var(--brick-light); border-radius:10px;
-    font-size:.96rem;
-  }
 
   /* ---------- O NAS ---------- */
   .section-onas{ background:var(--paper-light); }
@@ -595,7 +548,6 @@
   @media (max-width: 860px){
     .hero-inner, .onas-grid{ grid-template-columns:1fr; }
     .produkty-grid, .kontakt-grid{ grid-template-columns:1fr; }
-    .skolni-card{ grid-template-columns:1fr; padding:28px; }
     .header-inner{ flex-wrap:wrap; }
     nav.tabs{ flex:0 0 100%; width:100%; min-width:0; padding-top:4px; }
 
@@ -932,83 +884,86 @@
     return true;
   }
 
+  // Sestaví jednu kartu ve stylu „lísteček" (používají ji novinky i sekce Škola)
+  function vytvorNoteCard(item){
+    const card = document.createElement('div');
+    card.className = 'note reveal';
+
+    const tape = document.createElement('div');
+    tape.className = 'note-tape';
+    tape.setAttribute('aria-hidden', 'true');
+    card.appendChild(tape);
+
+    // obrázky: podporuje jednu cestu (řetězec) i více (pole), max 3
+    const obrazky = (Array.isArray(item.obrazek) ? item.obrazek : [item.obrazek])
+                      .filter(Boolean).slice(0, 3);
+    function novyObrazek(src, trida){
+      const im = document.createElement('img');
+      im.src = src;
+      im.alt = item.popisek || '';
+      im.loading = 'lazy';
+      im.className = trida;
+      return im;
+    }
+    function vlozObrazky(hlavniTrida){
+      if(obrazky.length === 0) return;
+      if(obrazky.length === 1){
+        const im = novyObrazek(obrazky[0], hlavniTrida);
+        if(item.sirka) im.width = item.sirka;
+        if(item.vyska) im.height = item.vyska;
+        card.appendChild(im);
+      } else {
+        const gal = document.createElement('div');
+        gal.className = 'note-gallery';
+        obrazky.forEach(src => gal.appendChild(novyObrazek(src, 'note-img')));
+        card.appendChild(gal);
+      }
+    }
+
+    if(item.nadpis){
+      if(item.stitek){
+        const tag = document.createElement('span');
+        tag.className = 'note-tag';
+        tag.textContent = item.stitek;
+        card.appendChild(tag);
+      }
+      vlozObrazky('note-img');
+      const h = document.createElement('h3');
+      h.textContent = item.nadpis;
+      card.appendChild(h);
+      const p = document.createElement('p');
+      p.textContent = item.text || '';
+      card.appendChild(p);
+      if(item.rezervace){
+        const subject = 'Rezervace: ' + item.nadpis;
+        const body =
+          'Dobrý den,\n\n' +
+          'rád(a) bych si rezervoval(a) k vyzvednutí:\n' +
+          item.nadpis + '\n\n' +
+          'Jméno:\n' +
+          'Telefon:\n' +
+          'Kdy si zboží vyzvednu (orientačně):\n\n' +
+          'Děkuji.';
+        const a = document.createElement('a');
+        a.className = 'note-reserve';
+        a.href = 'mailto:papirnictvi@hrackyroztoky.cz?subject=' +
+                 encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+        a.textContent = 'Rezervovat k vyzvednutí';
+        card.appendChild(a);
+      }
+    } else {
+      card.classList.add('note-plain');
+      vlozObrazky('note-art');
+    }
+    return card;
+  }
+
   // Vykreslení karet novinek z dat v data/novinky.js
   function renderNovinky(){
-    const grid = document.querySelector('.notes-grid');
+    const grid = document.querySelector('.section-novinky .notes-grid');
     if(!grid || !Array.isArray(window.NOVINKY)) return;
     grid.innerHTML = '';
-    window.NOVINKY.filter(novinkaViditelna).forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'note reveal';
-
-      const tape = document.createElement('div');
-      tape.className = 'note-tape';
-      tape.setAttribute('aria-hidden', 'true');
-      card.appendChild(tape);
-
-      // obrázky: podporuje jednu cestu (řetězec) i více (pole), max 3
-      const obrazky = (Array.isArray(item.obrazek) ? item.obrazek : [item.obrazek])
-                        .filter(Boolean).slice(0, 3);
-      function novyObrazek(src, trida){
-        const im = document.createElement('img');
-        im.src = src;
-        im.alt = item.popisek || '';
-        im.loading = 'lazy';
-        im.className = trida;
-        return im;
-      }
-      function vlozObrazky(hlavniTrida){
-        if(obrazky.length === 0) return;
-        if(obrazky.length === 1){
-          const im = novyObrazek(obrazky[0], hlavniTrida);
-          if(item.sirka) im.width = item.sirka;
-          if(item.vyska) im.height = item.vyska;
-          card.appendChild(im);
-        } else {
-          const gal = document.createElement('div');
-          gal.className = 'note-gallery';
-          obrazky.forEach(src => gal.appendChild(novyObrazek(src, 'note-img')));
-          card.appendChild(gal);
-        }
-      }
-
-      if(item.nadpis){
-        if(item.stitek){
-          const tag = document.createElement('span');
-          tag.className = 'note-tag';
-          tag.textContent = item.stitek;
-          card.appendChild(tag);
-        }
-        vlozObrazky('note-img');
-        const h = document.createElement('h3');
-        h.textContent = item.nadpis;
-        card.appendChild(h);
-        const p = document.createElement('p');
-        p.textContent = item.text || '';
-        card.appendChild(p);
-        if(item.rezervace){
-          const subject = 'Rezervace: ' + item.nadpis;
-          const body =
-            'Dobrý den,\n\n' +
-            'rád(a) bych si rezervoval(a) k vyzvednutí:\n' +
-            item.nadpis + '\n\n' +
-            'Jméno:\n' +
-            'Telefon:\n' +
-            'Kdy si zboží vyzvednu (orientačně):\n\n' +
-            'Děkuji.';
-          const a = document.createElement('a');
-          a.className = 'note-reserve';
-          a.href = 'mailto:papirnictvi@hrackyroztoky.cz?subject=' +
-                   encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-          a.textContent = 'Rezervovat k vyzvednutí';
-          card.appendChild(a);
-        }
-      } else {
-        card.classList.add('note-plain');
-        vlozObrazky('note-art');
-      }
-      grid.appendChild(card);
-    });
+    window.NOVINKY.filter(novinkaViditelna).forEach(item => grid.appendChild(vytvorNoteCard(item)));
   }
   renderNovinky();
 
@@ -1028,6 +983,8 @@
     const tab = document.querySelector('nav.tabs a[href="#skolni-balicky"]');
     const s = window.SKOLA;
     if(!box || !s) return;
+    // Název sekce se použije jako nadpis i jako text tlačítka v menu.
+    if(tab && s.nazev) tab.textContent = s.nazev;
     // mimo sezónu / vypnuto: skryjeme sekci i tlačítko v menu
     if(!skolaViditelna()){
       sekce.style.display = 'none';
@@ -1038,44 +995,43 @@
     sekce.style.display = '';
     if(tab) tab.style.display = '';
 
-    // Tlačítka jsou napevno (mají v sobě předvyplněný e-mail / telefon).
-    const mailtoHref = 'mailto:papirnictvi@hrackyroztoky.cz?subject=%C5%A0koln%C3%AD%20bal%C3%AD%C4%8Dek&body=Dobr%C3%BD%20den%2C%0A%0Am%C3%A1m%20z%C3%A1jem%20o%20sestaven%C3%AD%20%C5%A1koln%C3%ADho%20bal%C3%AD%C4%8Dku%20pro%20chlapce/d%C3%ADvku.%0A%0ASeznam%20pom%C5%AFcek%20pros%C3%ADm%20p%C5%99ilo%C5%BEte%20jedn%C3%ADm%20z%20t%C4%9Bchto%20zp%C5%AFsob%C5%AF%3A%0A-%20vyfo%C5%A5te%20seznam%20%28%C4%8Diteln%C4%9B%2C%20v%20dobr%C3%A9m%20osv%C4%9Btlen%C3%AD%29%0A-%20p%C5%99ilo%C5%BEte%20jako%20soubor%20%28.txt%2C%20Word%20nebo%20PDF%29%0A%0AJm%C3%A9no%3A%0ATelefon%3A%0AKdy%20si%20bal%C3%AD%C4%8Dek%20vyzvednu%20%28orienta%C4%8Dn%C4%9B%29%3A%0A%0APozn%C3%A1mky%20%28nepovinn%C3%A9%29%3A%0ANap%C5%99.%20obl%C3%ADben%C3%A9%20barvy%20a%20motivy%2C%20zda%20se%20jedn%C3%A1%20o%20lev%C3%A1ka%20atp.%0A%0AD%C4%9Bkuji.';
+    box.innerHTML = '';
 
-    const krokyHtml = (s.kroky || []).map((k, i) =>
-      '<li><span class="skolni-num" aria-hidden="true">' + (i + 1) + '</span><span>' + (k || '') + '</span></li>'
-    ).join('');
-    const obalyLi = (arr) => (arr || []).map(k =>
-      '<li><strong>' + (k.tucne || '') + '</strong> ' + (k.text || '') + '</li>'
-    ).join('');
+    // Nadpis sekce
+    const head = document.createElement('div');
+    head.className = 'section-head reveal';
+    const h2 = document.createElement('h2');
+    h2.textContent = s.nazev || '';
+    head.appendChild(h2);
+    box.appendChild(head);
 
-    box.innerHTML =
-      '<div class="skolni-card reveal">' +
-        '<div>' +
-          '<span class="eyebrow">' + (s.stitek || '') + '</span>' +
-          '<h2>' + (s.nadpis || '') + '</h2>' +
-          '<p class="skolni-lead">' + (s.text || '') + '</p>' +
-          '<p class="skolni-price"><strong>' + (s.cenaPopisek || '') + '</strong> ' + (s.cena || '') + '</p>' +
-          '<div class="skolni-cta">' +
-            '<a class="btn btn-primary" href="' + mailtoHref + '">Napsat e-mail</a>' +
-            '<a class="btn btn-onSage" href="tel:+420607839568">Zavolat: 607 839 568</a>' +
-          '</div>' +
-          '<p class="skolni-note">' + (s.poznamka || '') + '</p>' +
-        '</div>' +
-        '<ol class="skolni-steps">' + krokyHtml + '</ol>' +
-      '</div>' +
-      '<div class="skolni-guide reveal">' +
-        '<span class="eyebrow">' + (s.obalyStitek || '') + '</span>' +
-        '<h2>' + (s.obalyNadpis || '') + '</h2>' +
-        '<div class="jen-mobil">' +
-          '<p>' + (s.obalyMobilUvod || '') + '</p>' +
-          '<ol class="guide-list">' + obalyLi(s.obalyMobilKroky) + '</ol>' +
-        '</div>' +
-        '<div class="jen-desktop">' +
-          '<p>' + (s.obalyUvod || '') + '</p>' +
-          '<ol class="guide-list">' + obalyLi(s.obalyKroky) + '</ol>' +
-          '<p class="guide-tip"><strong>Tip:</strong> ' + (s.obalyTip || '') + '</p>' +
-        '</div>' +
-      '</div>';
+    // Obsah = karty (stejné jako novinky)
+    const grid = document.createElement('div');
+    grid.className = 'notes-grid';
+    (s.polozky || []).forEach(item => grid.appendChild(vytvorNoteCard(item)));
+    box.appendChild(grid);
+
+    // Kontaktní tlačítka (volitelná)
+    if(s.telefonTlacitko || s.emailTlacitko){
+      const cta = document.createElement('div');
+      cta.className = 'skolni-cta reveal';
+      if(s.emailTlacitko){
+        const a = document.createElement('a');
+        a.className = 'btn btn-primary';
+        a.href = 'mailto:papirnictvi@hrackyroztoky.cz?subject=' +
+                 encodeURIComponent(s.emailPredmet || '') + '&body=' + encodeURIComponent(s.emailText || '');
+        a.textContent = 'Napsat e-mail';
+        cta.appendChild(a);
+      }
+      if(s.telefonTlacitko){
+        const t = document.createElement('a');
+        t.className = 'btn btn-onSage';
+        t.href = 'tel:+420607839568';
+        t.textContent = 'Zavolat: 607 839 568';
+        cta.appendChild(t);
+      }
+      box.appendChild(cta);
+    }
   }
   renderSkola();
 

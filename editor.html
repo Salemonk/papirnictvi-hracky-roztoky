@@ -105,7 +105,7 @@
     <p id="upozorneni" class="warn"></p>
   </div>
 
-  <h2 style="margin:40px 0 4px;">Tipy do bannerku „Věděli jste?"</h2>
+  <h2 style="margin:40px 0 4px;">Tipy do banneru „Věděli jste?"</h2>
   <p class="lead">Krátké zajímavosti, které se v úvodu stránky náhodně střídají. Každý tip je jedna věta či dvě.</p>
 
   <div id="seznam-tipy"></div>
@@ -126,7 +126,7 @@
   </div>
 
   <h2 style="margin:40px 0 4px;">Škola (sezónní sekce)</h2>
-  <p class="lead">Sekce „Školní balíčky" a návod na obaly. Můžete ji zapnout/vypnout podle sezóny a upravit všechny texty. Tlačítka „Napsat e-mail" a „Zavolat" jsou napevno (mají v sobě předvyplněný e-mail).</p>
+  <p class="lead">Sezónní sekce s vlastním názvem (mění i tlačítko v menu). Můžete ji zapnout/vypnout podle sezóny, přidat kartičky obsahu jako u novinek a zapnout/vypnout tlačítka „Zavolat" a „Napsat e-mail" (u e-mailu upravit i předvyplněný text).</p>
 
   <div id="skola-form"></div>
 
@@ -539,74 +539,66 @@
   // ===================== ŠKOLA (sezónní sekce) =====================
   var skolaData = (function(){
     var s = window.SKOLA || {};
-    function pairs(arr){ return (Array.isArray(arr)?arr:[]).map(function(k){ return { tucne:k.tucne||'', text:k.text||'' }; }); }
+    function karty(arr){ return (Array.isArray(arr)?arr:[]).map(function(k){
+      return { stitek:k.stitek||'', nadpis:k.nadpis||'', text:k.text||'', obrazek:(typeof k.obrazek==='string'?k.obrazek:'') };
+    }); }
     return {
       zobrazit: s.zobrazit !== false,
       zobrazitOd: s.zobrazitOd||'', zobrazitDo: s.zobrazitDo||'',
-      stitek: s.stitek||'', nadpis: s.nadpis||'', text: s.text||'',
-      cenaPopisek: s.cenaPopisek||'', cena: s.cena||'', poznamka: s.poznamka||'',
-      kroky: (Array.isArray(s.kroky)?s.kroky.map(function(k){return String(k);}):[]),
-      obalyStitek: s.obalyStitek||'', obalyNadpis: s.obalyNadpis||'',
-      obalyMobilUvod: s.obalyMobilUvod||'', obalyMobilKroky: pairs(s.obalyMobilKroky),
-      obalyUvod: s.obalyUvod||'', obalyKroky: pairs(s.obalyKroky),
-      obalyTip: s.obalyTip||''
+      nazev: s.nazev||'',
+      telefonTlacitko: s.telefonTlacitko !== false,
+      emailTlacitko: s.emailTlacitko !== false,
+      emailPredmet: s.emailPredmet||'', emailText: s.emailText||'',
+      polozky: karty(s.polozky)
     };
   })();
 
   function upravSkola(pole, hodnota){ skolaData[pole] = hodnota; generujSkola(); }
-  // kroky karty (prosté texty)
-  function upravKrok(i, v){ skolaData.kroky[i] = v; generujSkola(); }
-  function pridatKrok(){ skolaData.kroky.push(''); renderSkolaForm(); }
-  function smazatKrok(i){ skolaData.kroky.splice(i,1); renderSkolaForm(); }
-  function posunKrok(i, smer){ var a=skolaData.kroky, j=i+smer; if(j<0||j>=a.length) return; var t=a[i]; a[i]=a[j]; a[j]=t; renderSkolaForm(); }
-  // kroky návodu na obaly (dvojice: tučný začátek + text)
-  function upravObalyKrok(list, i, cast, v){ skolaData[list][i][cast] = v; generujSkola(); }
-  function pridatObalyKrok(list){ skolaData[list].push({tucne:'', text:''}); renderSkolaForm(); }
-  function smazatObalyKrok(list, i){ skolaData[list].splice(i,1); renderSkolaForm(); }
-  function posunObalyKrok(list, i, smer){ var a=skolaData[list], j=i+smer; if(j<0||j>=a.length) return; var t=a[i]; a[i]=a[j]; a[j]=t; renderSkolaForm(); }
-
-  function poleText(popis, hint, pole, textarea){
-    var val = esc(skolaData[pole]);
-    return '<label>'+popis+(hint?' <span class="hint">('+hint+')</span>':'')+'</label>' +
-      (textarea
-        ? '<textarea oninput="upravSkola(\''+pole+'\',this.value)">'+val+'</textarea>'
-        : '<input type="text" value="'+val+'" oninput="upravSkola(\''+pole+'\',this.value)">');
+  // karty obsahu (stejné jako novinky, jen jednodušší)
+  function upravSkolaKartu(i, pole, v){ skolaData.polozky[i][pole] = v; generujSkola(); }
+  function pridatSkolaKartu(){ skolaData.polozky.push({stitek:'',nadpis:'',text:'',obrazek:''}); renderSkolaForm(); }
+  function smazatSkolaKartu(i){ if(confirm('Opravdu smazat tuto kartu?')){ skolaData.polozky.splice(i,1); renderSkolaForm(); } }
+  function posunSkolaKartu(i, smer){ var a=skolaData.polozky, j=i+smer; if(j<0||j>=a.length) return; var t=a[i]; a[i]=a[j]; a[j]=t; renderSkolaForm(); }
+  // výběr obrázku karty (soubor už musí být ve složce images/produkty nebo images)
+  function vyberSkolaObrazek(i){
+    var inp = document.createElement('input'); inp.type='file'; inp.accept='image/*';
+    inp.onchange = function(){
+      if(!inp.files || !inp.files[0]) return;
+      var nazev = inp.files[0].name;
+      zkusCesty(['images/produkty/' + nazev, 'images/' + nazev], function(cesta){
+        if(cesta){ skolaData.polozky[i].obrazek = cesta; renderSkolaForm(); }
+        else alert('Obrázek „' + nazev + '" jsem nenašel ve složce images/produkty.\n\nNejdřív ho tam prosím nakopírujte a pak ho vyberte znovu.');
+      });
+    };
+    inp.click();
   }
 
-  function renderKrokyKarty(){
-    var html = '<label>Kroky „Jak to funguje" <span class="hint">(očíslují se automaticky 1, 2, 3…)</span></label>';
-    skolaData.kroky.forEach(function(k, i){
-      html += '<div class="card" style="padding:12px 14px; margin-bottom:10px;">' +
-        '<div class="card-head" style="margin-bottom:8px;"><strong>Krok '+(i+1)+'</strong>' +
+  function renderSkolaKarty(){
+    var html = '';
+    skolaData.polozky.forEach(function(k, i){
+      html += '<div class="card">' +
+        '<div class="card-head"><strong>Karta č. ' + (i+1) + '</strong>' +
           '<span class="card-tools">' +
-            '<button type="button" onclick="posunKrok('+i+',-1)" title="Nahoru">▲</button>' +
-            '<button type="button" onclick="posunKrok('+i+',1)" title="Dolů">▼</button>' +
-            '<button type="button" class="danger" onclick="smazatKrok('+i+')">Smazat</button>' +
+            '<button type="button" onclick="posunSkolaKartu(' + i + ',-1)" title="Nahoru">▲</button>' +
+            '<button type="button" onclick="posunSkolaKartu(' + i + ',1)" title="Dolů">▼</button>' +
+            '<button type="button" class="danger" onclick="smazatSkolaKartu(' + i + ')">Smazat</button>' +
           '</span>' +
         '</div>' +
-        '<textarea style="min-height:52px;" oninput="upravKrok('+i+',this.value)">'+esc(k)+'</textarea>' +
-      '</div>';
-    });
-    html += '<div class="toolbar"><button type="button" onclick="pridatKrok()">+ Přidat krok</button></div>';
-    return html;
-  }
-
-  function renderObalyKroky(list, popis){
-    var html = '<label>'+popis+' <span class="hint">(tučný začátek + zbytek věty)</span></label>';
-    skolaData[list].forEach(function(k, i){
-      html += '<div class="card" style="padding:12px 14px; margin-bottom:10px;">' +
-        '<div class="card-head" style="margin-bottom:8px;"><strong>Krok '+(i+1)+'</strong>' +
-          '<span class="card-tools">' +
-            '<button type="button" onclick="posunObalyKrok(\''+list+'\','+i+',-1)" title="Nahoru">▲</button>' +
-            '<button type="button" onclick="posunObalyKrok(\''+list+'\','+i+',1)" title="Dolů">▼</button>' +
-            '<button type="button" class="danger" onclick="smazatObalyKrok(\''+list+'\','+i+')">Smazat</button>' +
-          '</span>' +
+        '<label>Štítek <span class="hint">(nepovinné, malý text nahoře)</span></label>' +
+        '<input type="text" value="' + esc(k.stitek) + '" oninput="upravSkolaKartu(' + i + ',\'stitek\',this.value)">' +
+        '<label>Nadpis</label>' +
+        '<input type="text" value="' + esc(k.nadpis) + '" oninput="upravSkolaKartu(' + i + ',\'nadpis\',this.value)">' +
+        '<label>Text</label>' +
+        '<textarea oninput="upravSkolaKartu(' + i + ',\'text\',this.value)">' + esc(k.text) + '</textarea>' +
+        '<label>Obrázek <span class="hint">(nepovinné — vyberte tlačítkem, nebo napište cestu)</span></label>' +
+        '<div class="img-row">' +
+          '<input type="text" value="' + esc(k.obrazek) + '" oninput="upravSkolaKartu(' + i + ',\'obrazek\',this.value)">' +
+          '<button type="button" onclick="vyberSkolaObrazek(' + i + ')">Vybrat…</button>' +
         '</div>' +
-        '<input type="text" placeholder="Tučný začátek" value="'+esc(k.tucne)+'" oninput="upravObalyKrok(\''+list+'\','+i+',\'tucne\',this.value)">' +
-        '<textarea placeholder="Zbytek věty" style="min-height:52px; margin-top:6px;" oninput="upravObalyKrok(\''+list+'\','+i+',\'text\',this.value)">'+esc(k.text)+'</textarea>' +
+        (k.obrazek ? '<img class="thumb" style="display:block;" src="' + esc(k.obrazek) + '" onerror="this.style.display=\'none\'">' : '') +
       '</div>';
     });
-    html += '<div class="toolbar"><button type="button" onclick="pridatObalyKrok(\''+list+'\')">+ Přidat krok</button></div>';
+    html += '<div class="toolbar"><button type="button" class="primary" onclick="pridatSkolaKartu()">+ Přidat kartu</button></div>';
     return html;
   }
 
@@ -614,60 +606,65 @@
     var box = document.getElementById('skola-form');
     box.innerHTML =
       '<div class="card">' +
+        '<label>Název sekce <span class="hint">(zobrazí se jako nadpis sekce i jako tlačítko v menu)</span></label>' +
+        '<input type="text" value="' + esc(skolaData.nazev) + '" oninput="upravSkola(\'nazev\',this.value)">' +
+        '<div class="checkbox-row" style="margin-top:16px;">' +
+          '<input type="checkbox" id="skola-zobrazit" ' + (skolaData.zobrazit?'checked':'') + ' onchange="upravSkola(\'zobrazit\',this.checked)">' +
+          '<label for="skola-zobrazit">Zobrazit sekci na webu (i tlačítko v menu)</label>' +
+        '</div>' +
+        '<label>Zobrazit jen v období <span class="hint">(nepovinné — prázdné = řídí se jen přepínačem)</span></label>' +
+        '<div class="row2">' +
+          '<div><label class="hint">od</label><input type="date" value="' + esc(skolaData.zobrazitOd) + '" oninput="upravSkola(\'zobrazitOd\',this.value)"></div>' +
+          '<div><label class="hint">do</label><input type="date" value="' + esc(skolaData.zobrazitDo) + '" oninput="upravSkola(\'zobrazitDo\',this.value)"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="card">' +
+        '<div class="card-head"><strong>Kontaktní tlačítka pod sekcí</strong></div>' +
         '<div class="checkbox-row">' +
-          '<input type="checkbox" id="skola-zobrazit" '+(skolaData.zobrazit?'checked':'')+' onchange="upravSkola(\'zobrazit\',this.checked)">' +
-          '<label for="skola-zobrazit">Zobrazit sekci Škola na webu (i tlačítko v menu)</label>' +
+          '<input type="checkbox" id="skola-tel" ' + (skolaData.telefonTlacitko?'checked':'') + ' onchange="upravSkola(\'telefonTlacitko\',this.checked)">' +
+          '<label for="skola-tel">Tlačítko „Zavolat: 607 839 568"</label>' +
         '</div>' +
-        '<label>Zobrazit jen v období <span class="hint">(nepovinné — necháte-li prázdné, řídí se jen přepínačem nahoře)</span></label>' +
-        '<div class="row2">' +
-          '<div><label class="hint">od</label><input type="date" value="'+esc(skolaData.zobrazitOd)+'" oninput="upravSkola(\'zobrazitOd\',this.value)"></div>' +
-          '<div><label class="hint">do</label><input type="date" value="'+esc(skolaData.zobrazitDo)+'" oninput="upravSkola(\'zobrazitDo\',this.value)"></div>' +
+        '<div class="checkbox-row">' +
+          '<input type="checkbox" id="skola-email" ' + (skolaData.emailTlacitko?'checked':'') + ' onchange="upravSkola(\'emailTlacitko\',this.checked)">' +
+          '<label for="skola-email">Tlačítko „Napsat e-mail"</label>' +
         '</div>' +
+        '<label>Předmět e-mailu <span class="hint">(použije se, jen když je e-mailové tlačítko zapnuté)</span></label>' +
+        '<input type="text" value="' + esc(skolaData.emailPredmet) + '" oninput="upravSkola(\'emailPredmet\',this.value)">' +
+        '<label>Předvyplněný text e-mailu</label>' +
+        '<textarea style="min-height:150px;" oninput="upravSkola(\'emailText\',this.value)">' + esc(skolaData.emailText) + '</textarea>' +
       '</div>' +
-      '<div class="card">' +
-        '<div class="card-head"><strong>Karta „Školní balíčky"</strong></div>' +
-        poleText('Štítek','malý text nahoře','stitek',false) +
-        poleText('Nadpis','','nadpis',false) +
-        poleText('Úvodní text','','text',true) +
-        '<div class="row2">' +
-          '<div>'+poleText('Popisek ceny','tučný text před cenou','cenaPopisek',false)+'</div>' +
-          '<div>'+poleText('Cena','např. 500 Kč','cena',false)+'</div>' +
-        '</div>' +
-        poleText('Poznámka pod tlačítky','','poznamka',false) +
-        renderKrokyKarty() +
-      '</div>' +
-      '<div class="card">' +
-        '<div class="card-head"><strong>Návod „Jak vybrat obaly na učebnice"</strong></div>' +
-        poleText('Štítek','','obalyStitek',false) +
-        poleText('Nadpis','','obalyNadpis',false) +
-        '<label style="margin-top:16px;display:block;font-size:1rem;">Krátká verze pro mobil</label>' +
-        poleText('Úvodní věta','','obalyMobilUvod',true) +
-        renderObalyKroky('obalyMobilKroky','Kroky (mobil)') +
-        '<label style="margin-top:16px;display:block;font-size:1rem;">Plná verze pro počítač</label>' +
-        poleText('Úvodní text','','obalyUvod',true) +
-        renderObalyKroky('obalyKroky','Kroky (počítač)') +
-        poleText('Tip na konci','','obalyTip',true) +
-      '</div>';
+      '<h3 style="margin:24px 0 4px;">Obsah sekce (karty)</h3>' +
+      '<p class="lead" style="margin-top:0;">Kartičky jako u novinek — přidávejte, mažte a přesouvejte je.</p>' +
+      renderSkolaKarty();
     generujSkola();
   }
 
   function generujSkola(){
     var s = skolaData;
     var J = function(v){ return JSON.stringify(String(v == null ? '' : v)); };
-    function listStr(items){ return items.length ? ('[\n' + items.join(',\n') + '\n  ]') : '[]'; }
-    var kroky = listStr(s.kroky.filter(function(k){return String(k).trim();}).map(function(k){ return '    ' + J(k); }));
-    function pairsStr(arr){ return listStr(arr.filter(function(k){return (k.tucne+k.text).trim();}).map(function(k){ return '    { tucne: '+J(k.tucne)+', text: '+J(k.text)+' }'; })); }
+    var polozky = s.polozky.filter(function(k){ return (k.nadpis + k.text + k.obrazek).trim() !== ''; }).map(function(k){
+      var radky = [];
+      if(k.stitek)  radky.push('      stitek: ' + J(k.stitek));
+      if(k.nadpis)  radky.push('      nadpis: ' + J(k.nadpis));
+      if(k.text)    radky.push('      text: ' + J(k.text));
+      if(k.obrazek) radky.push('      obrazek: ' + J(k.obrazek));
+      return '    {\n' + radky.join(',\n') + '\n    }';
+    });
+    var polozkyBlock = polozky.length ? ('[\n' + polozky.join(',\n') + '\n  ]') : '[]';
     var header =
 `/*
-  ŠKOLA — obsah a nastavení sezónní sekce „Školní balíčky" na webu.
+  ŠKOLA — sezónní sekce webu (obsah + nastavení).
   Nejsnáz se upravuje v editoru (editor.html, sekce „Škola").
 
-  zobrazit    — true = sekce i tlačítko „Škola" v menu jsou vidět, false = skryté.
+  zobrazit    — true = sekce i její tlačítko v menu jsou vidět, false = skryté.
   zobrazitOd  — nepovinné „RRRR-MM-DD"; když vyplníte obě data, sekce se ukáže
   zobrazitDo    jen v tom období. Jinak se řídí jen přepínačem „zobrazit".
+  nazev       — název sekce; použije se jako nadpis i jako text tlačítka v menu.
+  telefonTlacitko / emailTlacitko — zapnutí tlačítek „Zavolat" / „Napsat e-mail".
+  emailPredmet / emailText — předmět a text předvyplněného e-mailu.
+  polozky     — karty obsahu (jako novinky): stitek, nadpis, text, obrazek.
 
   Po úpravě soubor uložte. Na webu se změna projeví po načtení stránky.
-  Tlačítka „Napsat e-mail" a „Zavolat" jsou napevno v index.html.
 */
 
 `;
@@ -676,20 +673,12 @@
       '  zobrazit: ' + (s.zobrazit ? 'true' : 'false') + ',\n' +
       '  zobrazitOd: ' + J(s.zobrazitOd) + ',\n' +
       '  zobrazitDo: ' + J(s.zobrazitDo) + ',\n\n' +
-      '  stitek: ' + J(s.stitek) + ',\n' +
-      '  nadpis: ' + J(s.nadpis) + ',\n' +
-      '  text: ' + J(s.text) + ',\n' +
-      '  cenaPopisek: ' + J(s.cenaPopisek) + ',\n' +
-      '  cena: ' + J(s.cena) + ',\n' +
-      '  poznamka: ' + J(s.poznamka) + ',\n' +
-      '  kroky: ' + kroky + ',\n\n' +
-      '  obalyStitek: ' + J(s.obalyStitek) + ',\n' +
-      '  obalyNadpis: ' + J(s.obalyNadpis) + ',\n' +
-      '  obalyMobilUvod: ' + J(s.obalyMobilUvod) + ',\n' +
-      '  obalyMobilKroky: ' + pairsStr(s.obalyMobilKroky) + ',\n' +
-      '  obalyUvod: ' + J(s.obalyUvod) + ',\n' +
-      '  obalyKroky: ' + pairsStr(s.obalyKroky) + ',\n' +
-      '  obalyTip: ' + J(s.obalyTip) + '\n' +
+      '  nazev: ' + J(s.nazev) + ',\n\n' +
+      '  telefonTlacitko: ' + (s.telefonTlacitko ? 'true' : 'false') + ',\n' +
+      '  emailTlacitko: ' + (s.emailTlacitko ? 'true' : 'false') + ',\n' +
+      '  emailPredmet: ' + J(s.emailPredmet) + ',\n' +
+      '  emailText: ' + J(s.emailText) + ',\n\n' +
+      '  polozky: ' + polozkyBlock + '\n' +
       '};\n';
     document.getElementById('vystup-skola').value = obsah;
     return obsah;
