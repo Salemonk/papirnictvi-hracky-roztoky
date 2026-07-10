@@ -377,7 +377,7 @@
     font-size:1.3rem; line-height:1; cursor:pointer;
   }
   .note h3{ font-size:1.12rem; margin-bottom:.35em; }
-  .note p{ font-size:.94rem; color:var(--ink-soft); margin:0; }
+  .note p{ font-size:.94rem; color:var(--ink-soft); margin:0; white-space:pre-line; }
 
   /* ---------- PRODUKTY ---------- */
   .produkty-grid{
@@ -403,9 +403,18 @@
 
   /* ---------- SEZÓNNÍ SEKCE (historicky „škola") ---------- */
   /* Obsah tvoří karty ve stylu novinek (.note…) — vykresluje je renderSkola()
-     z data/skola.js. Tady zůstávají jen styly kontaktních tlačítek pod sekcí. */
-  .skolni-cta{ display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
-  .btn-onSage{ background:var(--paper-light); color:var(--ink); }
+     z data/skola.js. Každá karta si může zapnout vlastní kontaktní tlačítka. */
+  .note-cta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .note-btn{
+    display:inline-block;
+    font-family:'Karla',sans-serif; font-weight:700; font-size:.85rem;
+    text-decoration:none; color:var(--ink);
+    background:var(--honey); border:2px solid var(--ink);
+    border-radius:999px; padding:8px 16px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .note-btn:hover{ transform:translateY(-2px); box-shadow:0 4px 0 var(--ink); }
+  .note-btn-tel{ background:var(--paper-light); }
 
   /* ---------- O NAS ---------- */
   .section-onas{ background:var(--paper-light); }
@@ -520,7 +529,7 @@
   }
   .vite-text{
     margin:2px 0 0; font-size:1.05rem; min-height:3.2em;
-    transition:opacity .35s ease;
+    transition:opacity .35s ease; white-space:pre-line;
   }
   .vite-text.fade{ opacity:0; }
   .vite-dalsi{
@@ -956,6 +965,29 @@
       card.classList.add('note-plain');
       vlozObrazky('note-art');
     }
+
+    // Volitelná kontaktní tlačítka. Novinky je nenastavují, sezónní karty ano
+    // (každá karta si zapíná „Napsat e-mail" / „Zavolat" samostatně).
+    if(item.telefonTlacitko || item.emailTlacitko){
+      const cta = document.createElement('div');
+      cta.className = 'note-cta';
+      if(item.emailTlacitko){
+        const a = document.createElement('a');
+        a.className = 'note-btn';
+        a.href = 'mailto:papirnictvi@hrackyroztoky.cz?subject=' +
+                 encodeURIComponent(item.emailPredmet || '') + '&body=' + encodeURIComponent(item.emailText || '');
+        a.textContent = 'Napsat e-mail';
+        cta.appendChild(a);
+      }
+      if(item.telefonTlacitko){
+        const t = document.createElement('a');
+        t.className = 'note-btn note-btn-tel';
+        t.href = 'tel:+420607839568';
+        t.textContent = 'Zavolat: 607 839 568';
+        cta.appendChild(t);
+      }
+      card.appendChild(cta);
+    }
     return card;
   }
 
@@ -1006,33 +1038,12 @@
     head.appendChild(h2);
     box.appendChild(head);
 
-    // Obsah = karty (stejné jako novinky)
+    // Obsah = karty (stejné jako novinky). Kontaktní tlačítka (e-mail / telefon)
+    // si nastavuje každá karta zvlášť — vykresluje je vytvorNoteCard().
     const grid = document.createElement('div');
     grid.className = 'notes-grid';
     (s.polozky || []).forEach(item => grid.appendChild(vytvorNoteCard(item)));
     box.appendChild(grid);
-
-    // Kontaktní tlačítka (volitelná)
-    if(s.telefonTlacitko || s.emailTlacitko){
-      const cta = document.createElement('div');
-      cta.className = 'skolni-cta reveal';
-      if(s.emailTlacitko){
-        const a = document.createElement('a');
-        a.className = 'btn btn-primary';
-        a.href = 'mailto:papirnictvi@hrackyroztoky.cz?subject=' +
-                 encodeURIComponent(s.emailPredmet || '') + '&body=' + encodeURIComponent(s.emailText || '');
-        a.textContent = 'Napsat e-mail';
-        cta.appendChild(a);
-      }
-      if(s.telefonTlacitko){
-        const t = document.createElement('a');
-        t.className = 'btn btn-onSage';
-        t.href = 'tel:+420607839568';
-        t.textContent = 'Zavolat: 607 839 568';
-        cta.appendChild(t);
-      }
-      box.appendChild(cta);
-    }
   }
   renderSkola();
 

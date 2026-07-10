@@ -539,7 +539,8 @@
 
   // Tip zapíšeme do apostrofů a ošetříme zpětné lomítko i apostrof uvnitř textu.
   function jsApostrof(s){
-    return "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r?\n/g, ' ') + "'";
+    // odřádkování zachováme jako \n (na webu se s CSS white-space:pre-line zobrazí jako nový řádek)
+    return "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r?\n/g, '\\n') + "'";
   }
 
   function generujTipy(){
@@ -597,23 +598,28 @@
   var skolaData = (function(){
     var s = window.SKOLA || {};
     function karty(arr){ return (Array.isArray(arr)?arr:[]).map(function(k){
-      return { stitek:k.stitek||'', nadpis:k.nadpis||'', text:k.text||'', obrazek:(typeof k.obrazek==='string'?k.obrazek:'') };
+      return {
+        stitek:k.stitek||'', nadpis:k.nadpis||'', text:k.text||'',
+        obrazek:(typeof k.obrazek==='string'?k.obrazek:''),
+        telefonTlacitko: k.telefonTlacitko === true,
+        emailTlacitko: k.emailTlacitko === true,
+        emailPredmet: k.emailPredmet||'', emailText: k.emailText||''
+      };
     }); }
     return {
       zobrazit: s.zobrazit !== false,
       zobrazitOd: s.zobrazitOd||'', zobrazitDo: s.zobrazitDo||'',
       nazev: s.nazev||'',
-      telefonTlacitko: s.telefonTlacitko !== false,
-      emailTlacitko: s.emailTlacitko !== false,
-      emailPredmet: s.emailPredmet||'', emailText: s.emailText||'',
       polozky: karty(s.polozky)
     };
   })();
 
   function upravSkola(pole, hodnota){ skolaData[pole] = hodnota; generujSkola(); }
-  // karty obsahu (stejné jako novinky, jen jednodušší)
+  // karty obsahu (stejné jako novinky, jen jednodušší); tlačítka má každá karta zvlášť
   function upravSkolaKartu(i, pole, v){ skolaData.polozky[i][pole] = v; generujSkola(); }
-  function pridatSkolaKartu(){ skolaData.polozky.push({stitek:'',nadpis:'',text:'',obrazek:''}); renderSkolaForm(); }
+  // varianta, která překreslí formulář — pro přepínač e-mailu, aby se ukázala/schovala pole
+  function upravSkolaKartuReRender(i, pole, v){ skolaData.polozky[i][pole] = v; renderSkolaForm(); }
+  function pridatSkolaKartu(){ skolaData.polozky.push({stitek:'',nadpis:'',text:'',obrazek:'',telefonTlacitko:false,emailTlacitko:false,emailPredmet:'',emailText:''}); renderSkolaForm(); }
   function smazatSkolaKartu(i){ if(confirm('Opravdu smazat tuto kartu?')){ skolaData.polozky.splice(i,1); renderSkolaForm(); } }
   function posunSkolaKartu(i, smer){ var a=skolaData.polozky, j=i+smer; if(j<0||j>=a.length) return; var t=a[i]; a[i]=a[j]; a[j]=t; renderSkolaForm(); }
   // výběr obrázku karty (soubor už musí být ve složce images/produkty nebo images)
@@ -653,6 +659,21 @@
           '<button type="button" onclick="vyberSkolaObrazek(' + i + ')">Vybrat…</button>' +
         '</div>' +
         (k.obrazek ? '<img class="thumb" style="display:block;" src="' + esc(k.obrazek) + '" onerror="this.style.display=\'none\'">' : '') +
+        '<label style="margin-top:16px;">Tlačítka na kartě <span class="hint">(nepovinné)</span></label>' +
+        '<div class="checkbox-row">' +
+          '<input type="checkbox" id="skola-tel-' + i + '" ' + (k.telefonTlacitko?'checked':'') + ' onchange="upravSkolaKartu(' + i + ',\'telefonTlacitko\',this.checked)">' +
+          '<label for="skola-tel-' + i + '">Tlačítko „Zavolat: 607 839 568"</label>' +
+        '</div>' +
+        '<div class="checkbox-row">' +
+          '<input type="checkbox" id="skola-email-' + i + '" ' + (k.emailTlacitko?'checked':'') + ' onchange="upravSkolaKartuReRender(' + i + ',\'emailTlacitko\',this.checked)">' +
+          '<label for="skola-email-' + i + '">Tlačítko „Napsat e-mail"</label>' +
+        '</div>' +
+        (k.emailTlacitko ?
+          '<label>Předmět e-mailu</label>' +
+          '<input type="text" value="' + esc(k.emailPredmet) + '" oninput="upravSkolaKartu(' + i + ',\'emailPredmet\',this.value)">' +
+          '<label>Předvyplněný text e-mailu</label>' +
+          '<textarea style="min-height:130px;" oninput="upravSkolaKartu(' + i + ',\'emailText\',this.value)">' + esc(k.emailText) + '</textarea>'
+          : '') +
       '</div>';
     });
     html += '<div class="toolbar"><button type="button" class="primary" onclick="pridatSkolaKartu()">+ Přidat kartu</button></div>';
@@ -675,23 +696,8 @@
           '<div><label class="hint">do</label><input type="date" value="' + esc(skolaData.zobrazitDo) + '" oninput="upravSkola(\'zobrazitDo\',this.value)"></div>' +
         '</div>' +
       '</div>' +
-      '<div class="card">' +
-        '<div class="card-head"><strong>Kontaktní tlačítka pod sekcí</strong></div>' +
-        '<div class="checkbox-row">' +
-          '<input type="checkbox" id="skola-tel" ' + (skolaData.telefonTlacitko?'checked':'') + ' onchange="upravSkola(\'telefonTlacitko\',this.checked)">' +
-          '<label for="skola-tel">Tlačítko „Zavolat: 607 839 568"</label>' +
-        '</div>' +
-        '<div class="checkbox-row">' +
-          '<input type="checkbox" id="skola-email" ' + (skolaData.emailTlacitko?'checked':'') + ' onchange="upravSkola(\'emailTlacitko\',this.checked)">' +
-          '<label for="skola-email">Tlačítko „Napsat e-mail"</label>' +
-        '</div>' +
-        '<label>Předmět e-mailu <span class="hint">(použije se, jen když je e-mailové tlačítko zapnuté)</span></label>' +
-        '<input type="text" value="' + esc(skolaData.emailPredmet) + '" oninput="upravSkola(\'emailPredmet\',this.value)">' +
-        '<label>Předvyplněný text e-mailu</label>' +
-        '<textarea style="min-height:150px;" oninput="upravSkola(\'emailText\',this.value)">' + esc(skolaData.emailText) + '</textarea>' +
-      '</div>' +
       '<h3 style="margin:24px 0 4px;">Obsah sekce (karty)</h3>' +
-      '<p class="lead" style="margin-top:0;">Kartičky jako u novinek — přidávejte, mažte a přesouvejte je.</p>' +
+      '<p class="lead" style="margin-top:0;">Kartičky jako u novinek — přidávejte, mažte a přesouvejte je. U každé karty můžete zapnout tlačítka „Zavolat" a „Napsat e-mail" (u e-mailu i předvyplněný text).</p>' +
       renderSkolaKarty();
     generujSkola();
   }
@@ -705,6 +711,12 @@
       if(k.nadpis)  radky.push('      nadpis: ' + J(k.nadpis));
       if(k.text)    radky.push('      text: ' + J(k.text));
       if(k.obrazek) radky.push('      obrazek: ' + J(k.obrazek));
+      if(k.telefonTlacitko) radky.push('      telefonTlacitko: true');
+      if(k.emailTlacitko){
+        radky.push('      emailTlacitko: true');
+        if(k.emailPredmet) radky.push('      emailPredmet: ' + J(k.emailPredmet));
+        if(k.emailText)    radky.push('      emailText: ' + J(k.emailText));
+      }
       return '    {\n' + radky.join(',\n') + '\n    }';
     });
     var polozkyBlock = polozky.length ? ('[\n' + polozky.join(',\n') + '\n  ]') : '[]';
@@ -718,9 +730,9 @@
   zobrazitOd  — nepovinné „RRRR-MM-DD"; když vyplníte obě data, sekce se ukáže
   zobrazitDo    jen v tom období. Jinak se řídí jen přepínačem „zobrazit".
   nazev       — název sekce; použije se jako nadpis i jako text tlačítka v menu.
-  telefonTlacitko / emailTlacitko — zapnutí tlačítek „Zavolat" / „Napsat e-mail".
-  emailPredmet / emailText — předmět a text předvyplněného e-mailu.
   polozky     — karty obsahu (jako novinky): stitek, nadpis, text, obrazek.
+                Každá karta může mít i vlastní tlačítka: telefonTlacitko /
+                emailTlacitko (+ emailPredmet / emailText pro předvyplněný e-mail).
 
   Po úpravě soubor uložte. Na webu se změna projeví po načtení stránky.
 */
@@ -732,10 +744,6 @@
       '  zobrazitOd: ' + J(s.zobrazitOd) + ',\n' +
       '  zobrazitDo: ' + J(s.zobrazitDo) + ',\n\n' +
       '  nazev: ' + J(s.nazev) + ',\n\n' +
-      '  telefonTlacitko: ' + (s.telefonTlacitko ? 'true' : 'false') + ',\n' +
-      '  emailTlacitko: ' + (s.emailTlacitko ? 'true' : 'false') + ',\n' +
-      '  emailPredmet: ' + J(s.emailPredmet) + ',\n' +
-      '  emailText: ' + J(s.emailText) + ',\n\n' +
       '  polozky: ' + polozkyBlock + '\n' +
       '};\n';
     document.getElementById('vystup-skola').value = obsah;
