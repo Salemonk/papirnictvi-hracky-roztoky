@@ -1,7 +1,9 @@
 /*
-  ŠKOLA — sezónní sekce webu (obsah + nastavení).
+  SEZÓNNÍ SEKCE webu (obsah + nastavení). Univerzální sekce, jejíž náplň se mění
+  podle sezóny — teď „školní balíčky", jindy třeba Vánoce. Názvy skola/SKOLA/
+  skola.js jsou jen historické, koncept je obecná „sezóna".
 
-  Nejsnáz se upravuje v editoru (editor.html, sekce „Škola") — otevřete ho
+  Nejsnáz se upravuje v editoru (editor.html, sekce „Sezóna") — otevřete ho
   dvojklikem. Můžete ale upravovat i ručně tady.
 
   zobrazit    — true = sekce i její tlačítko v menu jsou vidět, false = skryté.

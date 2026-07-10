@@ -13,7 +13,7 @@
   ------------
   data/novinky.js ...... karty v sekci „Co je u nás nového" (návod je v souboru)
   data/tipy.js ......... texty do bannerku „Věděli jste?" (návod je v souboru)
-  data/skola.js ........ obsah + zapnutí/vypnutí sezónní sekce „Škola"
+  data/skola.js ........ obsah + zapnutí/vypnutí sezónní sekce (teď „školní balíčky")
   editor.html .......... formulářový editor novinek, tipů a sekce Škola
                          (otevřít dvojklikem; vygeneruje datové soubory ke stažení)
   images/, assets/ ..... fotky produktů, ilustrace, logo, favicon
@@ -401,7 +401,7 @@
   .product-card.papirnictvi li::before{ background:var(--brick); }
   .product-card.hracky li::before{ background:var(--sage); }
 
-  /* ---------- SEKCE ŠKOLA (sezónní) ---------- */
+  /* ---------- SEZÓNNÍ SEKCE (historicky „škola") ---------- */
   /* Obsah tvoří karty ve stylu novinek (.note…) — vykresluje je renderSkola()
      z data/skola.js. Tady zůstávají jen styly kontaktních tlačítek pod sekcí. */
   .skolni-cta{ display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
@@ -646,11 +646,12 @@
     </div>
   </section>
 
-  <!-- ================= ŠKOLNÍ BALÍČKY (sezónní) =================
-       Sezónní sekce. Obsah i zapnutí/vypnutí (a případné období) se řídí
-       souborem data/skola.js — nejsnáz přes editor.html, sekci „Škola".
-       Když je vypnutá nebo mimo zadané období, skryje se i tlačítko „Škola"
-       v menu. Obsah sem vykresluje funkce renderSkola() ve skriptu níže. -->
+  <!-- ================= SEZÓNNÍ SEKCE =================
+       Univerzální sezónní sekce (teď „školní balíčky", jindy třeba Vánoce).
+       Název, obsah, zapnutí/vypnutí i případné období se řídí souborem
+       data/skola.js — nejsnáz přes editor.html, sekci „Sezóna". Když je vypnutá
+       nebo mimo období, skryje se i její tlačítko v menu. Obsah sem vykresluje
+       funkce renderSkola() ve skriptu níže. (id/název „skola" jsou historické.) -->
   <section id="skolni-balicky">
     <div class="container"></div>
   </section>
@@ -862,7 +863,7 @@
   /* ===========================================================================
      SKRIPTY STRÁNKY — přehled (jednotlivé části níže jsou okomentované):
        1) novinkaViditelna() + renderNovinky() — vykreslí karty z window.NOVINKY
-       2) renderSkola() — sezónní sekce Škola z window.SKOLA (data/skola.js);
+       2) renderSkola() — univerzální sezónní sekce z window.SKOLA (data/skola.js);
           umí ji i skrýt vč. tlačítka v menu (přepínač / období)
        3) zvýraznění aktivní položky v menu podle scrollu (IntersectionObserver)
        4) „reveal" — prvky s třídou .reveal se plavně objeví při scrollu

@@ -1,10 +1,30 @@
 <!DOCTYPE html>
 <html lang="cs">
+<!--
+  ============================================================================
+  EDITOR OBSAHU — pracovní nástroj pro majitele (NEPATŘÍ na veřejný web).
+  ============================================================================
+  Samostatná stránka (otevřít dvojklikem). Needituje web přímo — jen z formulářů
+  vygeneruje datové soubory (data/novinky.js, data/tipy.js, data/skola.js) ke
+  stažení, které pak majitel nakopíruje do složky data/ a nahraje skriptem.
+
+  Uvnitř jsou TŘI nezávislé editory se stejným vzorem (data → formulář → soubor):
+    • NOVINKY — karty sekce „Co je u nás nového" (pole: polozky, funkce render/uprav/generuj…)
+    • TIPY    — texty banneru „Věděli jste?" (pole: tipyList)
+    • SEZÓNA  — univerzální sezónní sekce, teď obsahuje „školní balíčky" (pole: skolaData;
+                názvy skola/SKOLA/skola.js jsou historické, koncept je obecná „sezóna")
+  Sdílené pomocné funkce: esc() (escapování do HTML), zkusCesty() (najde cestu
+  k obrázku), a u každého editoru dvojice stáhnout*/zkopírovat*.
+
+  Pozor: pracuje se soubory přes <script src>, ne fetch(), aby fungoval i po
+  otevření z disku (file://). Generované soubory jsou platný JS (JSON.stringify).
+  ============================================================================
+-->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Editor novinek a tipů — Papírnictví a Hračky Roztoky</title>
-<!-- Načte stávající novinky a tipy, aby se daly upravovat -->
+<title>Editor obsahu — Papírnictví a Hračky Roztoky</title>
+<!-- Načte stávající obsah (novinky, tipy, škola), aby se dal upravovat -->
 <script src="data/novinky.js"></script>
 <script src="data/tipy.js"></script>
 <script src="data/skola.js"></script>
@@ -68,25 +88,49 @@
   .img-row input{ flex:1 1 auto; min-width:0; }
   .img-row button{ flex:0 0 auto; white-space:nowrap; }
   @media (max-width:560px){ .row2{ grid-template-columns:1fr; } }
+
+  /* Rychlá navigace mezi sekcemi editoru — přilepená k hornímu okraji. */
+  .ed-nav{
+    position:sticky; top:0; z-index:50;
+    display:flex; flex-wrap:wrap; gap:8px;
+    background:var(--paper); border-bottom:2px solid var(--ink);
+    padding:12px 0; margin:0 0 8px;
+  }
+  .ed-nav a{
+    text-decoration:none; font-weight:bold; font-size:.95rem; color:var(--ink);
+    background:var(--paper-light); border:2px solid var(--ink);
+    border-radius:999px; padding:8px 18px;
+  }
+  .ed-nav a:hover{ background:var(--honey-light); }
+  /* aby kotva po kliknutí skončila pod přilepenou lištou, ne schovaná za ní */
+  h2[id]{ scroll-margin-top:82px; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Editor novinek a tipů</h1>
-  <p class="lead">Tady upravíte <strong>novinky</strong> i <strong>tipy</strong> na webu bez psaní kódu. Vyplňte políčka a u té části, kterou jste měnili, si dole vygenerujte hotový soubor.</p>
+  <h1>Editor obsahu</h1>
+  <p class="lead">Tady upravíte <strong>novinky</strong>, <strong>tipy</strong> i <strong>sezónní sekci</strong> bez psaní kódu. Vyplňte políčka a u té části, kterou jste měnili, si dole vygenerujte hotový soubor.</p>
 
   <div class="steps">
     <strong>Jak na to:</strong>
     <ol>
-      <li>Nahoře upravte <strong>novinky</strong>, dole <strong>tipy</strong> (přidat, smazat, přesunout, změnit text).</li>
-      <li>U té části, kterou jste měnili, klikněte na její tlačítko <strong>„Stáhnout soubor…"</strong> (novinky.js, resp. tipy.js).</li>
+      <li>Nahoře si vyberte sekci a upravte ji (přidat, smazat, přesunout, změnit text).</li>
+      <li>U té části, kterou jste měnili, klikněte na její tlačítko <strong>„Stáhnout soubor…"</strong>.</li>
       <li>Stažený soubor přesuňte do složky <strong>data</strong> ve vašem projektu (nahraďte původní).</li>
       <li>Nové obrázky nezapomeňte nakopírovat do složky <strong>images/produkty</strong>.</li>
       <li>Spusťte <strong>nahrat-na-github.bat</strong> a hotovo.</li>
     </ol>
   </div>
 
-  <h2 style="margin:26px 0 4px;">Novinky</h2>
+  <!-- Rychlé přeskočení na sekci (lišta zůstává přilepená nahoře při scrollování) -->
+  <nav class="ed-nav" aria-label="Sekce editoru">
+    <a href="#ed-novinky">Novinky</a>
+    <a href="#ed-tipy">Tipy</a>
+    <a href="#ed-skola">Sezóna</a>
+  </nav>
+
+  <h2 id="ed-novinky" style="margin:14px 0 4px;">Novinky</h2>
+  <p class="lead">Kartičky v sekci webu „Co je u nás nového". Přidávejte, upravujte, mažte a přesouvejte je; dole si pak stáhnete soubor <strong>novinky.js</strong>.</p>
 
   <div id="seznam"></div>
 
@@ -105,7 +149,7 @@
     <p id="upozorneni" class="warn"></p>
   </div>
 
-  <h2 style="margin:40px 0 4px;">Tipy do banneru „Věděli jste?"</h2>
+  <h2 id="ed-tipy" style="margin:40px 0 4px;">Tipy do banneru „Věděli jste?"</h2>
   <p class="lead">Krátké zajímavosti, které se v úvodu stránky náhodně střídají. Každý tip je jedna věta či dvě.</p>
 
   <div id="seznam-tipy"></div>
@@ -125,8 +169,8 @@
     <p id="upozorneni-tipy" class="warn"></p>
   </div>
 
-  <h2 style="margin:40px 0 4px;">Škola (sezónní sekce)</h2>
-  <p class="lead">Sezónní sekce s vlastním názvem (mění i tlačítko v menu). Můžete ji zapnout/vypnout podle sezóny, přidat kartičky obsahu jako u novinek a zapnout/vypnout tlačítka „Zavolat" a „Napsat e-mail" (u e-mailu upravit i předvyplněný text).</p>
+  <h2 id="ed-skola" style="margin:40px 0 4px;">Sezónní sekce</h2>
+  <p class="lead">Univerzální sezónní sekce — teď je nastavená jako „Školní balíčky", ale název i obsah si můžete kdykoli změnit (třeba na Vánoce). Název řídí i tlačítko v menu. Můžete ji zapnout/vypnout podle sezóny, přidat kartičky obsahu jako u novinek a zapnout/vypnout tlačítka „Zavolat" a „Napsat e-mail" (u e-mailu upravit i předvyplněný text).</p>
 
   <div id="skola-form"></div>
 
@@ -142,6 +186,19 @@
 </div>
 
 <script>
+  /* ===========================================================================
+     SKRIPTY EDITORU — tři nezávislé editory se stejným vzorem:
+       DATA (pole) → RENDER formuláře → GENERUJ text souboru → STÁHNI/ZKOPÍRUJ
+
+       1) NOVINKY  — data: polozky   | render: renderSeznam  | výstup: #vystup      → novinky.js
+       2) TIPY     — data: tipyList  | render: renderTipy     | výstup: #vystup-tipy → tipy.js
+       3) SEZÓNA   — data: skolaData | render: renderSkolaForm| výstup: #vystup-skola→ skola.js
+
+     Sdílené pomůcky: esc() (bezpečně vloží text do HTML atributu/obsahu),
+     zkusCesty() (najde první existující cestu k obrázku). Textová pole se při psaní
+     jen zapíší do dat + přegenerují výstup; strukturální změny (přidat/smazat/
+     přesunout) překreslí příslušný seznam. Na konci se všechny tři jednou vykreslí.
+     =========================================================================== */
   // Načtení stávajících novinek (nebo prázdný seznam, když se nenačtou)
   let polozky = [];
   try{
@@ -653,8 +710,9 @@
     var polozkyBlock = polozky.length ? ('[\n' + polozky.join(',\n') + '\n  ]') : '[]';
     var header =
 `/*
-  ŠKOLA — sezónní sekce webu (obsah + nastavení).
-  Nejsnáz se upravuje v editoru (editor.html, sekce „Škola").
+  SEZÓNNÍ SEKCE webu (obsah + nastavení). Univerzální sekce, jejíž náplň se mění
+  podle sezóny (teď „školní balíčky", jindy třeba Vánoce). Nejsnáz se upravuje
+  v editoru (editor.html, sekce „Sezóna"). Názvy skola/SKOLA jsou jen historické.
 
   zobrazit    — true = sekce i její tlačítko v menu jsou vidět, false = skryté.
   zobrazitOd  — nepovinné „RRRR-MM-DD"; když vyplníte obě data, sekce se ukáže
