@@ -26,7 +26,7 @@ window.SKOLA = {
   zobrazitDo: '',
 
   // --- Název sekce (nadpis + tlačítko v menu) ---
-  nazev: 'Školní balíčky',
+  nazev: 'Škola',
 
   // --- Kontaktní tlačítka pod obsahem ---
   telefonTlacitko: true,
