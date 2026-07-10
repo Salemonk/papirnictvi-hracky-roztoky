@@ -549,36 +549,41 @@
   .reveal{ opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease; }
   .reveal.in-view{ opacity:1; transform:translateY(0); }
 
-  /* Pomocné třídy pro odlišný obsah na počítači a na mobilu (zlom 860 px).
-     .jen-desktop se ukáže jen na počítači, .jen-mobil jen na telefonu.
-     Hodí se, když má být na mobilu kratší text. */
+  /* Pomocné třídy pro odlišný obsah na velkém a malém displeji (zlom 700 px).
+     .jen-desktop se ukáže na počítači i tabletu, .jen-mobil jen na telefonu.
+     Hodí se, když má být na telefonu kratší text. */
   .jen-mobil{ display:none; }
 
+  /* ===== ROZLOŽENÍ pro užší displeje (tablety i telefony, do 860 px) =====
+     Jen přeskládání do jednoho sloupce a zalomení menu — obsah se tu neskrývá. */
   @media (max-width: 860px){
     .hero-inner, .onas-grid{ grid-template-columns:1fr; }
     .produkty-grid, .kontakt-grid{ grid-template-columns:1fr; }
     .header-inner{ flex-wrap:wrap; }
     nav.tabs{ flex:0 0 100%; width:100%; min-width:0; padding-top:4px; }
+  }
 
-    /* Odlehčení mobilu: na telefonu skryjeme čistě dekorativní a redundantní
-       prvky, ať je stránka kratší, přehlednější a rychleji se dostane k textu.
-       Stav „Otevřeno / Zavřeno" zůstává v sekci Kontakt, informace se neztrácí.
-       Chcete-li něco z toho na mobilu zase zobrazit, smažte příslušný řádek. */
+  /* ===== ODLEHČENÍ pro telefony (do 700 px) =====
+     Na telefonu skryjeme dekorativní a méně důležité části, ať je stránka
+     kratší a rychleji se dostane k podstatnému. Tablety (od 700 px výš)
+     vidí plný obsah. Stav „Otevřeno / Zavřeno" zůstává v sekci Kontakt.
+     Chcete-li něco z toho na telefonu zase zobrazit, smažte příslušný řádek. */
+  @media (max-width: 700px){
     .hero-art{ display:none; }        /* pravý sloupec hero s logem (na mobilu je značka v hlavičce) */
     .onas-art-wrap{ display:none; }   /* ilustrace výlohy v sekci „O nás" */
     .section-vite{ display:none; }    /* banner „Věděli jste?" */
 
-    /* Na mobilu skryjeme celé sekce Produkty, O nás a Recenze i s jejich
+    /* Na telefonu skryjeme celé sekce Produkty, O nás a Recenze i s jejich
        tlačítky v horním menu (aby tlačítka nevedla na skryté sekce). */
     #produkty, #o-nas, #recenze{ display:none; }
     nav.tabs a[href="#produkty"],
     nav.tabs a[href="#o-nas"],
     nav.tabs a[href="#recenze"]{ display:none; }
 
-    /* Vloženou mapu na mobilu skryjeme, odkaz zůstává přes tlačítko „Otevřít v mapách". */
+    /* Vloženou mapu na telefonu skryjeme, odkaz zůstává přes tlačítko „Otevřít v mapách". */
     .map-embed{ display:none; }
 
-    /* Odlišný obsah pro mobil: schová se verze pro počítač, ukáže se mobilní. */
+    /* Odlišný obsah pro telefon: schová se verze pro počítač, ukáže se mobilní. */
     .jen-desktop{ display:none; }
     .jen-mobil{ display:block; }
   }
