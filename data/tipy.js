@@ -1,5 +1,5 @@
 /*
-  TIPY — texty do bannerku „Věděli jste?" na webu.
+  TIPY — texty do banneru „Věděli jste?" na webu.
 
   Při načtení stránky se ukáže jeden náhodný tip. Návštěvník si tlačítkem
   „Další tip" může přepnout na následující. Tady se tipy dají upravovat,
@@ -20,7 +20,7 @@
 
 window.TIPY = [
   'Když se řekne „osmdesátka", myslí se gramáž: jeden metr čtvereční běžného kancelářského papíru váží 80 gramů. Proto se značí 80 g/m².',
-  'Formát A4 je malý zázrak. Přeložíte ho napůl a dostanete A5 se stejnými proporcemi (poměr stran je odmocnina ze dvou). A největší arch celé řady, A0, měří přesně jeden metr čtvereční.',
-  'Číslo na sešitu není náhodné. První číslice je formát (4 = A4, 5 = A5, 6 = A6), druhá počet listů (2 = 20, 4 = 40…) a třetí typ linek. Takže „524" je sešit A5, 20 listů, linkovaný.',
-  'Písmena na tužce prozradí tvrdost. H znamená „hard", tedy tvrdá tužka se světlou stopou na rýsování. B je jako „black", u nás spíš měkká tužka se sytou stopou na kreslení. A HB je zlatá střední cesta.'
+  'Formát A4 je malý zázrak. Přeložíte ho napůl a dostanete A5 se stejnými proporcemi. A největší arch celé řady, A0, měří přesně jeden metr čtvereční.',
+  'Číslo na sešitu není náhodné.\nPrvní číslice je formát (4 = A4, 5 = A5, 6 = A6),\ndruhá počet listů (2 = 20, 4 = 40…),\ntřetí typ linek. Takže „524" je sešit A5, 20 listů, linkovaný.',
+  'Písmena na tužce prozradí tvrdost.\nH znamená „hard", tedy tvrdá tužka se světlou stopou na rýsování.\nB je jako „black", u nás spíš měkká tužka se sytou stopou na kreslení.\nHB je zlatá střední cesta.'
 ];

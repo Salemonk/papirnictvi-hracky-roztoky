@@ -12,7 +12,7 @@
   KDE CO NAJDU
   ------------
   data/novinky.js ...... karty v sekci „Co je u nás nového" (návod je v souboru)
-  data/tipy.js ......... texty do bannerku „Věděli jste?" (návod je v souboru)
+  data/tipy.js ......... texty do banneru „Věděli jste?" (návod je v souboru)
   data/skola.js ........ obsah + zapnutí/vypnutí sezónní sekce (teď „školní balíčky")
   editor.html .......... formulářový editor novinek, tipů a sekce Škola
                          (otevřít dvojklikem; vygeneruje datové soubory ke stažení)
@@ -549,11 +549,6 @@
   .reveal{ opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease; }
   .reveal.in-view{ opacity:1; transform:translateY(0); }
 
-  /* Pomocné třídy pro odlišný obsah na velkém a malém displeji (zlom 700 px).
-     .jen-desktop se ukáže na počítači i tabletu, .jen-mobil jen na telefonu.
-     Hodí se, když má být na telefonu kratší text. */
-  .jen-mobil{ display:none; }
-
   /* ===== ROZLOŽENÍ pro užší displeje (tablety i telefony, do 860 px) =====
      Jen přeskládání do jednoho sloupce a zalomení menu — obsah se tu neskrývá. */
   @media (max-width: 860px){
@@ -582,10 +577,6 @@
 
     /* Vloženou mapu na telefonu skryjeme, odkaz zůstává přes tlačítko „Otevřít v mapách". */
     .map-embed{ display:none; }
-
-    /* Odlišný obsah pro telefon: schová se verze pro počítač, ukáže se mobilní. */
-    .jen-desktop{ display:none; }
-    .jen-mobil{ display:block; }
   }
 
   /* Platební ikony: jakmile se přestanou vejít na jeden řádek (úzké displeje),
@@ -628,7 +619,7 @@
         <span class="eyebrow">rodinné papírnictví &amp; hračky v Roztokách</span>
         <h1>Kde radost začíná tužkou</h1>
         <p class="lede">Vedeme náš krámek tak, jak byste to čekali od malého rodinného obchodu.</p>
-        <p class="lede">Se zápalem, který je vidět na první pohled, pomocí, když si nevíte rady a sortimentem, který si vybíráme sami.</p>
+        <p class="lede">Se zápalem, který je vidět na první pohled, pomocí, když si nevíte rady, a sortimentem, který si vybíráme sami.</p>
         <div class="hero-ctas">
           <a class="btn btn-primary" href="#novinky">Podívat se na novinky</a>
           <a class="btn btn-ghost" href="#kontakt">Kde nás najdete</a>
@@ -733,9 +724,10 @@
       <div class="reveal">
         <span class="eyebrow">pár slov o nás</span>
         <h2>Kdo za tím stojí</h2>
-        <p>Jsme malý rodinný obchod a přesně tak se k němu i chováme. Bez zbytečných systémů, s upřímností napřed a se zkušenostmi, které rádi předáváme dál.</p>
-        <p>Snažíme se poradit a pomoci, i když vám občas doporučíme nakoupit jinde. Víc nám totiž záleží na tom, abyste se k nám rádi vraceli.</p>
+        <p>Jsme malý rodinný obchod a přesně tak se k němu i chováme. Bez zbytečných systémů, s upřímností a se zkušenostmi, o které se rádi podělíme.</p>
+        <p>Poradíme vám to, co je nejlepší pro vás, ne to, co se nám zrovna hodí prodat. Záleží nám totiž na tom, abyste se k nám rádi vraceli.</p>
         <p>Zboží si vybíráme sami a rádi si o něm s vámi popovídáme, ať už hledáte první pastelky pro prvňáčka, nebo dárek, který opravdu potěší.</p>
+        <p>Koupili jste něco, co se nakonec nehodí? Nevadí. Zboží v původním balení vám rádi vyměníme, nebo vám vrátíme peníze.</p>
         <p class="quote">„Nejsme velký řetězec, jsme obchod, kam se dá zajít i bez nákupního seznamu.“</p>
       </div>
     </div>

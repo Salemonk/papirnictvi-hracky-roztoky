@@ -31,6 +31,12 @@
      (jako naše grafika „DOVOLENÁ"). Vyplňte obrazek, popisek, sirka
      a vyska a NEvyplňujte nadpis.
 
+  DOBA PLATNOSTI (u všech typů, nepovinné):
+       zobrazitOd — datum, odkdy se novinka ukáže, např. "2026-08-01"
+       zobrazitDo — datum, dokdy se ukáže (poslední den včetně)
+                    Karta se pak sama objeví a sama zmizí. Když necháte
+                    prázdné, zobrazuje se pořád.
+
   Přidání novinky: zkopírujte jeden blok { ... }, vložte ho a upravte.
   Smazání novinky: smažte celý blok { ... } i s čárkou za ním.
   Po úpravě soubor uložte — na webu se změna projeví po načtení stránky.
@@ -47,11 +53,9 @@ window.NOVINKY = [
   {
     stitek: "Novinka",
     nadpis: "Pokémon TCG: Pitch Black",
-    text: "Edice Pitch Black boostery i ETB boxy právě dorazily. Držíme po jednom kusu na zákazníka, ať se dostane na co nejvíce z vás.",
-    obrazek: "images/produkty/pokemon-pitchblack.jpg",
-    popisek: "Booster box Pokémon TCG: Mega Evolution Pitch Black",
-    sirka: 732,
-    vyska: 1000
+    text: "Edice Pitch Black, boostery i ETB, očekáváme 20. července. Držíme po jednom kusu na zákazníka, ať se dostane na co nejvíce z vás.",
+    obrazek: ["images/produkty/pokemon-pitchblack.jpg", "images/produkty/elite-trainer-box-en-cut.png"],
+    popisek: "Booster box Pokémon TCG: Mega Evolution Pitch Black"
   },
   {
     stitek: "Výhodná cena",
@@ -60,7 +64,6 @@ window.NOVINKY = [
     obrazek: "images/produkty/pilot-familypack.png",
     popisek: "Sada šesti náplní Pilot Frixion",
     sirka: 600,
-    vyska: 524,
-    rezervace: true
+    vyska: 524
   }
 ];

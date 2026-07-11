@@ -25,7 +25,7 @@ window.SKOLA = {
     {
       stitek: "služba pro rodiče",
       nadpis: "Školní balíčky",
-      text: "Nechte přípravu pomůcek na nás. Pošlete nám seznam ze školy a my vám balíček nachystáme k vyzvednutí.\nUšetříte si shánění i frontu na začátku září. Orientační cena balíčku pro prvňáčka: 1500-2000 Kč.",
+      text: "Nechte přípravu pomůcek na nás. Pošlete nám seznam ze školy a my vám balíček nachystáme k vyzvednutí.\nMáte nějaké zvláštní přání nebo potřebujete něco navíc? Napište nám ho do e-mailu nebo zavolejte, rádi se domluvíme.",
       telefonTlacitko: true,
       emailTlacitko: true,
       emailPredmet: "Školní balíček",
@@ -34,7 +34,7 @@ window.SKOLA = {
     {
       stitek: "poradíme",
       nadpis: "Jak vybrat obaly na učebnice",
-      text: "Nevíte si s obaly na učebnice rady?\nPřineste je k nám, nebo si doma změřte jejich výšku, a vybereme je s vámi přesně na míru."
+      text: "Mají všechny vaše učebnice „divnej rozměr\"?\nPřineste je k nám, nebo si doma změřte jejich výšku, a vybereme je s vámi přesně na míru."
     }
   ]
 };
