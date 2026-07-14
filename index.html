@@ -419,17 +419,15 @@
   /* ---------- O NAS ---------- */
   .section-onas{ background:var(--paper-light); }
   .onas-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:44px; align-items:center; }
-  .onas-art-wrap{ position:relative; }
-  .onas-art{
-    aspect-ratio:4/3;
-    border:2px solid var(--ink);
-    border-radius:var(--radius);
-    background:var(--paper);
-    overflow:hidden;
+  .quote{
+    font-family:'Caveat',cursive; font-size:1.5rem; font-weight:600;
+    color:var(--brick); border-left:3px solid var(--brick); padding-left:18px;
+    margin:22px 0 0; transform:rotate(-0.6deg);
   }
-  .onas-art img{ width:100%; height:100%; display:block; object-fit:cover; }
+  /* levý sloupec: zvětšený citát + odznak „OD 2003" pod ním */
+  .onas-citat .quote{ font-size:2.1rem; line-height:1.35; margin:0; }
+  .onas-citat .est-badge{ margin:28px 0 0 21px; }
   .est-badge{
-    position:absolute; bottom:-18px; right:-14px;
     width:78px; height:78px; border-radius:50%;
     background:var(--honey); border:2.5px dashed var(--ink);
     display:flex; align-items:center; justify-content:center;
@@ -437,11 +435,6 @@
     font-family:'Fraunces',serif; font-weight:700; font-size:.95rem; line-height:1.2;
     text-align:center; color:var(--ink);
     box-shadow:0 6px 14px var(--shadow);
-  }
-  .quote{
-    font-family:'Caveat',cursive; font-size:1.5rem; font-weight:600;
-    color:var(--brick); border-left:3px solid var(--brick); padding-left:18px;
-    margin:22px 0 0; transform:rotate(-0.6deg);
   }
 
   /* ---------- RECENZE ---------- */
@@ -565,7 +558,6 @@
      Chcete-li něco z toho na telefonu zase zobrazit, smažte příslušný řádek. */
   @media (max-width: 700px){
     .hero-art{ display:none; }        /* pravý sloupec hero s logem (na mobilu je značka v hlavičce) */
-    .onas-art-wrap{ display:none; }   /* ilustrace výlohy v sekci „O nás" */
     .section-vite{ display:none; }    /* banner „Věděli jste?" */
 
     /* Na telefonu skryjeme celé sekce Produkty, O nás a Recenze i s jejich
@@ -712,23 +704,22 @@
     </div>
   </section>
 
-  <!-- ================= O NAS ================= -->
+  <!-- ================= O NAS =================
+       Vlevo velký ručně psaný citát s odznakem „OD 2003", vpravo text.
+       (Dříve tu byla ilustrace výlohy — images/vyloha.svg zůstává jen lokálně.) -->
   <section class="section-onas" id="o-nas">
     <div class="container onas-grid">
-      <div class="onas-art-wrap reveal">
-        <div class="onas-art">
-          <img src="images/vyloha.svg" alt="Ilustrace výlohy našeho obchodu se sešity a tužkami ve výkladu" width="400" height="300" loading="lazy">
-        </div>
+      <div class="onas-citat reveal">
+        <p class="quote">„U nás se dá zastavit i jen tak, pro radost nebo pro radu.“</p>
         <div class="est-badge" aria-hidden="true"><span>OD<br>2003</span></div>
       </div>
       <div class="reveal">
         <span class="eyebrow">pár slov o nás</span>
-        <h2>Kdo za tím stojí</h2>
+        <h2>Jak to u nás chodí</h2>
         <p>Jsme malý rodinný obchod a přesně tak se k němu i chováme. Bez zbytečných systémů, s upřímností a se zkušenostmi, o které se rádi podělíme.</p>
         <p>Poradíme vám to, co je nejlepší pro vás, ne to, co se nám zrovna hodí prodat. Záleží nám totiž na tom, abyste se k nám rádi vraceli.</p>
         <p>Zboží si vybíráme sami a rádi si o něm s vámi popovídáme, ať už hledáte první pastelky pro prvňáčka, nebo dárek, který opravdu potěší.</p>
         <p>Koupili jste něco, co se nakonec nehodí? Nevadí. Zboží v původním balení vám rádi vyměníme, nebo vám vrátíme peníze.</p>
-        <p class="quote">„Nejsme velký řetězec, jsme obchod, kam se dá zajít i bez nákupního seznamu.“</p>
       </div>
     </div>
   </section>
