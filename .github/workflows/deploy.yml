@@ -23,6 +23,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR || './' }}
           protocol: ftps
+          log-level: verbose
           # Nahrávají se jen soubory, které web opravdu potřebuje —
           # pracovní/administrativní soubory se na hosting nekopírují.
           exclude: |
