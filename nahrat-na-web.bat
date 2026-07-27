@@ -13,7 +13,7 @@ rem ============================================================
 
 rem --- Nastaveni (upravte podle skutecnosti u FORPSI) ---
 set PRIPOJENI=forpsi-web
-set VZDALENA_SLOZKA=/WWW
+set VZDALENA_SLOZKA=/www
 
 rem --- Najdi git ---
 set GIT="C:\Program Files\Git\cmd\git.exe"
@@ -63,6 +63,7 @@ del "%STAGE%\nahrat-na-web.bat" >nul 2>&1
 del "%STAGE%\CLAUDE.md" >nul 2>&1
 del "%STAGE%\README.md" >nul 2>&1
 del "%STAGE%\.gitignore" >nul 2>&1
+rmdir /s /q "%STAGE%\.github" >nul 2>&1
 
 rem --- 4) Synchronizace pres WinSCP ---
 echo [2/2] Nahravam na server (WinSCP)...
