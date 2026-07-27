@@ -15,3 +15,7 @@ images/mic.svg
 images/slunecnik-plazovy.svg
 images/kufr-na-koleckach.svg
 images/vyloha.svg
+
+# Lokální nástroje pro náhled webu na konkrétním PC (spouštění dev serveru
+# přes Claude Code) — netýká se webu, nenahrává se na GitHub ani hosting.
+.claude/
