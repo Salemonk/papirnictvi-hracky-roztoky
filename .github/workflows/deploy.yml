@@ -1,0 +1,36 @@
+name: Nahrát web na hosting (FTP)
+
+# Spustí se automaticky po každém "push" do větve main (tedy i po
+# spuštění nahrat-na-github.bat), nebo ručně přes záložku "Actions" na GitHubu.
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Nahrát soubory přes FTP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stáhnout repozitář
+        uses: actions/checkout@v4
+
+      - name: Nahrát na FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR || './' }}
+          protocol: ftps
+          # Nahrávají se jen soubory, které web opravdu potřebuje —
+          # pracovní/administrativní soubory se na hosting nekopírují.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/.claude/**
+            editor.html
+            nahrat-na-github.bat
+            CLAUDE.md
+            README.md
