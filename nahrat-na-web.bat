@@ -19,9 +19,10 @@ rem --- Najdi git ---
 set GIT="C:\Program Files\Git\cmd\git.exe"
 if not exist %GIT% set GIT=git
 
-rem --- Najdi WinSCP ---
+rem --- Najdi WinSCP (systemova i uzivatelska instalace) ---
 set WINSCP="C:\Program Files (x86)\WinSCP\winscp.com"
 if not exist %WINSCP% set WINSCP="C:\Program Files\WinSCP\winscp.com"
+if not exist %WINSCP% set WINSCP="%LOCALAPPDATA%\Programs\WinSCP\winscp.com"
 if not exist %WINSCP% goto chybawinscp
 
 echo ============================================
