@@ -2,6 +2,11 @@ name: Nahrát web na hosting (FTP)
 
 # Spustí se automaticky po každém "push" do větve main (tedy i po
 # spuštění nahrat-na-github.bat), nebo ručně přes záložku "Actions" na GitHubu.
+#
+# Běží na vlastním PC (self-hosted runner), ne v cloudu u GitHubu — FORPSI
+# povoluje FTP přihlášení jen z ČR/SR, takže nasazení musí probíhat z domácí/
+# firemní IP adresy. PC s nainstalovaným runnerem musí být zapnuté, aby se
+# nasazení spustilo.
 on:
   push:
     branches: [ main ]
@@ -10,7 +15,7 @@ on:
 jobs:
   deploy:
     name: Nahrát soubory přes FTP
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Stáhnout repozitář
         uses: actions/checkout@v4
