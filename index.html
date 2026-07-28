@@ -486,9 +486,12 @@
   .hours-day{ font-weight:700; }                       /* den tučně, ať se dobře čte */
   .hours-time{ text-align:right; white-space:nowrap; } /* časy zarovnané doprava, bez zalamování uprostřed */
   .map-embed{
-    margin-top:28px; aspect-ratio:16/6; width:100%;
+    display:block; margin-top:28px; aspect-ratio:16/6; width:100%;
     border:2px solid var(--ink); border-radius:var(--radius); overflow:hidden;
+    transition:transform .15s ease, box-shadow .15s ease;
   }
+  .map-embed img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .map-embed:hover{ transform:translateY(-2px); box-shadow:0 8px 18px var(--shadow); }
   .kontakt-tip{ margin-top:20px; color:var(--ink-soft); font-size:.96rem; }
   .kontakt-tip a{ color:var(--brick); font-weight:700; }
 
@@ -808,9 +811,13 @@
           <div class="hours-row"><span class="hours-day">Svátky</span><span class="hours-time">Zavřeno</span></div>
         </div>
       </div>
-      <div class="map-embed reveal">
-        <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=14.380%2C50.155%2C14.404%2C50.167&layer=mapnik&marker=50.161288%2C14.392002" width="100%" height="100%" style="border:0;" loading="lazy" title="Mapa — Papírnictví a Hračky Roztoky, Lidická 689"></iframe>
-      </div>
+      <!-- Mapa je obyčejný obrázek (ne vložená mapa z cizího webu): zobrazí se
+           vždy a všem, nic neposílá jinam. Kliknutím se otevře mapa s adresou.
+           Obrázek se vyrábí z podkladů OpenStreetMap, proto je v jeho rohu
+           uvedený autor — ten tam prosím ponechte. -->
+      <a class="map-embed reveal" href="https://www.google.com/maps/search/?api=1&amp;query=Lidick%C3%A1+689%2C+253+63+Roztoky" target="_blank" rel="noopener" title="Otevřít mapu s naší adresou">
+        <img src="images/mapa-roztoky.png" alt="Mapa okolí obchodu: Lidická 689, Roztoky" width="1200" height="450" loading="lazy">
+      </a>
       <p class="kontakt-tip reveal">Kopírování a tisk u nás sice nenajdete, ale zařídíte je kousek od nás v <a href="https://knihovna.roztoky.cz/" target="_blank" rel="noopener">Městské knihovně Roztoky</a>.</p>
     </div>
   </section>
