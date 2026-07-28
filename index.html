@@ -315,8 +315,12 @@
 
   /* ---------- NOVINKY (sticky notes) ---------- */
   .section-novinky{ background:var(--paper-light); }
+  /* Karty mají omezenou šířku, aby vypadaly stejně bez ohledu na to, kolik
+     novinek je právě vypsaných (jinak by se při dvou kartách roztáhly přes
+     půl obrazovky a fotky by byly zbytečně velké). */
   .notes-grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,380px));
+    justify-content:center;
     gap:34px 26px;
   }
   .note{
@@ -343,10 +347,13 @@
     text-transform:uppercase; padding:4px 10px; border-radius:999px; margin-bottom:10px;
     background:var(--ink); color:var(--paper-light);
   }
-  .note-img{ display:block; width:100%; height:140px; object-fit:cover; border-radius:6px; border:2px solid var(--ink); margin-bottom:12px; cursor:zoom-in; }
+  /* Náhledy fotek jsou čtvercové (aspect-ratio), takže se výška sama přizpůsobí
+     šířce karty. Fotka se do čtverce ořízne (object-fit:cover), v lightboxu
+     po kliknutí je pak vidět celá. */
+  .note-img{ display:block; width:100%; aspect-ratio:1/1; height:auto; object-fit:cover; border-radius:6px; border:2px solid var(--ink); margin-bottom:12px; cursor:zoom-in; }
   .note-art{ display:block; width:100%; height:auto; cursor:zoom-in; }
   .note-gallery{ display:flex; gap:8px; margin-bottom:12px; }
-  .note-gallery .note-img{ flex:1 1 0; min-width:0; height:96px; margin-bottom:0; }
+  .note-gallery .note-img{ flex:1 1 0; min-width:0; margin-bottom:0; }
   .note-reserve{
     display:inline-block; margin-top:14px;
     font-family:'Karla',sans-serif; font-weight:700; font-size:.85rem;
