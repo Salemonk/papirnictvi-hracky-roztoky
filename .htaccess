@@ -1,2 +1,18 @@
 # Vlastní stránka pro neexistující adresy (chyba 404)
 ErrorDocument 404 /404.html
+
+# Všechny návštěvníky pošleme na jedinou zabezpečenou adresu:
+# https://www.hrackyroztoky.cz
+# Důvody: bezpečnost návštěvníků (zámeček v prohlížeči) a lepší pozice
+# u Googlu, který jinak bere http a https jako dva různé weby.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 1) nezabezpečené http:// na zabezpečené https://
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://www.hrackyroztoky.cz%{REQUEST_URI} [R=301,L]
+
+  # 2) adresa bez www na adresu s www
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  RewriteRule ^ https://www.hrackyroztoky.cz%{REQUEST_URI} [R=301,L]
+</IfModule>
