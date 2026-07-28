@@ -19,3 +19,6 @@ images/vyloha.svg
 # Lokální nástroje pro náhled webu na konkrétním PC (spouštění dev serveru
 # přes Claude Code) — netýká se webu, nenahrává se na GitHub ani hosting.
 .claude/
+images/mapa-roztoky.png
+images/mapa-piny-papirnictvi-knihovna.png
+assets/logo-icon-export.png
