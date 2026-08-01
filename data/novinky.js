@@ -51,6 +51,23 @@ window.NOVINKY = [
     zobrazitDo: "2026-07-18"
   },
   {
+    stitek: "Limitovaná edice",
+    nadpis: "FriXion Best Friend",
+    text: "Dvě gumovací pera, která patří k sobě. Jedno si necháte, druhé dáte kamarádovi. Edice má pět dvojic.",
+    obrazek: "images/produkty/frixion-best-friend.png",
+    popisek: "Pět dvojic gumovacích per Pilot FriXion Best Friend s postavičkami",
+    sirka: 900,
+    vyska: 900,
+    zobrazitOd: "2026-08-05"
+  },
+  {
+    stitek: "Novinka",
+    nadpis: "Velké kreativní sady",
+    text: "Papírový obchod na vybarvení, batoh na pomalování i odlévání ze sádry. Zabaví na dlouho.",
+    obrazek: ["images/produkty/sada-obchod.jpg", "images/produkty/sada-batoh.jpg", "images/produkty/sada-sadra.jpg"],
+    popisek: "Kreativní sady: papírový obchod na vybarvení, batoh na pomalování a odlévání sádrových jednorožců"
+  },
+  {
     stitek: "Novinka",
     nadpis: "Pokémon TCG: Pitch Black",
     text: "Edice Pitch Black! Boostery, booster boxy a Elite trainer boxy jsou stále k dostání.",
