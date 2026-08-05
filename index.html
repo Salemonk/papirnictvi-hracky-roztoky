@@ -282,6 +282,8 @@
   .hero h1{ font-size:clamp(2.1rem,4.4vw,3rem); max-width:12ch; }
   .hero p.lede{ max-width:46ch; color:var(--ink-soft); font-size:1.08rem; }
   .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-top:26px; }
+  /* Řádek se stavem obchodu pod tlačítky v úvodu (vzhled dědí ze .stav). */
+  .hero-stav-radek{ margin:20px 0 0; }
 
   .btn{
     display:inline-block; text-decoration:none; font-family:'Karla',sans-serif;
@@ -511,11 +513,6 @@
   .payment-row{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:24px; }
   .payment-row span{ font-size:.82rem; color:var(--paper); opacity:.7; margin-right:4px; }
   .payment-row img{ height:26px; width:auto; border-radius:5px; }
-  .social-row{ display:flex; gap:12px; }
-  .social-row a{
-    width:38px; height:38px; border-radius:50%; border:2px solid var(--paper-light);
-    display:flex; align-items:center; justify-content:center; text-decoration:none;
-  }
 
   /* ---------- VĚDĚLI JSTE (banner s tipy) ---------- */
   .section-vite{ padding:20px 0 44px; }
@@ -580,6 +577,11 @@
 
     /* Vloženou mapu na telefonu skryjeme, odkaz zůstává přes tlačítko „Otevřít v mapách". */
     .map-embed{ display:none; }
+
+    /* Menu má na telefonu užší tlačítka, aby se všechna čtyři vešla na šířku
+       displeje a poslední („Kontakt") nezůstávalo useknuté za okrajem. */
+    nav.tabs{ gap:4px; }
+    nav.tabs a{ padding:9px 11px 10px; font-size:.86rem; }
   }
 
   /* Platební ikony: jakmile se přestanou vejít na jeden řádek (úzké displeje),
@@ -627,6 +629,11 @@
           <a class="btn btn-primary" href="#novinky">Podívat se na novinky</a>
           <a class="btn btn-ghost" href="#kontakt">Kde nás najdete</a>
         </div>
+
+        <!-- Stav obchodu hned v úvodu, ať ho návštěvník najde bez scrollování.
+             Vyplňuje ho stejný skript jako tabulku v Kontaktu (třída js-stav),
+             proto tu NESMÍ být id, to je na stránce jen u té v Kontaktu. -->
+        <p class="hero-stav-radek"><span class="stav js-stav" aria-live="polite"></span></p>
       </div>
 
       <!-- Pravý sloupec hero sekce: logo s tužkou (dříve zde byla ilustrace poličky
@@ -842,12 +849,9 @@
       </a>
       <div class="footer-tagline">Kde radost začíná tužkou</div>
     </div>
-    <div class="social-row" aria-label="Sociální sítě">
-      <a href="https://www.facebook.com/PHRoztoky/" target="_blank" rel="noopener" aria-label="Facebook">f</a>
-    </div>
   </div>
   <div class="container payment-row" aria-label="Přijímané platební metody">
-    <span>Platíme kartou<span class="pay-colon" aria-hidden="true">:</span></span>
+    <span>Přijímáme karty</span>
     <img src="images/platby/visa.svg" alt="Visa" width="120" height="80" loading="lazy">
     <img src="images/platby/mastercard.svg" alt="Mastercard" width="120" height="80" loading="lazy">
     <img src="images/platby/american-express.svg" alt="American Express" width="120" height="80" loading="lazy">
@@ -897,6 +901,32 @@
       if(!isNaN(doData) && dnes > doData) return false;
     }
     return true;
+  }
+
+  // ---------- Česká typografie: pevné mezery ----------
+  // Jednopísmenná předložka (v, k, s, z, o, u) ani spojka (a, i) nesmí podle
+  // pravidel zůstat sama na konci řádku. Nahradíme za nimi obyčejnou mezeru
+  // pevnou (nezlomitelnou), takže se přesunou na další řádek i se slovem.
+  // Totéž děláme mezi číslem a jednotkou, ať se nerozdělí třeba „209 Kč".
+  //
+  // Řeší se to takhle za běhu, a ne ručně v textech, protože texty přicházejí
+  // i z data/*.js a vkládají se přes textContent, kde by zápis &nbsp; nefungoval.
+  // Díky tomu zůstávají datové soubory čitelné a editor.html se nemusí měnit.
+  function pevneMezery(koren){
+    if(!koren) return;
+    const prochazka = document.createTreeWalker(koren, NodeFilter.SHOW_TEXT, {
+      acceptNode(uzel){
+        const rodic = uzel.parentElement;
+        if(!rodic || rodic.closest('script,style,textarea')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    for(let uzel; (uzel = prochazka.nextNode()); ){
+      const upraveny = uzel.nodeValue
+        .replace(/(^|[\s(„"])([aikosuvzAIKOSUVZ]) +/g, '$1$2 ')
+        .replace(/(\d) +(Kč|g\/m²|g|mm|cm|m|km|kg|%)/g, '$1 $2');
+      if(upraveny !== uzel.nodeValue) uzel.nodeValue = upraveny;
+    }
   }
 
   // Sestaví jednu kartu ve stylu „lísteček" (používají ji novinky i sekce Škola)
@@ -1052,6 +1082,11 @@
   }
   renderSkola();
 
+  // Projde celou stránku (pevné texty i vykreslené novinky a sezónní sekci)
+  // a doplní pevné mezery. Tipy a stav obchodu se překreslují samostatně,
+  // takže si typografii ošetřují u sebe.
+  pevneMezery(document.body);
+
   // active tab highlighting
   const sections = document.querySelectorAll('main section, .hero');
   const tabs = document.querySelectorAll('nav.tabs a');
@@ -1149,7 +1184,7 @@
     const bezPohybu = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let i = Math.floor(Math.random() * tipy.length); // náhodný tip při načtení
 
-    function ukaz(){ el.textContent = tipy[i]; }
+    function ukaz(){ el.textContent = tipy[i]; pevneMezery(el); }
     function dalsi(){
       i = (i + 1) % tipy.length;
       if(bezPohybu){ ukaz(); return; }
@@ -1267,11 +1302,18 @@
         const dot = document.createElement('span'); dot.className = 'dot'; dot.setAttribute('aria-hidden','true');
         const text = document.createElement('span'); text.innerHTML = html;
         stavEl.appendChild(dot); stavEl.appendChild(text);
+        pevneMezery(text);
       });
     }
 
     render();
     setInterval(render, 60000); // aktualizace každou minutu
+
+    // Když má někdo stránku dlouho otevřenou na pozadí nebo se na ni vrátí
+    // tlačítkem zpět, prohlížeč časovač uspí a zůstal by tu starý údaj.
+    // Proto stav přepočítáme vždy, když se stránka znovu ukáže.
+    document.addEventListener('visibilitychange', function(){ if(!document.hidden) render(); });
+    window.addEventListener('pageshow', render);
   })();
 </script>
 
